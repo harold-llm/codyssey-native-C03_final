@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Bloomy 데이터
+backend/*.db
+backend/.smoke_test.db
+.venv/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# 환경
+.env
