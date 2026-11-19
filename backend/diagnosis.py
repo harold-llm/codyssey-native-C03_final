@@ -8,6 +8,8 @@
   - level = 1 + score//2  (0-1→L1, 2-3→L2, 4-5→L3, 6-7→L4, 8-10→L5)
   - 영어 노출 'much' → +1 (L5 상한)
 """
+from collections.abc import Mapping
+from typing import TypedDict
 
 QUESTIONS = {
     "alphabet": {
@@ -35,7 +37,14 @@ QUESTIONS = {
 SCORE = {"none": 0, "some": 1, "many": 2}
 
 
-def questions_payload():
+class Diagnosis(TypedDict):
+    score: int
+    level: int
+    answers: dict[str, str]
+    note: str
+
+
+def questions_payload() -> list[dict[str, object]]:
     """UI(온보딩 5문항 화면)에 내릴 질문 정의."""
     return [
         {"key": k, "label": v["label"], "options": v["options"]}
@@ -43,17 +52,17 @@ def questions_payload():
     ]
 
 
-def diagnose(answers, exposure="none"):
+def diagnose(answers: Mapping[str, str], exposure: str = "none") -> Diagnosis:
     """5문항 응답 → {score, level, answers, note}.
 
     answers: {alphabet, phonics, readers, response, focus} 각 none|some|many
     누락 문항이 있으면 ValueError.
     """
     if not isinstance(answers, dict):
-        raise ValueError("diagnosis answers must be an object")
+        raise TypeError("diagnosis answers must be an object")
     unknown = [k for k in QUESTIONS if answers.get(k) not in SCORE]
     if unknown:
-        raise ValueError("missing or invalid answers: %s" % ",".join(unknown))
+        raise ValueError(f"missing or invalid answers: {','.join(unknown)}")
     score = sum(SCORE[answers[k]] for k in QUESTIONS)
     level = 1 + score // 2
     if exposure == "much":

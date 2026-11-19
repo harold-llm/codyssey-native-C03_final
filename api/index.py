@@ -7,10 +7,15 @@
 
 로컬 실행:  ./.venv/bin/python -m uvicorn api.index:app --port 8000
 """
+from __future__ import annotations
+
 import datetime as dt
 import json
 import os
 import sys
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from typing import cast
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
@@ -20,44 +25,49 @@ BACKEND = os.path.join(ROOT, "backend")
 if BACKEND not in sys.path:
     sys.path.insert(0, BACKEND)
 
-from fastapi import FastAPI, Request, Response  # noqa: E402
+from fastapi import FastAPI, Request, Response
 
-import main as bloomy  # noqa: E402
-import store  # noqa: E402
+import main as bloomy
+import store
 
 
-async def _parse_body(request: Request):
+async def _parse_body(request: Request) -> dict[str, object] | None:
     raw = await request.body()
     if not raw:
         return {}
     try:
-        data = json.loads(raw)
-        return data if isinstance(data, dict) else None
+        data = cast("object", json.loads(raw))
+        if isinstance(data, dict):
+            return cast("dict[str, object]", data)
+        return None
     except (ValueError, UnicodeDecodeError):
         return None
 
 
-def _jsonable(o):
+def _jsonable(o: object) -> object:
     """Postgres는 created_at 등에 datetime 객체를 돌려서 JSON 직렬화가 깨진다.
     모든 응답을 isoformat 문자열로 정규화한다 (SQLite 문자열은 그대로)."""
     if isinstance(o, dict):
+        o = cast("dict[str, object]", o)
         return {k: _jsonable(v) for k, v in o.items()}
     if isinstance(o, (list, tuple)):
+        o = cast("list[object]", o)
         return [_jsonable(v) for v in o]
     if isinstance(o, (dt.datetime, dt.date, dt.time)):
         return o.isoformat()
     return o
 
 
-def _respond(code, payload, ctype):
+def _respond(code: int, payload: object, ctype: str) -> Response:
     if ctype == bloomy.JSON and isinstance(payload, (dict, list)):
-        payload = json.dumps(_jsonable(payload), ensure_ascii=False).encode("utf-8")
+        data = cast("object", payload)
+        payload = json.dumps(_jsonable(data), ensure_ascii=False).encode("utf-8")
     if isinstance(payload, str):
         payload = payload.encode("utf-8")
     return Response(content=payload or b"", status_code=code, media_type=ctype)
 
 
-def _run(request: Request, path_with_slash: str, body):
+def _run(request: Request, path_with_slash: str, body: object | None) -> Response:
     full = path_with_slash
     if request.url.query:
         full += "?" + request.url.query
@@ -67,16 +77,17 @@ def _run(request: Request, path_with_slash: str, body):
     return _respond(code, payload, ctype)
 
 
-app = FastAPI(title="Bloomy", docs_url=None, redoc_url=None)
-app.router.routes.clear()
-
-
-@app.on_event("startup")
-def _startup():
+@asynccontextmanager
+async def _lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
     store.init()
     import catalog
 
-    catalog.load()
+    _items, _skips = catalog.load()
+    yield
+
+
+app = FastAPI(title="Bloomy", lifespan=_lifespan, docs_url=None, redoc_url=None)
+app.router.routes.clear()
 
 
 @app.api_route("/", methods=["GET", "POST"], include_in_schema=False)

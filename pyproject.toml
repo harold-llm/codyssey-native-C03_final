@@ -9,3 +9,12 @@ dependencies = [
 
 [tool.vercel]
 entrypoint = "api.index:app"
+
+[tool.ruff.lint.isort]
+known-first-party = ["main", "store"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+extraPaths = ["backend"]
+pythonVersion = "3.12"

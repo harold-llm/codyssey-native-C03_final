@@ -5,23 +5,30 @@
 - 표준 라이브러리만 사용 (bcrypt 등 외부 의존성 없음).
 """
 import base64
+import binascii
 import hashlib
 import hmac
 import json
 import os
 import secrets
 import time
+from typing import TypedDict, cast
 
 PEPPER = os.environ.get("BLOOMY_PEPPER", "bloomy-default-pepper").encode("utf-8")
 TOKEN_TTL = 30 * 24 * 3600  # 30일
 ITERATIONS = 200_000
 
 
-def new_salt():
+class _TokenPayload(TypedDict):
+    sub: int
+    exp: int
+
+
+def new_salt() -> str:
     return secrets.token_hex(16)
 
 
-def hash_password(password, salt_hex):
+def hash_password(password: str, salt_hex: str) -> str:
     digest = hashlib.pbkdf2_hmac(
         "sha256",
         (password + "|" + PEPPER.decode("utf-8")).encode("utf-8"),
@@ -31,7 +38,7 @@ def hash_password(password, salt_hex):
     return digest.hex()
 
 
-def make_token(account_id):
+def make_token(account_id: int) -> str:
     payload = {"sub": account_id, "exp": int(time.time()) + TOKEN_TTL}
     body = base64.urlsafe_b64encode(
         json.dumps(payload, separators=(",", ":")).encode("utf-8")
@@ -42,7 +49,7 @@ def make_token(account_id):
     return (body + b"." + sig).decode("ascii")
 
 
-def check_token(token):
+def check_token(token: str) -> int | None:
     if not token:
         return None
     try:
@@ -54,9 +61,11 @@ def check_token(token):
         if not hmac.compare_digest(expected, actual):
             return None
         pad = "=" * (-len(body_b64) % 4)
-        payload = json.loads(base64.urlsafe_b64decode(body_b64 + pad))
+        payload = cast(
+            "_TokenPayload", json.loads(base64.urlsafe_b64decode(body_b64 + pad))
+        )
         if int(payload.get("exp", 0)) < time.time():
             return None
         return int(payload["sub"])
-    except Exception:
+    except (ValueError, KeyError, TypeError, binascii.Error, AttributeError):
         return None

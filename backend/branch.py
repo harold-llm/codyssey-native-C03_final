@@ -27,14 +27,26 @@
 제외 (5.4).
 """
 import datetime as dt
+from typing import TypedDict
 
 INTENTS = ("none", "question", "change_request", "out_of_scope")
 
 COMPLETIONS = ("full", "partial", "none")  # 잘 따라옴 / 일부 / 못 함
 
 
-def decide(*, date, completion, interest, comprehension, intent="none",
-           prev=None, rest_day=False):
+class Decision(TypedDict):
+    case: str
+    intent: str
+    flags: dict[str, bool]
+    low_interest_streak: int
+    reasons: list[str]
+
+
+def decide(
+    *, date: str, completion: str, interest: int, comprehension: int,
+    intent: str = "none", prev: dict[str, object] | None = None,
+    rest_day: bool = False,
+) -> Decision:
     """분기 판정. 순수 함수 — DB·LLM 접근 없음.
 
     date: 피드백 날짜 "YYYY-MM-DD" (2일 연속 판정에 사용)
@@ -67,17 +79,26 @@ def decide(*, date, completion, interest, comprehension, intent="none",
     # --- 흥미 2일 연속: 전일(캘린더 인접) 기록도 흥미≤2여야 성립 ---
     streak = 1 if interest <= 2 else 0
     if streak and prev is not None:
+        prev_date = None
+        today = None
         try:
             prev_date = dt.date.fromisoformat(str(prev.get("date")))
             today = dt.date.fromisoformat(str(date))
         except (TypeError, ValueError):
             prev_date = None
-        if prev_date is not None and (today - prev_date).days == 1:
-            try:
-                if int(prev.get("interest", 0)) <= 2:
-                    streak = 2
-            except (TypeError, ValueError):
-                pass
+            today = None
+        if (
+            prev_date is not None
+            and today is not None
+            and (today - prev_date).days == 1
+        ):
+            raw_interest = prev.get("interest", 0)
+            if isinstance(raw_interest, int | float | str):
+                try:
+                    if int(raw_interest) <= 2:
+                        streak = 2
+                except (TypeError, ValueError):
+                    pass
 
     intent_c = intent in ("question", "change_request")
     is_c = intent_c or streak >= 2
@@ -88,11 +109,11 @@ def decide(*, date, completion, interest, comprehension, intent="none",
         "expert_referral": intent == "out_of_scope",
         "interest_dip": streak == 1,
     }
-    reasons = []
+    reasons: list[str] = []
 
     if is_c:
         if intent_c:
-            reasons.append("메모 의도 %s → 수정·질문·형식 변경" % intent)
+            reasons.append(f"메모 의도 {intent} → 수정·질문·형식 변경")
         if streak >= 2:
             reasons.append("흥미≤2 2일 연속 → 소재 교체·휴식일 제안")
         # 중복 해소: B 조건도 동시에 걸리면 난이도 조정을 조정 안에 포함 (5.4)
@@ -103,9 +124,9 @@ def decide(*, date, completion, interest, comprehension, intent="none",
 
     if is_b:
         if completion in ("partial", "none"):
-            reasons.append("완료도 %s → 부분 미달" % completion)
+            reasons.append(f"완료도 {completion} → 부분 미달")
         if comprehension < 3:
-            reasons.append("이해도 %d < 3 → 부분 미달" % comprehension)
+            reasons.append(f"이해도 {comprehension} < 3 → 부분 미달")
         return _result("B", intent, streak, flags, reasons)
 
     reasons.append("C·B 모두 미해당 → 디폴트 A(순조)")
@@ -114,7 +135,11 @@ def decide(*, date, completion, interest, comprehension, intent="none",
     return _result("A", intent, streak, flags, reasons)
 
 
-def _result(case, intent, streak, flags=None, reasons=None):
+def _result(
+    case: str, intent: str, streak: int,
+    flags: dict[str, bool] | None = None,
+    reasons: list[str] | None = None,
+) -> Decision:
     return {
         "case": case,
         "intent": intent,

@@ -18,12 +18,17 @@ OPENAI_API_KEY가 없으면 내장 룰베이스 코치가 동일한 분기·조�
 동작한다 (오프라인/데모 모드, 스모크 테스트 결정성 보장).
 """
 import datetime as dt
+import io
 import json
 import os
 import urllib.request
+from collections.abc import Callable
+from itertools import pairwise
+from typing import TypedDict, cast
 
 import branch
 import catalog
+
 import store
 
 RULES_VERSION = "bloomy-coach-v2-rules"
@@ -60,34 +65,34 @@ _INTENT_RULES = (
 )
 
 
-def _intent_keywords(memo):
+def _intent_keywords(memo: str) -> tuple[str, str]:
     m = (memo or "").strip()
     for label, keys in _INTENT_RULES:
         for k in keys:
             if k in m:
-                return label, "키워드 '%s' 매칭" % k
+                return label, f"키워드 '{k}' 매칭"
     return "none", "변경·질문 키워드 없음"
 
 
-def _strip_fences(raw):
+def _strip_fences(raw: str) -> str:
     text = (raw or "").strip()
     if text.startswith("```"):
         text = text.strip("`")
         if text.startswith("json"):
-            text = text[4:]
+            text = text.removeprefix("json")
     return text.strip()
 
 
-def _try_llm_intent(memo):
+def _try_llm_intent(memo: str) -> tuple[str, str] | None:
     """LLM으로 의도 분류. 스키마 검증 실패 1회 재시도, 그래도 실패하면 None."""
     for _attempt in (1, 2):
-        raw = _call_llm(INTENT_SYSTEM, "메모: %s" % memo)
+        raw = _call_llm(INTENT_SYSTEM, f"메모: {memo}")
         if not raw:
             return None
         try:
-            data = json.loads(_strip_fences(raw))
+            data = cast("dict[str, object]", json.loads(_strip_fences(raw)))
             intent = data.get("intent")
-            if intent not in branch.INTENTS:
+            if not isinstance(intent, str) or intent not in branch.INTENTS:
                 continue
             return intent, str(data.get("reason") or "")[:200]
         except (ValueError, AttributeError):
@@ -95,7 +100,7 @@ def _try_llm_intent(memo):
     return None
 
 
-def classify_memo_intent(memo):
+def classify_memo_intent(memo: str) -> tuple[str, str]:
     """(intent, reason) 반환. LLM 없이도 키워드 규칙으로 결정적 동작."""
     m = (memo or "").strip()
     if not m:
@@ -111,7 +116,9 @@ def classify_memo_intent(memo):
 # 확신 문구 데이터 조건 (6.6 — 고정 삽입 금지)
 # ---------------------------------------------------------------------------
 
-def confidence_ok(child_id, as_of=None):
+def confidence_ok(
+    child_id: int, as_of: dt.date | None = None,
+) -> tuple[bool, list[str]]:
     """(ok, reasons) 반환.
 
     True 조건(모두 충족):
@@ -120,14 +127,14 @@ def confidence_ok(child_id, as_of=None):
       ③ 연속 B(캘린더 인접) 없음
     """
     as_of = as_of or dt.date.today()
-    reasons = []
+    reasons: list[str] = []
     cur = store.feedback_between(
         child_id, (as_of - dt.timedelta(days=6)).isoformat(), as_of.isoformat())
     if not cur:
         return False, ["최근 7일 기록 없음 — 데이터가 조건을 뒷받침하지 못함"]
 
-    def avg(rows, k):
-        vs = [int(r[k]) for r in rows]
+    def avg(rows: list[dict[str, object]], k: str) -> float | None:
+        vs = [cast("int", r[k]) for r in rows]
         return sum(vs) / len(vs) if vs else None
 
     cur_int, cur_comp = avg(cur, "interest"), avg(cur, "comprehension")
@@ -137,31 +144,30 @@ def confidence_ok(child_id, as_of=None):
     if prev:
         p_int, p_comp = avg(prev, "interest"), avg(prev, "comprehension")
         if p_int is not None and cur_int is not None and cur_int < p_int - 0.5:
-            reasons.append("흥미 평균 하락(%.1f→%.1f)" % (p_int, cur_int))
+            reasons.append(f"흥미 평균 하락({p_int:.1f}→{cur_int:.1f})")
         if p_comp is not None and cur_comp is not None and cur_comp < p_comp - 0.5:
-            reasons.append("이해도 평균 하락(%.1f→%.1f)" % (p_comp, cur_comp))
+            reasons.append(f"이해도 평균 하락({p_comp:.1f}→{cur_comp:.1f})")
     if cur_int is not None and cur_comp is not None and min(cur_int, cur_comp) < 3:
         reasons.append("현재 흥미·이해도 평균 3 미만")
 
     bd = store.branch_dates(
         child_id, (as_of - dt.timedelta(days=27)).isoformat(), as_of.isoformat())
-    last_c = None
+    last_c: str | None = None
     for d, b in bd:
         if b == "C":
             last_c = d
     if last_c:
         resolved = store.one(
-            "SELECT 1 AS ok FROM feedbacks WHERE child_id=? AND date>? AND date<=? "
-            "AND completion='full' AND comprehension>=3",
+            "SELECT 1 AS ok FROM feedbacks WHERE child_id=? AND date>? AND date<=? AND completion='full' AND comprehension>=3",
             (child_id, last_c, as_of.isoformat()))
         if not resolved:
-            reasons.append("미해결 C 잔존(%s~)" % last_c)
+            reasons.append(f"미해결 C 잔존({last_c}~)")
 
-    for (d1, b1), (d2, b2) in zip(bd, bd[1:]):
+    for (d1, b1), (d2, b2) in pairwise(bd):
         if b1 == "B" and b2 == "B":
             try:
                 if (dt.date.fromisoformat(d2) - dt.date.fromisoformat(d1)).days == 1:
-                    reasons.append("연속 B(%s, %s)" % (d1, d2))
+                    reasons.append(f"연속 B({d1}, {d2})")
                     break
             except ValueError:
                 pass
@@ -172,21 +178,26 @@ def confidence_ok(child_id, as_of=None):
 # Long-term Memory (6.4)
 # ---------------------------------------------------------------------------
 
-def memory_summary(child_id):
+class MemorySummary(TypedDict):
+    recent: list[dict[str, object]]
+    streak: int
+    low_comprehension_streak: int
+    low_interest_streak: int
+    strong_streak: int
+
+
+def memory_summary(child_id: int) -> MemorySummary:
     """최근 기록에서 연속 지표 추출 (수치형 피드백 기준)."""
     rows = store.query(
-        "SELECT f.*, c.content_id AS content_id FROM feedbacks f "
-        "LEFT JOIN cards c ON c.id=f.card_id "
-        "WHERE f.child_id=? AND f.rest_day=0 "
-        "ORDER BY f.date DESC LIMIT 14",
+        "SELECT f.*, c.content_id AS content_id FROM feedbacks f LEFT JOIN cards c ON c.id=f.card_id WHERE f.child_id=? AND f.rest_day=0 ORDER BY f.date DESC LIMIT 14",
         (child_id,))
-    recs = []
+    recs: list[dict[str, object]] = []
     for r in rows:
         item = catalog.find_item(r["content_id"])
         recs.append({**dict(r), "title": item["title"] if item else "학습"})
     recs.reverse()  # 오래된 순
 
-    def streak_of(pred):
+    def streak_of(pred: Callable[[dict[str, object]], bool]) -> int:
         n = 0
         for r in reversed(recs):
             try:
@@ -202,7 +213,7 @@ def memory_summary(child_id):
     streak = 0
     if recs:
         recorded = {r["date"] for r in recs}
-        d = dt.date.fromisoformat(recs[-1]["date"])
+        d = dt.date.fromisoformat(cast("str", recs[-1]["date"]))
         while d.isoformat() in recorded:
             streak += 1
             d -= dt.timedelta(days=1)
@@ -211,39 +222,44 @@ def memory_summary(child_id):
         "recent": recs,
         "streak": streak,
         "low_comprehension_streak": streak_of(
-            lambda r: int(r["comprehension"]) <= 2),
+            lambda r: cast("int", r["comprehension"]) <= 2),
         "low_interest_streak": streak_of(
-            lambda r: int(r["interest"]) <= 2),
+            lambda r: cast("int", r["interest"]) <= 2),
         "strong_streak": streak_of(
-            lambda r: r["completion"] == "full" and int(r["comprehension"]) >= 4),
+            lambda r: r["completion"] == "full"
+            and cast("int", r["comprehension"]) >= 4),
     }
 
 
-def write_memory(child, rec, decision, item):
+def write_memory(
+    child: dict[str, object], rec: dict[str, object],
+    decision: branch.Decision, item: catalog.Item | None,
+) -> None:
     """피드백 1건 → memory_facts 기록 (6.4)."""
     if decision["case"] == "SKIP":
         return
     if item and item["title"]:
         if decision["case"] == "B":
-            store.upsert_fact(child["id"], "weak_point", item["title"])
+            store.upsert_fact(cast("int", child["id"]), "weak_point", item["title"])
         elif decision["case"] == "A" and \
-                rec["completion"] == "full" and int(rec["comprehension"]) >= 4:
-            store.upsert_fact(child["id"], "learned", item["title"])
-    if decision["flags"]["interest_dip"]:
-        store.replace_facts(child["id"], "interest_low_streak",
-                            ["%d" % decision["low_interest_streak"]])
-    elif decision["low_interest_streak"] >= 2:
-        store.replace_facts(child["id"], "interest_low_streak",
-                            ["%d" % decision["low_interest_streak"]])
+                rec["completion"] == "full" and cast("int", rec["comprehension"]) >= 4:
+            store.upsert_fact(cast("int", child["id"]), "learned", item["title"])
+    if decision["flags"]["interest_dip"] or decision["low_interest_streak"] >= 2:
+        store.replace_facts(cast("int", child["id"]), "interest_low_streak",
+                            [f"{decision['low_interest_streak']}"])
     if decision["flags"]["expert_referral"]:
-        store.upsert_fact(child["id"], "out_of_scope", rec["date"])
+        store.upsert_fact(cast("int", child["id"]), "out_of_scope",
+                          cast("str", rec["date"]))
 
 
 # ---------------------------------------------------------------------------
 # 조정 (5.4) — 다음 카드에 반영
 # ---------------------------------------------------------------------------
 
-def _pick_swap(child, card, lower=False):
+def _pick_swap(
+    child: dict[str, object], card: dict[str, object] | None,
+    lower: bool = False,
+) -> catalog.Item | None:
     """대체 콘텐츠 후보: (lower면 한 레벨 아래, 아니면 같은 레벨) 다른 항목.
     다른 유형을 우선해 '형식·소재 교체'를 실제로 체감하게 한다."""
     if not card or not card.get("content_id"):
@@ -252,31 +268,43 @@ def _pick_swap(child, card, lower=False):
     if not cur:
         return None
     level = max(1, cur["level"] - (1 if lower else 0))
-    pool = [it for it in (catalog.items_by_level(level, child.get("age"))
+    age = cast("int | None", child.get("age"))
+    pool = [it for it in (catalog.items_by_level(level, age)
                           or catalog.items_by_level(level))
             if it["id"] != cur["id"]]
-    diff = [it for it in pool if it.get("type") != cur.get("type")]
+    diff = [it for it in pool if it["type"] != cur["type"]]
     if diff:
         return diff[0]
     return pool[0] if pool else None
 
 
-def _shrink_card(tomorrow):
-    new_min = max(5, int(tomorrow["minutes"] or 10) - 5)
-    store.update_card_content(tomorrow["id"], tomorrow["content_id"],
-                              tomorrow["task"], new_min, tomorrow["check_point"])
+def _shrink_card(tomorrow: dict[str, object]) -> int:
+    new_min = max(5, cast("int", tomorrow["minutes"] or 10) - 5)
+    store.update_card_content(
+        cast("int", tomorrow["id"]),
+        cast("str | None", tomorrow["content_id"]),
+        cast("str", tomorrow["task"]), new_min,
+        cast("str", tomorrow["check_point"]),
+    )
     return new_min
 
 
-def _swap_card(tomorrow, child, new_item):
+def _swap_card(
+    tomorrow: dict[str, object], child: dict[str, object],
+    new_item: catalog.Item,
+) -> catalog.Item:
     task, check = catalog.card_text(new_item)
-    minutes = min(int(new_item.get("session_minutes") or 10),
-                  int(child.get("session_length") or 10))
-    store.update_card_content(tomorrow["id"], new_item["id"], task, minutes, check)
+    minutes = min(new_item["session_minutes"] or 10,
+                  cast("int", child.get("session_length") or 10))
+    store.update_card_content(cast("int", tomorrow["id"]), new_item["id"],
+                              task, minutes, check)
     return new_item
 
 
-def apply_adjustment(child, rec, decision, tomorrow):
+def apply_adjustment(
+    child: dict[str, object], _rec: dict[str, object],
+    decision: branch.Decision, tomorrow: dict[str, object] | None,
+) -> dict[str, object]:
     """분기 판정을 다음 카드에 반영. (type, reason, dates, proposal?) 반환.
 
     A/SKIP: 없음
@@ -297,7 +325,7 @@ def apply_adjustment(child, rec, decision, tomorrow):
             return {"type": "none", "reason": "다음 카드 없음", "dates": []}
         new_min = _shrink_card(tomorrow)
         return {"type": "shrink",
-                "reason": "완료도·이해도 미달 → 내일 분량 %d분으로 축소" % new_min,
+                "reason": f"완료도·이해도 미달 → 내일 분량 {new_min}분으로 축소",
                 "dates": [tomorrow["date"]]}
 
     # --- C ---
@@ -315,22 +343,22 @@ def apply_adjustment(child, rec, decision, tomorrow):
             return {"type": "none", "reason": "다음 카드 없음", "dates": []}
         new_item = _pick_swap(child, tomorrow, lower=flags["difficulty_adjust"])
         if not new_item:
-            return {"type": "none", "reason": "대체 콘텐츠 없음 — 카탈로그 보강 필요", "dates": []}
-        _swap_card(tomorrow, child, new_item)
+            return {"type": "none",
+                    "reason": "대체 콘텐츠 없음 — 카탈로그 보강 필요", "dates": []}
+        _ = _swap_card(tomorrow, child, new_item)
         t = "swap_easy" if flags["difficulty_adjust"] else "swap"
         return {"type": t,
-                "reason": "흥미≤2 2일 연속 → 같은 목표, 다른 형식·소재로 교체(%s)"
-                          % new_item["title"],
+                "reason": f"흥미≤2 2일 연속 → 같은 목표, 다른 형식·소재로 교체({new_item['title']})",
                 "dates": [tomorrow["date"]]}
     if flags["difficulty_adjust"] and tomorrow:
         new_min = _shrink_card(tomorrow)
         return {"type": "shrink",
-                "reason": "C+B 중복 → 조정 안에 난이도 조정 포함(분량 %d분)" % new_min,
+                "reason": f"C+B 중복 → 조정 안에 난이도 조정 포함(분량 {new_min}분)",
                 "dates": [tomorrow["date"]]}
     return {"type": "none", "reason": "", "dates": []}
 
 
-def tomorrow_payload(card):
+def tomorrow_payload(card: dict[str, object] | None) -> dict[str, object] | None:
     if not card:
         return None
     item = catalog.find_item(card.get("content_id"))
@@ -348,18 +376,22 @@ def tomorrow_payload(card):
 # 3단계 — 메시지 생성
 # ---------------------------------------------------------------------------
 
-def build_message_v2(child, rec, decision, item, tomorrow, adjust, conf):
+def build_message_v2(
+    child: dict[str, object], _rec: dict[str, object],
+    decision: branch.Decision, item: catalog.Item | None,
+    tomorrow: dict[str, object] | None,
+    adjust: dict[str, object], conf: tuple[bool, list[str]],
+) -> str:
     """룰베이스 코치 — LLM 없이도 결정적·동등하게 동작."""
     case = decision["case"]
     name = child.get("name") or "우리 아이"
     title = item["title"] if item else "오늘 학습"
-    lines = []
+    lines: list[str] = []
     if case == "A":
-        lines.append("%s이(가) 오늘 '%s'을(를) 끝까지 함께 해냈어요. 좋은 흐름이에요."
-                     % (name, title))
+        lines.append(
+            f"{name}이(가) 오늘 '{title}'을(를) 끝까지 함께 해냈어요. 좋은 흐름이에요.")
         if tomorrow:
-            lines.append("내일은 '%s'(%d분) — 오늘 모멘텀 그대로 이어가요."
-                         % (tomorrow["task"], tomorrow["minutes"]))
+            lines.append(f"내일은 '{tomorrow['task']}'({tomorrow['minutes']}분) — 오늘 모멘텀 그대로 이어가요.")
         else:
             lines.append("이번 계획의 마지막이었어요. 짧게 마무리하며 마무리 인사를 나눠보세요.")
         if conf[0]:
@@ -367,36 +399,28 @@ def build_message_v2(child, rec, decision, item, tomorrow, adjust, conf):
         else:
             lines.append(ACCUMULATION)
     elif case == "B":
-        lines.append("오늘은 '%s'에서 여기까지 닿았어요. 그 자체로 하루치의 쌓임이에요." % title)
+        lines.append(f"오늘은 '{title}'에서 여기까지 닿았어요. 그 자체로 하루치의 쌓임이에요.")
         lines.append("조금 쉽게: 오늘의 활동을 절반으로 나눠서, 먼저 소리만 따라 해보세요.")
         if tomorrow:
-            lines.append("내일 연습할 것 하나: '%s' — %d분으로 줄여서 부담 없이 시작해요."
-                         % (tomorrow["task"], tomorrow["minutes"]))
+            lines.append(f"내일 연습할 것 하나: '{tomorrow['task']}' — {tomorrow['minutes']}분으로 줄여서 부담 없이 시작해요.")
         lines.append(ACCUMULATION)
     elif case == "C":
         intent = decision["intent"]
         if intent == "question":
             lines.append("남겨주신 질문에 답드릴게요.")
-            lines.append("이 단계에서는 한국어로 해석하기보다 소리를 내어 따라 읽는 게 "
-                         "더 효과적이에요. 아이가 틀려도 멈추지 말고 소리를 유지해 주세요.")
+            lines.append("이 단계에서는 한국어로 해석하기보다 소리를 내어 따라 읽는 게 더 효과적이에요. 아이가 틀려도 멈추지 말고 소리를 유지해 주세요.")
             if decision["flags"]["difficulty_adjust"]:
                 lines.append("이해도도 조금 흔들렸던 것 같아, 내일 분량을 줄여서 다잡을게요.")
         elif intent == "change_request":
             prop = adjust.get("proposal")
-            lines.append("변경 요청 접수했어요. 제안: %s. 확인해 주시면 다음 카드부터 "
-                         "반영할게요 — 큰 변경은 부모님 확인 후에만 적용해요."
-                         % (prop or "대체 콘텐츠를 준비해 둘게요"))
+            lines.append(f"변경 요청 접수했어요. 제안: {prop or '대체 콘텐츠를 준비해 둘게요'}. 확인해 주시면 다음 카드부터 반영할게요 — 큰 변경은 부모님 확인 후에만 적용해요.")
         elif decision["low_interest_streak"] >= 2:
             tp = tomorrow_payload(tomorrow)
             nxt = (tp["title"] if tp and tp.get("title") else "대체 콘텐츠")
-            lines.append("이틀 연속 흥미가 흔들리는 걸 확인했어요. 같은 목표를 유지한 채 "
-                         "소재만 바꿀게요: %s." % nxt)
-            lines.append("오늘만 쉬어가는 휴식일도 괜찮습니다 — 기록에서 휴식일로 표시해 "
-                         "주시면 성취 분모에서 제외할게요.")
+            lines.append(f"이틀 연속 흥미가 흔들리는 걸 확인했어요. 같은 목표를 유지한 채 소재만 바꿀게요: {nxt}.")
+            lines.append("오늘만 쉬어가는 휴식일도 괜찮습니다 — 기록에서 휴식일로 표시해 주시면 성취 분모에서 제외할게요.")
         elif intent == "out_of_scope":
-            lines.append("남겨주신 내용은 영어 학습 범위 밖의 건강·발달 관련 질문인 것 같아요. "
-                         "앱으로 판단 드리는 것보다 소아과·언어치료 전문가와 상담하시는 걸 "
-                         "권해요. 학습은 지금 흐름을 유지할게요.")
+            lines.append("남겨주신 내용은 영어 학습 범위 밖의 건강·발달 관련 질문인 것 같아요. 앱으로 판단 드리는 것보다 소아과·언어치료 전문가와 상담하시는 걸 권해요. 학습은 지금 흐름을 유지할게요.")
         else:
             lines.append("오늘 기록을 바탕으로 내일 카드를 점검할게요.")
     if case != "SKIP":
@@ -425,60 +449,68 @@ MESSAGE_SYSTEM = (
 )
 
 
-def _llm_user_context(child, rec, decision, item, tomorrow, adjust, mem, conf):
+def _llm_user_context(
+    child: dict[str, object], rec: dict[str, object],
+    decision: branch.Decision, item: catalog.Item | None,
+    tomorrow: dict[str, object] | None,
+    adjust: dict[str, object], mem: MemorySummary, conf: tuple[bool, list[str]],
+) -> str:
     t = tomorrow_payload(tomorrow)
+    if t:
+        tomorrow_desc = f"{t['date']} '{t['task']}' {t['minutes']}분"
+    else:
+        tomorrow_desc = "없음(계획 종료)"
+    ek = "예" if child.get("ek_kindergarten") else "아니오"
+    exposure = child.get("exposure") or "none"
+    completion = cast("str", rec["completion"])
+    raw_decision = cast("dict[str, object]", cast("object", decision))
+    intent_reason = raw_decision.get("intent_reason") or ""
     return (
-        "아이: 만 %d세, 영어유치원 재원=%s, 영어 노출=%s, 하루 학습 %d분, 현재 단계 L%d\n"
-        "오늘 기록: 완료=%s 만족도=%s 흥미=%s 이해도=%s\n"
-        "메모: %s\n"
-        "메모 의도(1단계 분류기 출력): %s — %s\n"
-        "오늘 콘텐츠: %s (L%d, %s, 해설: %s)\n"
-        "분기 판정(규칙, 변경 불가): %s — %s\n"
-        "적용된 조정: %s (%s)\n"
-        "내일 카드: %s\n"
-        "최근 추이: 연속 학습 %d일, 이해도 저하 연속 %d일, 흥미 저하 연속 %d일, 순항 연속 %d일\n"
-        "확신 문구 데이터 조건(confidence_ok): %s%s"
-        % (
-            child["age"],
-            "예" if child.get("ek_kindergarten") else "아니오",
-            child.get("exposure") or "none",
-            child.get("session_length") or 10,
-            child.get("level") or 1,
-            COMPLETION_KO.get(rec["completion"], rec["completion"]),
-            rec["satisfaction"],
-            rec["interest"],
-            rec["comprehension"],
-            (rec.get("memo") or "(없음)"),
-            decision["intent"],
-            decision.get("intent_reason") or "",
-            (item["title"] if item else "학습"),
-            item["level"] if item else 1,
-            item.get("type", "") if item else "",
-            (item.get("expert_note") or "")[:200] if item else "",
-            decision["case"],
-            "; ".join(decision.get("reasons") or []),
-            adjust.get("type", "none"),
-            adjust.get("reason", ""),
-            ("%s '%s' %d분" % (t["date"], t["task"], t["minutes"]))
-            if t else "없음(계획 종료)",
-            mem["streak"],
-            mem["low_comprehension_streak"],
-            mem["low_interest_streak"],
-            mem["strong_streak"],
-            str(bool(conf[0])).lower(),
-            ("" if conf[0] else " — 사유: " + ", ".join(conf[1])),
-        )
+        f"아이: 만 {child['age']}세, 영어유치원 재원={ek}, 영어 노출={exposure}, "
+        f"하루 학습 {child.get('session_length') or 10}분, "
+        f"현재 단계 L{child.get('level') or 1}\n"
+        f"오늘 기록: 완료={COMPLETION_KO.get(completion, completion)} "
+        f"만족도={rec['satisfaction']} 흥미={rec['interest']} 이해도={rec['comprehension']}\n"
+        f"메모: {rec.get('memo') or '(없음)'}\n"
+        f"메모 의도(1단계 분류기 출력): {decision['intent']} — {intent_reason}\n"
+        f"오늘 콘텐츠: {item['title'] if item else '학습'} "
+        f"(L{item['level'] if item else 1}, "
+        f"{item.get('type', '') if item else ''}, "
+        f"해설: {(item.get('expert_note') or '')[:200] if item else ''})\n"
+        f"분기 판정(규칙, 변경 불가): {decision['case']} — "
+        f"{'; '.join(decision.get('reasons') or [])}\n"
+        f"적용된 조정: {adjust.get('type', 'none')} ({adjust.get('reason', '')})\n"
+        f"내일 카드: {tomorrow_desc}\n"
+        f"최근 추이: 연속 학습 {mem['streak']}일, 이해도 저하 연속 {mem['low_comprehension_streak']}일, "
+        f"흥미 저하 연속 {mem['low_interest_streak']}일, "
+        f"순항 연속 {mem['strong_streak']}일\n"
+        f"확신 문구 데이터 조건(confidence_ok): {str(bool(conf[0])).lower()}"
+        f"{'' if conf[0] else ' — 사유: ' + ', '.join(conf[1])}"
     )
 
 
-def _try_llm_message(child, rec, decision, item, tomorrow, adjust, mem, conf):
+class MessageResult(TypedDict):
+    case: str
+    message: str
+    prompt_version: str
+    model: str
+    is_ai_generated: bool
+
+
+def _try_llm_message(
+    child: dict[str, object], rec: dict[str, object],
+    decision: branch.Decision, item: catalog.Item | None,
+    tomorrow: dict[str, object] | None,
+    adjust: dict[str, object], mem: MemorySummary,
+    conf: tuple[bool, list[str]],
+) -> MessageResult | None:
     try:
         raw = _call_llm(MESSAGE_SYSTEM,
                         _llm_user_context(child, rec, decision, item, tomorrow,
                                           adjust, mem, conf))
         if not raw:
             return None
-        data = json.loads(_strip_fences(raw))
+        data = cast("dict[str, object]", json.loads(_strip_fences(raw)))
         body = str(data.get("body") or "").strip()
         if not body:
             return None
@@ -501,18 +533,24 @@ def _try_llm_message(child, rec, decision, item, tomorrow, adjust, mem, conf):
         return None
 
 
-def build_message(child, rec, decision, item, tomorrow, adjust, conf=None):
+def build_message(
+    child: dict[str, object], rec: dict[str, object],
+    decision: branch.Decision, item: catalog.Item | None,
+    tomorrow: dict[str, object] | None,
+    adjust: dict[str, object],
+    conf: tuple[bool, list[str]] | None = None,
+) -> MessageResult:
     """3단계 진입점. (LLM 없거나 스키마 실패 시) 룰베이스로 폴백."""
     if conf is None:
         try:
-            as_of = dt.date.fromisoformat(rec["date"])
+            as_of = dt.date.fromisoformat(cast("str", rec["date"]))
         except (TypeError, ValueError):
             as_of = dt.date.today()
-        conf = confidence_ok(child["id"], as_of)
-    result = None
+        conf = confidence_ok(cast("int", child["id"]), as_of)
+    result: MessageResult | None = None
     if _llm_available():
         result = _try_llm_message(child, rec, decision, item, tomorrow, adjust,
-                                  memory_summary(child["id"]), conf)
+                                  memory_summary(cast("int", child["id"])), conf)
     if result is None:
         result = {
             "case": decision["case"],
@@ -529,95 +567,95 @@ def build_message(child, rec, decision, item, tomorrow, adjust, conf=None):
 # 주간 · 월간 (5.5)
 # ---------------------------------------------------------------------------
 
-def weekly_report(child, week_start=None):
+def weekly_report(child: dict[str, object], week_start: str | None = None) -> dict[str, object]:
     """주간 리포트. week_start 미지정 시 지난 주(월~일).
 
     확신 문구는 confidence_ok(데이터 조건)일 때만 포함하고, 하락·미해결 주에는
     honest_note로 조정 사실을 솔직히 안내한다 (6.6 고정 삽입 금지).
     """
+    child_id = cast("int", child["id"])
     today = dt.date.today()
     if week_start:
         ws = dt.date.fromisoformat(week_start)
     else:
         ws = today - dt.timedelta(days=today.weekday() + 7)  # 지난 주 월요일
     we = ws + dt.timedelta(days=6)
-    crows = store.feedback_between(child["id"], ws.isoformat(), we.isoformat())
+    crows = store.feedback_between(child_id, ws.isoformat(), we.isoformat())
     pw = store.feedback_between(
-        child["id"], (ws - dt.timedelta(days=7)).isoformat(),
+        child_id, (ws - dt.timedelta(days=7)).isoformat(),
         (ws - dt.timedelta(days=1)).isoformat())
     record_days = len(crows)
 
-    def avg(rows, k):
-        vs = [int(r[k]) for r in rows]
+    def avg(rows: list[dict[str, object]], k: str) -> float | None:
+        vs = [cast("int", r[k]) for r in rows]
         return round(sum(vs) / len(vs), 1) if vs else None
 
     cur_int, cur_comp = avg(crows, "interest"), avg(crows, "comprehension")
     prev_int, prev_comp = avg(pw, "interest"), avg(pw, "comprehension")
-    trend = []
+    trend: list[str] = []
     if cur_int is not None and prev_int is not None:
-        trend.append("흥미 %.1f→%.1f" % (prev_int, cur_int))
+        trend.append(f"흥미 {prev_int:.1f}→{cur_int:.1f}")
     if cur_comp is not None and prev_comp is not None:
-        trend.append("이해도 %.1f→%.1f" % (prev_comp, cur_comp))
+        trend.append(f"이해도 {prev_comp:.1f}→{cur_comp:.1f}")
 
-    learned, seen = [], set()
+    learned: list[str] = []
+    seen: set[str] = set()
     for r in crows:
-        if r["completion"] == "full" and int(r["comprehension"]) >= 4 and r["content_id"]:
+        if (r["completion"] == "full"
+                and cast("int", r["comprehension"]) >= 4 and r["content_id"]):
             it = catalog.find_item(r["content_id"])
             if it and it["title"] not in seen:
                 seen.add(it["title"])
                 learned.append(it["title"])
     learned = learned[:3]
 
-    bd = store.branch_dates(child["id"], ws.isoformat(), we.isoformat())
-    counts = {"A": 0, "B": 0, "C": 0, "SKIP": 0}
+    bd = store.branch_dates(child_id, ws.isoformat(), we.isoformat())
+    counts: dict[str, int] = {"A": 0, "B": 0, "C": 0, "SKIP": 0}
     for _d, b in bd:
         counts[b] = counts.get(b, 0) + 1
 
-    choices = ["현재 흐름 유지 (추이가 안정적이라면 추천)"]
+    choices: list[str] = ["현재 흐름 유지 (추이가 안정적이라면 추천)"]
     if counts["B"] >= 2 or (cur_comp is not None and cur_comp < 3):
         choices.append("난이도를 살짝 낮춰서 진행")
     if ((cur_int is not None and prev_int is not None and cur_int < prev_int - 0.5)
             or counts["C"] >= 1):
         choices.append("소재·형식을 아이 흥미에 맞춰 교체")
 
-    next_cards = []
-    plan = store.approved_plan(child["id"])
+    next_cards: list[dict[str, object]] = []
+    plan = store.approved_plan(child_id)
     if plan:
-        for c in store.cards_for_plan(plan["id"]):
-            if c["date"] > we.isoformat():
+        for c in store.cards_for_plan(cast("int", plan["id"])):
+            if cast("str", c["date"]) > we.isoformat():
                 next_cards.append({"date": c["date"], "task": c["task"],
                                    "minutes": c["minutes"]})
             if len(next_cards) >= 5:
                 break
 
-    as_of = we if we < today else today
-    conf = confidence_ok(child["id"], as_of)
+    as_of = min(today, we)
+    conf = confidence_ok(child_id, as_of)
     confidence_sentence = ""
-    honest_note = None
+    honest_note: str | None = None
     if conf[0]:
         confidence_sentence = "데이터로 보면, 이번 주도 옳은 길로 가고 있어요."
     elif crows:
         if counts["C"] >= 1:
-            honest_note = ("이번 주에는 흥미가 흔들려 소재를 바꾸거나 조정했어요. "
-                           "그게 방향을 세우는 일입니다.")
+            honest_note = ("이번 주에는 흥미가 흔들려 소재를 바꾸거나 조정했어요. 그게 방향을 세우는 일입니다.")
         elif counts["B"] >= 2:
-            honest_note = ("이번 주에는 조금 막혔던 날이 있었어요. "
-                           "분량을 줄여 내일은 더 가볍게 가요.")
+            honest_note = ("이번 주에는 조금 막혔던 날이 있었어요. 분량을 줄여 내일은 더 가볍게 가요.")
         else:
-            honest_note = ("이번 주 추이는 살짝 흔들렸어요. 억지로 밀어붙이기보다 "
-                           "아이가 따라 올 수 있는 속도로 진행해요.")
+            honest_note = ("이번 주 추이는 살짝 흔들렸어요. 억지로 밀어붙이기보다 아이가 따라 올 수 있는 속도로 진행해요.")
 
     if learned:
-        one_step = "이번 주의 한 걸음: '%s'을(를) 한층 더 잘하게 됐어요!" % learned[0]
+        one_step = f"이번 주의 한 걸음: '{learned[0]}'을(를) 한층 더 잘하게 됐어요!"
     elif record_days:
-        one_step = ("이번 주의 한 걸음: %d일 동안 매일 한 걸음씩 걸었어요. "
-                    "그 자체가 큰 걸음입니다." % record_days)
+        one_step = (f"이번 주의 한 걸음: {record_days}일 동안 매일 한 걸음씩 걸었어요. "
+                    "그 자체가 큰 걸음입니다.")
     else:
         one_step = "이번 주에는 첫 걸음을 함께 내딛어요."
 
-    parts = ["이번 주 학습 %d일." % record_days]
+    parts: list[str] = [f"이번 주 학습 {record_days}일."]
     if trend:
-        parts.append("추이: %s." % ", ".join(trend))
+        parts.append(f"추이: {', '.join(trend)}.")
     summary = "".join(parts)
 
     return {
@@ -640,7 +678,19 @@ def weekly_report(child, week_start=None):
     }
 
 
-def monthly_achievement(child, month=None):
+class MonthlyAchievement(TypedDict):
+    month: str
+    record_days: int
+    max_streak: int
+    avg_interest: float | None
+    avg_comprehension: float | None
+    learned: list[str]
+    note: str
+
+
+def monthly_achievement(
+    child: dict[str, object], month: str | None = None,
+) -> MonthlyAchievement:
     """월간 학습 성취 리포트 (5.5) — 요금·청구와 무관하게 성취만 보고."""
     today = dt.date.today()
     if month is None:
@@ -648,11 +698,12 @@ def monthly_achievement(child, month=None):
     m = dt.date.fromisoformat(month + "-01")
     next_m = (m.replace(day=28) + dt.timedelta(days=4)).replace(day=1)
     rows = store.feedback_between(
-        child["id"], m.isoformat(), (next_m - dt.timedelta(days=1)).isoformat())
-    dates = sorted({r["date"] for r in rows})
+        cast("int", child["id"]), m.isoformat(),
+        (next_m - dt.timedelta(days=1)).isoformat())
+    dates = sorted({cast("str", r["date"]) for r in rows})
 
     max_streak = streak = 0
-    prev = None
+    prev: dt.date | None = None
     for dstr in dates:
         d = dt.date.fromisoformat(dstr)
         if prev is not None and (d - prev).days == 1:
@@ -662,16 +713,18 @@ def monthly_achievement(child, month=None):
         max_streak = max(max_streak, streak)
         prev = d
 
-    learned, seen = [], set()
+    learned: list[str] = []
+    seen: set[str] = set()
     for r in rows:
-        if r["completion"] == "full" and int(r["comprehension"]) >= 4 and r["content_id"]:
+        if (r["completion"] == "full"
+                and cast("int", r["comprehension"]) >= 4 and r["content_id"]):
             it = catalog.find_item(r["content_id"])
             if it and it["title"] not in seen:
                 seen.add(it["title"])
                 learned.append(it["title"])
 
-    def avg(k):
-        vs = [int(r[k]) for r in rows]
+    def avg(k: str) -> float | None:
+        vs = [cast("int", r[k]) for r in rows]
         return round(sum(vs) / len(vs), 1) if vs else None
 
     return {
@@ -685,20 +738,21 @@ def monthly_achievement(child, month=None):
     }
 
 
-def stats_payload(child):
+def stats_payload(child: dict[str, object]) -> dict[str, object]:
     """학습 성취 대시보드 (5.6) — 진행·추이만 노출, 인센티브 조건으로 쓰이지 않음."""
+    child_id = cast("int", child["id"])
     today = dt.date.today()
     month = today.strftime("%Y-%m")
-    rows = store.feedback_between(child["id"], month + "-01", today.isoformat())
-    mem = memory_summary(child["id"])
-    plan = store.approved_plan(child["id"])
+    rows = store.feedback_between(child_id, month + "-01", today.isoformat())
+    mem = memory_summary(child_id)
+    plan = store.approved_plan(child_id)
     planned = 0
     if plan:
-        planned = len([c for c in store.cards_for_plan(plan["id"])
-                       if c["date"].startswith(month)])
+        planned = len([c for c in store.cards_for_plan(cast("int", plan["id"]))
+                       if cast("str", c["date"]).startswith(month)])
 
-    def avg(k):
-        vs = [int(r[k]) for r in rows]
+    def avg(k: str) -> float | None:
+        vs = [cast("int", r[k]) for r in rows]
         return round(sum(vs) / len(vs), 1) if vs else None
 
     return {
@@ -721,17 +775,19 @@ def stats_payload(child):
 # LLM 전송 (OpenAI 호환, urllib)
 # ---------------------------------------------------------------------------
 
-def _llm_available():
+def _llm_available() -> bool:
     return bool(os.environ.get("OPENAI_API_KEY"))
 
 
-def _call_llm(system, user):
+def _call_llm(system: str, user: str) -> str | None:
     key = os.environ.get("OPENAI_API_KEY")
+    if not key:
+        return None
     base = os.environ.get("BLOOMY_LLM_BASE_URL", "https://api.openai.com/v1").rstrip("/")
     model = os.environ.get("BLOOMY_LLM_MODEL", "gpt-4o-mini")
-    last_err = None
+    last_err: Exception | None = None
     for use_json_mode in (True, False):
-        payload = {
+        payload: dict[str, object] = {
             "model": model,
             "temperature": 0.7,
             "messages": [
@@ -750,12 +806,15 @@ def _call_llm(system, user):
                     "Content-Type": "application/json",
                 },
             )
-            with urllib.request.urlopen(req, timeout=40) as r:
-                out = json.loads(r.read())
-            return out["choices"][0]["message"]["content"]
+            resp = cast("io.BufferedIOBase", urllib.request.urlopen(req, timeout=40))
+            with resp:
+                out = cast("dict[str, object]", json.loads(resp.read()))
+            choices = cast("list[dict[str, object]]", out["choices"])
+            message = cast("dict[str, object]", choices[0]["message"])
+            return cast("str | None", message["content"])
         except Exception as exc:  # noqa: BLE001
             last_err = exc
             continue
     if last_err:
-        print("[bloomy-coach] LLM call failed: %s" % last_err)
+        print(f"[bloomy-coach] LLM call failed: {last_err}")
     return None

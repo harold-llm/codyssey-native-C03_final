@@ -18,6 +18,8 @@ import datetime as dt
 import glob
 import json
 import os
+from collections.abc import Iterator
+from typing import TypedDict, cast
 
 import store
 
@@ -60,63 +62,84 @@ CARD_TEMPLATES = {
 }
 _DEFAULT_CARD = ("'%s'을(를) 아이와 함께 하기", "재밌어했나요? 다시 하고 싶어 했나요?")
 
-_ITEMS = []
+
+class Item(TypedDict):
+    """contents 테이블 1행 — canonical 필드 12종."""
+
+    id: str
+    title: str
+    age_min: int
+    age_max: int
+    level: int
+    skill: str
+    type: str
+    provider: str
+    link: str
+    session_minutes: int
+    expert_note: str
+    trust_source: str
+
+
+_ITEMS: list[Item] = []
 
 
 # ---------------------------------------------------------------------------
 # seed / 로드
 # ---------------------------------------------------------------------------
 
-def _iter_files():
+def _iter_files() -> list[str]:
     files = sorted(glob.glob(os.path.join(CATALOG_DIR, "*.json")))
     if os.path.isfile(_LEGACY_DATA):
         files.append(_LEGACY_DATA)
     return files
 
 
-def _iter_items():
+def _iter_items() -> Iterator[tuple[str, dict[str, object]]]:
     for fp in _iter_files():
         with open(fp, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        items = data.get("items") if isinstance(data, dict) else data
+            data = cast("dict[str, object] | list[object]", json.load(f))
+        items: object = data.get("items") if isinstance(data, dict) else data
         if not isinstance(items, list):
-            raise ValueError("%s: 리스트(또는 {items: [...]})가 아닙니다" % fp)
-        for it in items:
+            raise TypeError(f"{fp}: 리스트(또는 {{items: [...]}})가 아닙니다")
+        for it in cast("list[dict[str, object]]", items):
             yield fp, it
 
 
-def _level_of(v):
+def _level_of(v: object) -> int:
     """'L3' | 3 | '3' → 3"""
     if isinstance(v, str) and v.strip().upper().startswith("L"):
         return int(v.strip()[1:])
-    return int(v)
+    return int(cast("int | float | str", v))
 
 
-def normalize(item, source=""):
+def normalize(item: dict[str, object], source: str = "") -> Item:
     """canonical 필드로 정규화. 필수 필드 누락이면 ValueError."""
     if not item.get("id") or not item.get("title"):
-        raise ValueError("id/title 필수: %s (출처 %s)" % (item, source))
+        raise ValueError(f"id/title 필수: {item} (출처 {source})")
     legacy = "stage" in item
     try:
         level = _level_of(item.get("level", item.get("stage")))
     except (TypeError, ValueError):
-        raise ValueError("%s: level(또는 stage)이 1~5 여야 합니다" % item.get("id"))
+        raise ValueError(f"{item.get('id')}: level(또는 stage)이 1~5 여야 합니다")
     if not (1 <= level <= 5):
-        raise ValueError("%s: level 1~5 범위 (L6는 2차 확장)" % item.get("id"))
-    age_min = int(item.get("age_min", 4))
-    age_max = int(item.get("age_max", 7))
+        raise ValueError(f"{item.get('id')}: level 1~5 범위 (L6는 2차 확장)")
+    age_min = int(cast("int | float | str", item.get("age_min", 4)))
+    age_max = int(cast("int | float | str", item.get("age_max", 7)))
     if legacy:
         # 구 명세(3~6세) seed: 서비스 최소 연령이 4세이므로 4~7로 클램핑
         age_min = max(4, min(7, age_min))
         age_max = max(age_min, min(7, age_max))
     if not (4 <= age_min <= age_max <= 7):
-        raise ValueError("%s: 나이 범위는 4~7세여야 합니다 (age_min=%s age_max=%s)"
-                         % (item.get("id"), age_min, age_max))
-    provider = item.get("provider") or ("purchase" if item.get("paid") else "link")
+        raise ValueError(
+            f"{item.get('id')}: 나이 범위는 4~7세여야 합니다 (age_min={age_min} age_max={age_max})"
+        )
+    provider = (
+        cast("str", item.get("provider")) or ("purchase" if item.get("paid") else "link")
+    )
     if provider not in ("purchase", "link"):
         provider = "link"
-    expert = (item.get("expert_note") or item.get("why") or "").strip()
-    tip = (item.get("tip") or "").strip()
+    expert = cast("str", item.get("expert_note") or item.get("why") or "").strip()
+    tip = cast("str", item.get("tip") or "").strip()
     if tip and expert and tip not in expert:
         expert = expert + " | 부모 팁: " + tip
     return {
@@ -129,7 +152,9 @@ def normalize(item, source=""):
         "type": str(item.get("type") or "activity"),
         "provider": provider,
         "link": str(item.get("link") or ""),
-        "session_minutes": int(item.get("session_minutes") or item.get("minutes") or 10),
+        "session_minutes": int(
+            cast("int | float | str", item.get("session_minutes") or item.get("minutes") or 10)
+        ),
         "expert_note": expert,
         "trust_source": str(item.get("trust_source") or ""),
     }
@@ -148,8 +173,8 @@ _UPSERT = (
 )
 
 
-def upsert_item(row):
-    store.execute(
+def upsert_item(row: Item) -> None:
+    _ = store.execute(
         _UPSERT,
         (row["id"], row["title"], row["age_min"], row["age_max"], row["level"],
          row["skill"], row["type"], row["provider"], row["link"],
@@ -157,14 +182,14 @@ def upsert_item(row):
     )
 
 
-def load(strict=False):
+def load(strict: bool = False) -> tuple[int, list[str]]:
     """JSON seed → DB 업서트(멱등) + 전체 메모리 로드.
 
     strict=True면 잘못된 항목이 하나라도 있으면 실패 (seed 스크립트용).
     기본(False)은 잘못된 항목만 스킵하고 경고 출력 (운영 안정성).
     """
     store.init()
-    errors = []
+    errors: list[str] = []
     for fp, raw in _iter_items():
         try:
             upsert_item(normalize(raw, fp))
@@ -173,23 +198,24 @@ def load(strict=False):
     if errors and strict:
         raise ValueError("카탈로그 검증 실패:\n" + "\n".join(errors))
     if errors:
-        print("[bloomy-catalog] %d개 항목 스킵:\n%s" % (len(errors), "\n".join(errors)))
-    global _ITEMS
-    _ITEMS = store.query(
-        "SELECT * FROM contents ORDER BY level, age_min, id"
+        print(f"[bloomy-catalog] {len(errors)}개 항목 스킵:\n{'\n'.join(errors)}")
+    _ITEMS[:] = cast(
+        "list[Item]",
+        store.query("SELECT * FROM contents ORDER BY level, age_min, id"),
     )
     return len(_ITEMS), errors
 
 
-def validate():
+def validate() -> tuple[list[Item], list[str]]:
     """seed 스크립트용: (items, errors) 반환 — DB 쓰지 않음."""
-    items, errors = [], []
-    seen = set()
+    items: list[Item] = []
+    errors: list[str] = []
+    seen: set[str] = set()
     for fp, raw in _iter_items():
         try:
             row = normalize(raw, fp)
             if row["id"] in seen:
-                errors.append("중복 id: %s" % row["id"])
+                errors.append(f"중복 id: {row['id']}")
             seen.add(row["id"])
             items.append(row)
         except (ValueError, TypeError) as exc:
@@ -197,11 +223,18 @@ def validate():
     return items, errors
 
 
-def stats(items=None):
+class CatalogStats(TypedDict):
+    total: int
+    by_age: dict[int, int]
+    by_level: dict[int, int]
+    gate_ok: bool
+
+
+def stats(items: list[Item] | None = None) -> CatalogStats:
     """게이트 G3 점검용: 총개수·나이별 15+·레벨 분포."""
     items = items if items is not None else _ITEMS
-    by_age = {4: 0, 5: 0, 6: 0, 7: 0}
-    by_level = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    by_age: dict[int, int] = {4: 0, 5: 0, 6: 0, 7: 0}
+    by_level: dict[int, int] = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     for it in items:
         for age in range(4, 8):
             if it["age_min"] <= age <= it["age_max"]:
@@ -219,7 +252,7 @@ def stats(items=None):
 # 검색
 # ---------------------------------------------------------------------------
 
-def find_item(item_id):
+def find_item(item_id: object) -> Item | None:
     if not item_id:
         return None
     for it in _ITEMS:
@@ -228,8 +261,8 @@ def find_item(item_id):
     return None
 
 
-def items_by_level(level, age=None):
-    out = []
+def items_by_level(level: int, age: int | None = None) -> list[Item]:
+    out: list[Item] = []
     for it in _ITEMS:
         if it["level"] != level:
             continue
@@ -239,8 +272,14 @@ def items_by_level(level, age=None):
     return out
 
 
-def search(age=None, level=None, skill=None, type_=None, keyword=None):
-    out = []
+def search(
+    age: int | None = None,
+    level: int | None = None,
+    skill: str | None = None,
+    type_: str | None = None,
+    keyword: str | None = None,
+) -> list[Item]:
+    out: list[Item] = []
     kw = (keyword or "").lower()
     for it in _ITEMS:
         if age is not None and not (it["age_min"] <= age <= it["age_max"]):
@@ -261,8 +300,8 @@ def search(age=None, level=None, skill=None, type_=None, keyword=None):
 # 규칙 기반 계획 생성 (온보딩·replan 기본 — A의 RAG 추천과 같은 cards 형식)
 # ---------------------------------------------------------------------------
 
-def next_weekdays(start, n):
-    days = []
+def next_weekdays(start: dt.date, n: int) -> list[dt.date]:
+    days: list[dt.date] = []
     d = start
     while len(days) < n:
         if d.weekday() < 5:  # 평일(월~금)만 학습일
@@ -271,7 +310,7 @@ def next_weekdays(start, n):
     return days
 
 
-def card_text(item):
+def card_text(item: Item) -> tuple[str, str]:
     t, c = CARD_TEMPLATES.get(
         item.get("type", ""), _DEFAULT_CARD
     )
@@ -283,22 +322,39 @@ def card_text(item):
     return t, c
 
 
-def plan_explanation(child, base):
+def plan_explanation(child: dict[str, object], base: int) -> str:
     code, name, desc = LEVELS[base]
+    warmup = LEVELS[1][0]
+    session = child.get("session_length") or 10
     return (
-        "시작 단계는 %s (%s) — %s\n\n"
-        "왜 이 순서인지: 먼저 소리와 리듬에 익숙해지고, 글자-소리 대응, 읽기, "
-        "그리고 말하기 순서로 나아가는 게 '영어로 생각하는' 힘이 자연스럽게 쌓이는 "
-        "순서예요. 수요일은 %s 워밍업으로 리듬을 살리고, 금요일은 한 단계 위를 살짝 "
-        "도전해요.\n\n"
-        "부모 보조 팁: 하루 %d분, 옆에 앉아 아이가 가리키거나 따라 하는 것만 봐주세요. "
-        "영어를 잘해야 하는 게 아닙니다. "
-        "이 계획은 가정(hypothesis)이라 2주 반응 데이터로 조정돼요."
-        % (code, name, desc, LEVELS[1][0], child.get("session_length") or 10)
+        f"시작 단계는 {code} ({name}) — {desc}\n\n"
+        f"왜 이 순서인지: 먼저 소리와 리듬에 익숙해지고, 글자-소리 대응, 읽기, "
+        f"그리고 말하기 순서로 나아가는 게 '영어로 생각하는' 힘이 자연스럽게 쌓이는 "
+        f"순서예요. 수요일은 {warmup} 워밍업으로 리듬을 살리고, 금요일은 한 단계 위를 살짝 "
+        f"도전해요.\n\n"
+        f"부모 보조 팁: 하루 {session}분, 옆에 앉아 아이가 가리키거나 따라 하는 것만 봐주세요. "
+        f"영어를 잘해야 하는 게 아닙니다. "
+        f"이 계획은 가정(hypothesis)이라 2주 반응 데이터로 조정돼요."
     )
 
 
-def generate_plan(child, start):
+class Card(TypedDict):
+    """계획 카드 1장 (generate_plan cards 요소)."""
+
+    date: str
+    content_id: str | None
+    task: str
+    minutes: int
+    check_point: str
+
+
+class PlanDraft(TypedDict):
+    base_level: int
+    explanation: str
+    cards: list[Card]
+
+
+def generate_plan(child: dict[str, object], start: dt.date) -> PlanDraft:
     """4주(20 학습일) 계획 초안 (규칙 기반 기본 생성기).
 
     A의 커리큘럼 추천(RAG, 6.2)이 같은 cards 형식으로 이 결과를 대체/보완한다.
@@ -308,10 +364,11 @@ def generate_plan(child, start):
         금:       주 레벨 + 1 (한 단계 위 살짝 도전)
     학습일 11일째부터(3주차 블록) 주 레벨이 한 단계 올라간다.
     """
-    base = max(1, min(5, int(child.get("level") or 2)))
+    base = max(1, min(5, int(cast("int | float | str", child.get("level") or 2))))
+    age = int(cast("int | float | str", child["age"]))
     dates = next_weekdays(start, 20)
-    used = {}
-    cards = []
+    used: dict[int, int] = {}
+    cards: list[Card] = []
     for i, d in enumerate(dates):
         week = i // 5
         main_level = base if week < 2 else min(5, base + 1)
@@ -322,7 +379,7 @@ def generate_plan(child, start):
         else:  # 월/화/목
             level = main_level
         pool = (
-            items_by_level(level, child["age"])
+            items_by_level(level, age)
             or items_by_level(level)
             or list(_ITEMS)
         )
@@ -330,9 +387,12 @@ def generate_plan(child, start):
         used[level] = used.get(level, 0) + 1
         if item is None:
             cards.append({
-                "date": d.isoformat(), "content_id": None,
+                "date": d.isoformat(),
+                "content_id": None,
                 "task": "카탈로그 항목이 준비되는 중이에요. 오늘은 5분 영어 노래 시간!",
-                "minutes": min(5, child.get("session_length") or 10),
+                "minutes": min(
+                    5, int(cast("int | float | str", child.get("session_length") or 10))
+                ),
                 "check_point": "아이가 영어 소리에 반응했나요?",
             })
             continue
@@ -341,8 +401,10 @@ def generate_plan(child, start):
             "date": d.isoformat(),
             "content_id": item["id"],
             "task": task,
-            "minutes": min(int(item.get("session_minutes") or 10),
-                           int(child.get("session_length") or 10)),
+            "minutes": min(
+                int(item.get("session_minutes") or 10),
+                int(cast("int | float | str", child.get("session_length") or 10)),
+            ),
             "check_point": check,
         })
     return {
