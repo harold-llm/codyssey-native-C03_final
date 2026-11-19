@@ -1,0 +1,246 @@
+/* 꽃피다(Bloomy) — 따뜻한 크림 + 틸, 모바일 퍼스트 */
+:root {
+  --bg: #fff8f0;
+  --card: #ffffff;
+  --ink: #2d3a3a;
+  --ink-soft: #6b7a78;
+  --teal: #0f766e;
+  --teal-soft: #ccfbf1;
+  --teal-deep: #115e59;
+  --peach: #fb923c;
+  --peach-soft: #ffedd5;
+  --pink-soft: #fce7f3;
+  --line: #f0e6d8;
+  --danger: #dc2626;
+  --radius: 16px;
+  --shadow: 0 1px 3px rgba(45, 58, 58, 0.08), 0 4px 14px rgba(45, 58, 58, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; padding-bottom: 76px; }
+body.has-modal #app { padding-bottom: 0; }
+
+/* ---------- 공통 ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.muted { color: var(--ink-soft); font-size: 0.85rem; }
+.small { font-size: 0.8rem; }
+.center { text-align: center; }
+.mt8 { margin-top: 8px; } .mt16 { margin-top: 16px; }
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn:active { background: var(--teal-deep); }
+.btn:disabled { background: #b8c4c2; cursor: not-allowed; }
+.btn-ghost {
+  background: transparent;
+  color: var(--teal);
+  border: 1.5px solid var(--teal);
+}
+.btn-ghost:active { background: var(--teal-soft); }
+.btn-warn { background: #f97316; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); }
+label.field { display: block; margin-bottom: 12px; }
+label.field > span { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: var(--ink-soft); }
+textarea { resize: vertical; min-height: 72px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--teal-soft);
+  color: var(--teal-deep);
+}
+.badge-peach { background: var(--peach-soft); color: #c2570a; }
+.badge-pink { background: var(--pink-soft); color: #be185d; }
+.badge-gray { background: #eef1f0; color: var(--ink-soft); }
+
+/* ---------- 인증 / 온보딩 ---------- */
+.auth-wrap { padding: 48px 20px 20px; }
+.logo { font-size: 2.2rem; font-weight: 800; color: var(--teal-deep); text-align: center; letter-spacing: -1px; }
+.logo-sub { text-align: center; color: var(--ink-soft); margin: 6px 0 30px; font-size: 0.95rem; }
+.auth-tabs { display: flex; background: #f4ede2; border-radius: 12px; padding: 4px; margin-bottom: 18px; }
+.auth-tabs button {
+  flex: 1; border: none; background: transparent; padding: 10px;
+  font-size: 0.95rem; font-weight: 700; color: var(--ink-soft); border-radius: 9px; cursor: pointer;
+}
+.auth-tabs button.on { background: #fff; color: var(--teal-deep); box-shadow: var(--shadow); }
+.auth-msg { min-height: 22px; font-size: 0.85rem; color: var(--danger); margin: 8px 0 4px; text-align: center; }
+
+/* ---------- 상단 바 ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  background: rgba(255, 248, 240, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar .logo-sm { font-size: 1.25rem; font-weight: 800; color: var(--teal-deep); }
+.child-chips { display: flex; gap: 6px; flex: 1; overflow-x: auto; }
+.child-chips button {
+  border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+  padding: 5px 12px; font-size: 0.82rem; font-weight: 700; color: var(--ink-soft); cursor: pointer; white-space: nowrap;
+}
+.child-chips button.on { border-color: var(--teal); background: var(--teal-soft); color: var(--teal-deep); }
+.bell {
+  position: relative; border: none; background: none; font-size: 1.35rem; cursor: pointer; padding: 2px 4px;
+}
+.bell .dot {
+  position: absolute; top: -2px; right: -4px; min-width: 17px; height: 17px;
+  background: var(--peach); color: #fff; border-radius: 999px;
+  font-size: 0.68rem; font-weight: 800; display: flex; align-items: center; justify-content: center; padding: 0 4px;
+}
+
+/* ---------- 하단 탭 ---------- */
+.tabs {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  display: flex; max-width: 480px; margin: 0 auto;
+  background: #fff; border-top: 1px solid var(--line);
+}
+.tabs button {
+  flex: 1; border: none; background: none; padding: 9px 0 11px;
+  font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.tabs button .ic { font-size: 1.25rem; }
+.tabs button.on { color: var(--teal-deep); }
+
+/* ---------- 오늘 ---------- */
+.page { padding: 16px 14px; }
+.page-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; color: var(--ink); }
+.today-hero { border-top: 5px solid var(--teal); }
+.today-hero .stage-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.today-hero h2 { font-size: 1.25rem; line-height: 1.4; }
+.today-hero .meta { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.content-link { display: inline-block; margin-top: 10px; font-size: 0.85rem; font-weight: 700; color: var(--teal); word-break: break-all; }
+.tip-box {
+  margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+  background: var(--peach-soft); font-size: 0.85rem; color: #7c3e08;
+}
+.why-box { margin-top: 10px; font-size: 0.88rem; color: var(--ink-soft); }
+
+/* 피드백 칩 */
+.fb-group { margin-bottom: 14px; }
+.fb-group > span { display: block; font-size: 0.85rem; font-weight: 700; color: var(--ink-soft); margin-bottom: 6px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chips button {
+  flex: 1; min-width: 74px; border: 1.5px solid var(--line); background: #fff;
+  border-radius: 11px; padding: 9px 6px; font-size: 0.85rem; font-weight: 700;
+  color: var(--ink-soft); cursor: pointer;
+}
+.chips button.on { border-color: var(--teal); background: var(--teal-soft); color: var(--teal-deep); }
+
+/* 코치 메시지 */
+.coach-msg {
+  border-left: 4px solid var(--peach);
+  background: #fffaf3;
+}
+.coach-msg .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.coach-msg .head .avatar { font-size: 1.3rem; }
+.coach-msg .body { white-space: pre-line; font-size: 0.93rem; }
+.coach-msg .ai-label { margin-top: 10px; }
+.msg-list .coach-msg { margin-bottom: 12px; }
+
+/* ---------- 리포트 ---------- */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px; text-align: center;
+}
+.stat .num { font-size: 1.5rem; font-weight: 800; color: var(--teal-deep); }
+.stat .lbl { font-size: 0.78rem; color: var(--ink-soft); }
+.bar-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 0.82rem; }
+.bar-row .lbl { width: 64px; color: var(--ink-soft); }
+.bar { flex: 1; height: 10px; background: #f0e9dd; border-radius: 999px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--teal); border-radius: 999px; }
+.bar > i.peach { background: var(--peach); }
+.bar > i.pink { background: #f472b6; }
+.bar-row .val { width: 26px; text-align: right; font-weight: 700; }
+.trend-up { color: var(--teal-deep); } .trend-support { color: #c2570a; } .trend-steady { color: var(--ink-soft); }
+
+/* ---------- 내정보 ---------- */
+.fee-card { border-top: 5px solid var(--peach); }
+.fee-card .fee { font-size: 1.7rem; font-weight: 800; color: #c2570a; }
+.progress { height: 12px; background: #f0e9dd; border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+.progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--peach)); border-radius: 999px; transition: width 0.4s; }
+.row-btns { display: flex; gap: 10px; }
+.row-btns .btn { flex: 1; }
+
+/* ---------- 서재 ---------- */
+.filter-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.filter-row select, .filter-row input { flex: 1; }
+.filter-row input { min-width: 0; }
+.item-card { padding: 14px 16px; }
+.item-card h3 { font-size: 1rem; margin-bottom: 4px; }
+.item-card .meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.item-card .why { font-size: 0.83rem; color: var(--ink-soft); margin-top: 6px; }
+
+/* ---------- 알림 모달 ---------- */
+#modal {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(45, 58, 58, 0.45);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+#modal[hidden] { display: none; }
+.modal-sheet {
+  width: 100%; max-width: 480px; max-height: 80vh; overflow-y: auto;
+  background: var(--bg); border-radius: 20px 20px 0 0; padding: 18px 16px 26px;
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.modal-head h3 { font-size: 1.05rem; }
+.modal-head button { border: none; background: none; font-size: 1.3rem; cursor: pointer; color: var(--ink-soft); }
+.notif {
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.notif.unread { border-left: 4px solid var(--peach); }
+.notif h4 { font-size: 0.92rem; margin-bottom: 3px; }
+.notif .body { font-size: 0.84rem; color: var(--ink-soft); white-space: pre-line; }
+.notif .date { font-size: 0.72rem; color: #a8b3b1; margin-top: 5px; }
+.empty { text-align: center; color: var(--ink-soft); padding: 34px 10px; font-size: 0.92rem; }
+
+.philosophy {
+  margin: 18px 0 6px; padding: 14px 16px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--teal-soft), var(--peach-soft));
+  font-size: 0.88rem; color: var(--teal-deep); font-weight: 600;
+}
