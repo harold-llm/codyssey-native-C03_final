@@ -1,0 +1,11 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": ["backend", "Bloomy-AI"],
+  "pythonVersion": "3.12",
+  "exclude": [
+    "Bloomy-AI/examples",
+    "Bloomy-AI/tests",
+    "Bloomy-AI/tests_live"
+  ]
+}

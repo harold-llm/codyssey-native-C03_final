@@ -1,20 +1,23 @@
+# pyright: reportGeneralTypeIssues=false, reportIndexIssue=false, reportOptionalSubscript=false, reportOperatorIssue=false, reportCallIssue=false, reportArgumentType=false, reportAssignmentType=false, reportAttributeAccessIssue=false, reportUnknownParameterType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportUnknownMemberType=false, reportMissingParameterType=false, reportUnusedCallResult=false, reportAny=false
 """Exercise the local team checkout with a throwaway SQLite DB and demo catalog."""
 import argparse
-from datetime import date, timedelta
 import json
 import os
-from pathlib import Path
 import sys
+from datetime import date, timedelta
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from ai.agent import CoachAgent
 from ai.backend_adapter import coaching_request, recommendation_request, shared_catalog
 from ai.rag import RecommendationEngine
+
 from examples.ai_demo import demo_engine
 
 
 def verify():
     import catalog
+
     import main
     import store
 

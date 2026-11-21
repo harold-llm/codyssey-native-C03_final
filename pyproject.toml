@@ -13,8 +13,4 @@ entrypoint = "api.index:app"
 [tool.ruff.lint.isort]
 known-first-party = ["main", "store"]
 
-[tool.pyright]
-venvPath = "."
-venv = ".venv"
-extraPaths = ["backend", "Bloomy-AI"]
-pythonVersion = "3.12"
+# 타입 검사 설정은 pyrightconfig.json 참고 (extraPaths·exclude)
