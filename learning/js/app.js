@@ -51,7 +51,7 @@ async function api(method, path, body) {
     logout();
     throw new Error('로그인이 필요합니다');
   }
-  if (!res.ok) throw new Error((data && data.error) || '요청에 실패했어요');
+  if (!res.ok) throw new Error((data && data.error) || `요청에 실패했어요 (HTTP ${res.status})`);
   return data;
 }
 
