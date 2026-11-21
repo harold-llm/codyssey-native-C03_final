@@ -79,7 +79,7 @@ bloomy/
 | 변수 | 기본값 | 설명 |
 |---|---|---|
 | `DATABASE_URL` | — | **설정 시 Postgres 모드(Vercel/Neon), 미설정 시 SQLite 로컬 모드** |
-| `BLOOMY_CRON_SECRET` | — | `/api/cron` 인증 secret. Vercel 크론은 `CRON_SECRET` 헤더를 자동 첨부하므로 **Vercel 대시보드의 CRON_SECRET과 같은 값**을 설정 |
+| `BLOOMY_CRON_SECRET` / `CRON_SECRET` | — | `/api/cron` 인증 secret. Vercel Cron은 `CRON_SECRET`을 `Authorization: Bearer`로 보내므로 **`CRON_SECRET`만 설정해도 됨**(코드가 둘 다 인식) |
 | `BLOOMY_PORT` / `--port` | `8787` | 포트 (로컬 표준라이브러리 서버) |
 | `BLOOMY_HOST` / `--host` | `127.0.0.1` | 바인딩 주소 |
 | `BLOOMY_DB` | `backend/bloomy.db` | SQLite 경로 (로컬 모드) |

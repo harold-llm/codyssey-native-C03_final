@@ -592,7 +592,8 @@ def ep_cron(headers: Headers, body: Body | None) -> Resp:
             "date": "YYYY-MM-DD"(선택, daily/remind)}
     무료 티어는 크론 1회/일이므로 daily 잡이 리마인더·주간·월간을 내부에서
     조건 분기해 일괄 처리한다 (6.5)."""
-    secret = os.environ.get("BLOOMY_CRON_SECRET", "")
+    # Vercel Cron은 CRON_SECRET을 Authorization 헤더로 보낸다. 둘 다 인식.
+    secret = os.environ.get("BLOOMY_CRON_SECRET") or os.environ.get("CRON_SECRET", "")
     h = headers.get("Authorization") or ""
     if not secret or not h.startswith("Bearer ") or not hmac.compare_digest(
         h[7:].strip(), secret
