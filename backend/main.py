@@ -29,6 +29,7 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 # 같은 디렉터리 모듈 임포트를 위해 위의 sys.path 부트스트랩이 먼저 필요하다.
+import ai_bridge
 import auth
 import branch
 import catalog
@@ -36,6 +37,7 @@ import coach
 import diagnosis
 import scheduler
 
+import learning
 import store
 
 # 정적 파일 위치: 로컬에서는 루트(frontend 파일을 루트에 둬 Vercel 정적 서빙과 동일).
@@ -118,6 +120,16 @@ def _own_child(
     if not child or child["user_id"] != acc["id"]:
         return None, None, 404, "존재하지 않는 대상입니다"
     return acc, child, None, None
+
+
+def _plan_data(
+    child: dict[str, object], goal: str = "듣기",
+) -> tuple[catalog.PlanDraft, str]:
+    """RAG 추천 우선, 실패/미가용 시 규칙 기반 계획으로 폴백. → (data, source)"""
+    data = ai_bridge.generate_plan(child, goal)
+    if data is not None:
+        return cast("catalog.PlanDraft", cast("object", data)), "rag_onboarding"
+    return catalog.generate_plan(child, dt.date.today()), "onboarding_rule"
 
 
 def _plan_rows(
@@ -244,6 +256,7 @@ def ep_create_child(headers: Headers, body: Body) -> Resp:
         return 400, {"error": f"5문항 진단이 올바르지 않습니다 ({exc})"}, JSON
     materials = str(body.get("materials") or "").strip()[:200]
     favorite_topics = str(body.get("favorite_topics") or "").strip()[:200]
+    goal = str(body.get("goal") or "듣기").strip()[:20] or "듣기"
 
     child_id = store.create_child(
         cast("int", acc["id"]), name, age, birth_year, ek, exposure, materials,
@@ -254,9 +267,9 @@ def ep_create_child(headers: Headers, body: Body) -> Resp:
     child = store.get_child(child_id)
     if not child:
         return 500, {"error": "서버 오류가 발생했습니다"}, JSON
-    plan_data = catalog.generate_plan(child, dt.date.today())
+    plan_data, plan_source = _plan_data(child, goal)
     plan_id = store.create_plan(
-        child_id, plan_data["cards"][0]["date"], "onboarding_rule",
+        child_id, plan_data["cards"][0]["date"], plan_source,
         plan_data["base_level"], plan_data["explanation"], status="draft",
     )
     plan, cards = _plan_rows(plan_id, child_id, plan_data["cards"])
@@ -359,10 +372,10 @@ def ep_replan(_headers: Headers, child: dict[str, object]) -> Resp:
     if not refreshed:
         return 500, {"error": "서버 오류가 발생했습니다"}, JSON
     child = refreshed
-    plan_data = catalog.generate_plan(child, dt.date.today())
+    plan_data, plan_source = _plan_data(child)
     plan_id = store.create_plan(
         cast("int", child["id"]), plan_data["cards"][0]["date"],
-        "onboarding_rule",
+        plan_source,
         plan_data["base_level"], plan_data["explanation"], status="draft",
     )
     plan, cards = _plan_rows(plan_id, cast("int", child["id"]), plan_data["cards"])
@@ -561,6 +574,17 @@ def ep_notifications_read(headers: Headers) -> Resp:
     return 200, {"ok": True}, JSON
 
 
+def ep_learning_recommendation(headers: Headers, body: Body) -> Resp:
+    """아이용 미니러닝 서버 추천 (learning/ 프론트 계약). 인증 필요."""
+    if not _account_from(headers):
+        return 401, {"error": "로그인이 필요합니다"}, JSON
+    try:
+        result = learning.recommend(body)
+    except (TypeError, ValueError) as exc:
+        return 400, {"error": str(exc)}, JSON
+    return 200, result, JSON
+
+
 def ep_cron(headers: Headers, body: Body | None) -> Resp:
     """Vercel Cron 대상 엔드포인트. Bearer BLOOMY_CRON_SECRET 검증.
 
@@ -598,6 +622,8 @@ def serve_static(path: str) -> Resp:
     fp = os.path.normpath(os.path.join(FRONTEND_DIR, rel))
     if not (fp == FRONTEND_DIR or fp.startswith(FRONTEND_DIR + os.sep)):
         return 403, json.dumps({"error": "Forbidden"}).encode("utf-8"), JSON
+    if os.path.isdir(fp):
+        fp = os.path.join(fp, "index.html")
     if os.path.isfile(fp):
         ctype = STATIC_TYPES.get(
             os.path.splitext(fp)[1].lower(), "application/octet-stream"
@@ -700,6 +726,8 @@ def dispatch(
                     return ep_settings(child, body)
             if p == "/api/notifications/read":
                 return ep_notifications_read(headers)
+            if p == "/api/learning/recommendation":
+                return ep_learning_recommendation(headers, body)
             if p == "/api/cron":
                 return ep_cron(headers, body)
             return 404, {"error": "경로가 없습니다"}, JSON
@@ -769,3 +797,7 @@ def main() -> None:
     httpd = ThreadingHTTPServer((host, port), Handler)
     print(f"🌷 꽃피다(Bloomy) 서버 시작: http://{host}:{port}")
     httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    main()

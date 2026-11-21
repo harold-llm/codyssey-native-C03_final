@@ -1,0 +1,29 @@
+[
+  {
+    "id": "demo-sound-001", "title": "개발용 소리 놀이 카드",
+    "age_min": 4, "age_max": 7, "level": 2, "skill": "listening",
+    "type": "activity", "provider": "link", "link": "https://example.org/bloomy-demo/sound",
+    "session_minutes": 10, "expert_note": "소리를 듣고 같은 그림을 고르는 활동 예시. 전문가 미검수.",
+    "trust_source": "Bloomy 개발 테스트용 가상 자료. 교육 효과·공식 콘텐츠 출처가 아님.",
+    "review_status": "unreviewed", "task": "소리를 듣고 같은 그림을 함께 골라 보세요.",
+    "check_point": "아이가 소리에 반응해 그림을 고르나요?"
+  },
+  {
+    "id": "demo-animal-001", "title": "개발용 동물 소리 카드",
+    "age_min": 4, "age_max": 7, "level": 2, "skill": "listening",
+    "type": "activity", "provider": "link", "link": "https://example.org/bloomy-demo/animal",
+    "session_minutes": 10, "expert_note": "동물 그림과 소리를 연결하는 활동 예시. 전문가 미검수.",
+    "trust_source": "Bloomy 개발 테스트용 가상 자료. 교육 효과·공식 콘텐츠 출처가 아님.",
+    "review_status": "unreviewed", "task": "동물 그림을 보며 소리를 듣고 가리켜 보세요.",
+    "check_point": "동물 소리를 들으며 해당 그림에 관심을 보이나요?"
+  },
+  {
+    "id": "demo-speaking-001", "title": "개발용 인사 놀이 카드",
+    "age_min": 4, "age_max": 7, "level": 2, "skill": "speaking",
+    "type": "activity", "provider": "link", "link": "https://example.org/bloomy-demo/hello",
+    "session_minutes": 10, "expert_note": "짧은 인사를 주고받는 활동 예시. 발화를 강요하지 않습니다. 전문가 미검수.",
+    "trust_source": "Bloomy 개발 테스트용 가상 자료. 교육 효과·공식 콘텐츠 출처가 아님.",
+    "review_status": "unreviewed", "task": "인형과 짧은 인사를 주고받고 몸짓으로 답해도 괜찮다고 알려 주세요.",
+    "check_point": "몸짓이나 소리로 인사에 반응하나요?"
+  }
+]

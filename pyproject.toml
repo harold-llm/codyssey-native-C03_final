@@ -16,5 +16,5 @@ known-first-party = ["main", "store"]
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
-extraPaths = ["backend"]
+extraPaths = ["backend", "Bloomy-AI"]
 pythonVersion = "3.12"

@@ -114,12 +114,15 @@ def section_auth(suffix: str) -> str | None:
     st, d = req("GET", "/")
     d = cast("str", d)
     check("frontend /", st == 200 and "꽃피다" in d, f"status={st}")
-    st, d = req("GET", "/style.css")
+    st, d = req("GET", "/learning/")
     d = cast("str", d)
-    check("frontend /style.css", st == 200 and "--teal" in d, f"status={st}")
-    st, d = req("GET", "/app.js")
+    check("frontend /learning/", st == 200 and "themeToggle" in d, f"status={st}")
+    st, d = req("GET", "/learning/css/style.css")
     d = cast("str", d)
-    check("frontend /app.js", st == 200 and "Bloomy" in d, f"status={st}")
+    check("frontend /learning/css", st == 200 and "--accent" in d, f"status={st}")
+    st, d = req("GET", "/learning/js/app.js")
+    d = cast("str", d)
+    check("frontend /learning/js", st == 200 and "Bloomy" in d, f"status={st}")
 
     # 2. 회원가입 / 로그인
     email1 = f"parent{suffix}@test.bloomy"
@@ -744,6 +747,74 @@ def section_scheduler_cron(token1: str | None, m: dt.date, d5: dt.date) -> None:
     _ = os.environ.pop("BLOOMY_CRON_SECRET", None)
 
 
+def section_learning(token: str | None) -> None:
+    payload = {
+        "profile": {
+            "age": 5, "experience": "가끔 해봤어요",
+            "interests": ["동물"], "studyTime": 10,
+        },
+        "diagnosis": {},
+        "stats": {
+            "recentAttemptCount": 3, "recentAccuracy": 0.5,
+            "weakWords": ["Cat"], "words": [], "completionRate": 0.5,
+        },
+        "words": [
+            {"word": "Star"}, {"word": "Cat"},
+            {"word": "Dog"}, {"word": "Rabbit"},
+        ],
+        "phrases": [
+            {"english": "Hello, Star!"}, {"english": "I love cats!"},
+        ],
+    }
+    st, d = req("POST", "/api/learning/recommendation", token=token, body=payload)
+    d = cast("dict[str, object]", d)
+    check("learning recommendation -> 200", st == 200, str(d))
+    check("learning provider server_ai", d.get("provider") == "server_ai", str(d))
+    words = cast("list[dict[str, object]]", d.get("words") or [])
+    phrases = cast("list[dict[str, object]]", d.get("phrases") or [])
+    allowed_words = {"Star", "Cat", "Dog", "Rabbit"}
+    allowed_phrases = {"Hello, Star!", "I love cats!"}
+    check(
+        "learning words subset",
+        bool(words) and all(w.get("word") in allowed_words for w in words),
+        str(words),
+    )
+    check(
+        "learning weak word first",
+        bool(words) and words[0].get("word") == "Cat",
+        str(words),
+    )
+    check(
+        "learning phrases subset",
+        bool(phrases) and all(p.get("english") in allowed_phrases for p in phrases),
+        str(phrases),
+    )
+    check(
+        "learning difficulty valid",
+        d.get("difficulty") in ("기초", "차근차근", "도전"),
+        str(d.get("difficulty")),
+    )
+    mins = d.get("estimatedMinutes")
+    check(
+        "learning minutes in range",
+        isinstance(mins, int) and 5 <= mins <= 10,
+        str(mins),
+    )
+    check(
+        "learning historyCount int",
+        isinstance(d.get("historyCount"), int),
+        str(d.get("historyCount")),
+    )
+
+    st, d = req("POST", "/api/learning/recommendation", body=payload)
+    check("learning without auth -> 401", st == 401, str(d))
+
+    bad = dict(payload)
+    bad["words"] = []
+    st, d = req("POST", "/api/learning/recommendation", token=token, body=bad)
+    check("learning empty words -> 400", st == 400, str(d))
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -763,6 +834,7 @@ def main() -> int:
     section_reports(token1, child2, d0, d2, d3, d4, item0, orig)
     section_other_accounts(token1, child1, child2, d5, suffix)
     section_scheduler_cron(token1, m, d5)
+    section_learning(token1)
 
     try:
         os.remove(TEST_DB)

@@ -312,6 +312,39 @@
 
 - 전체 읽음 처리. `200` `{"ok": true}`
 
+#### `POST /api/learning/recommendation` — 인증 필요
+
+아이용 미니러닝(`learning/`)의 서버 추천. 프론트가 보낸 `words`/`phrases`의 **부분집합만** 골라 반환한다(카탈로그 밖 추천 금지). 룰베이스(결정적)로 동작하며 LLM 불요.
+
+```json
+{
+  "profile": {"age": 5, "experience": "가끔 해봤어요", "interests": ["동물"], "studyTime": 10},
+  "diagnosis": {"q1": "..."},
+  "stats": {"recentAttemptCount": 3, "recentAccuracy": 0.5, "weakWords": ["Cat"], "words": [], "completionRate": 0.5},
+  "words": [{"word": "Star"}, {"word": "Cat"}],
+  "phrases": [{"english": "Hello, Star!"}]
+}
+```
+- `words`/`phrases`가 비면 `400`. 미인증 `401`.
+- `200`:
+```json
+{
+  "provider": "server_ai",
+  "words": [{"word": "Cat"}, {"word": "Star"}],
+  "phrases": [{"english": "Hello, Star!"}],
+  "difficulty": "차근차근",
+  "estimatedMinutes": 10,
+  "historyCount": 3,
+  "reason": "동물 관심사와 지금 난이도(차근차근)에 맞춰 골랐어요.",
+  "summary": "오늘은 차근차근 단계로 단어 2개와 표현 1개를 연습해요.",
+  "strengths": ["꾸준히 시도하고 있어요"],
+  "supportNeeds": ["Cat 단어를 한 번 더 연습해요"],
+  "nextLearning": "다음에는 'Hello, Star!' 표현을 소리 내어 말해봐요."
+}
+```
+- `difficulty ∈ {기초, 차근차근, 도전}` — 영어 경험 + 최근 정답률로 결정. 약점 단어(`weakWords`)를 우선 배치.
+- `estimatedMinutes`는 `5 ≤ x ≤ studyTime` 범위.
+
 ### 2.7 크론 (Vercel)
 
 #### `POST /api/cron`
