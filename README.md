@@ -51,7 +51,7 @@ bloomy/
 │   ├── store.py               # SQLite 저장소 (DATABASE_URL 있으면 store_pg로 자동 재바인딩)
 │   ├── store_pg.py            # Postgres 저장소 (Vercel/Neon 운영용, store와 동일 API)
 │   ├── catalog.py             # 큐레이션 콘텐츠(62종) + 4주 계획 생성(규칙 폴백)
-│   ├── ai_bridge.py           # Bloomy-AI RAG 연결 (실패 시 규칙 기반 폴백)
+│   ├── ai_bridge.py           # Bloomy-AI RAG + LLM(Claude) 연결 (실패 시 규칙 폴백)
 │   ├── coach.py               # AI 코치 (LLM 선택 / 룰베이스 폴백, A·B·C 케이스)
 │   ├── branch.py              # 분기 규칙 엔진 (C→B→A, 공백/중복 해소)
 │   ├── learning.py            # 아이용 미니러닝 추천 (룰베이스)

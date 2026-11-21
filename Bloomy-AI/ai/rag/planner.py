@@ -1,11 +1,14 @@
+# pyright: reportMissingImports=false, reportMissingTypeStubs=false, reportUnknownParameterType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportUnknownMemberType=false, reportMissingParameterType=false, reportAny=false, reportAttributeAccessIssue=false, reportUnannotatedClassAttribute=false, reportUnusedParameter=false, reportUnknownLambdaType=false, reportImplicitStringConcatenation=false
 """Retrieve evidence and compose a grounded plan."""
-from datetime import date, timedelta
 from dataclasses import replace
+from datetime import date, timedelta
+
+from ai.contracts import RecommendationResult
+from ai.llm import LLMError, complete, object_schema
+
 from .ingest import load_catalog, make_chunks, validate_catalog
 from .retriever import LocalRetriever
 from .validator import validate_result
-from ai.contracts import RecommendationResult
-from ai.llm import LLMError, complete, object_schema
 
 
 class InsufficientCatalogError(ValueError):
