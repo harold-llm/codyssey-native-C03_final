@@ -657,6 +657,9 @@ def dispatch(
                 return ep_catalog(q)
             if p == "/api/me":
                 return ep_me(headers)
+            if p == "/api/cron":
+                # Vercel Cron은 GET으로 호출한다 (job 기본값 daily).
+                return ep_cron(headers, None)
             m = re.fullmatch(
                 r"/api/children/(\d+)/(today|plan|messages|report|achievement|stats)", p)
             if m:
