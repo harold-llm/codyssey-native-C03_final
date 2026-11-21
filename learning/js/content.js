@@ -31,6 +31,26 @@ window.BLOOMY_CONTENT = {
       { word: 'Color', meaning: '색칠하다', emoji: '🖍️', image: 'color.svg', pronunciation: '컬러' },
       { word: 'Smile', meaning: '웃다', emoji: '😊', image: 'smile.svg', pronunciation: '스마일' },
     ],
+    바다: [
+      { word: 'Fish', meaning: '물고기', emoji: '🐟', pronunciation: '피시' },
+      { word: 'Whale', meaning: '고래', emoji: '🐳', pronunciation: '웨일' },
+      { word: 'Boat', meaning: '배', emoji: '⛵', pronunciation: '보트' },
+    ],
+    자동차: [
+      { word: 'Car', meaning: '자동차', emoji: '🚗', pronunciation: '카' },
+      { word: 'Bus', meaning: '버스', emoji: '🚌', pronunciation: '버스' },
+      { word: 'Train', meaning: '기차', emoji: '🚂', pronunciation: '트레인' },
+    ],
+    자연: [
+      { word: 'Tree', meaning: '나무', emoji: '🌳', pronunciation: '트리' },
+      { word: 'Flower', meaning: '꽃', emoji: '🌸', pronunciation: '플라워' },
+      { word: 'Sun', meaning: '해', emoji: '☀️', pronunciation: '썬' },
+    ],
+    요리: [
+      { word: 'Cake', meaning: '케이크', emoji: '🍰', pronunciation: '케이크' },
+      { word: 'Apple', meaning: '사과', emoji: '🍎', pronunciation: '애플' },
+      { word: 'Milk', meaning: '우유', emoji: '🥛', pronunciation: '밀크' },
+    ],
   },
   phrases: {
     우주: [
@@ -57,11 +77,30 @@ window.BLOOMY_CONTENT = {
       { english: "Let's draw!", korean: '함께 그려 보자!', pronunciation: '렛츠 드로' },
       { english: 'I like colors!', korean: '나는 여러 색을 좋아해!', pronunciation: '아이 라이크 컬러스' },
     ],
+    바다: [
+      { english: 'Hello, fish!', korean: '안녕, 물고기야!', pronunciation: '헬로 피시' },
+      { english: 'I like the sea!', korean: '나는 바다가 좋아!', pronunciation: '아이 라이크 더 씨' },
+    ],
+    자동차: [
+      { english: 'Fast car!', korean: '빠른 자동차!', pronunciation: '패스트 카' },
+      { english: 'I like cars!', korean: '나는 자동차가 좋아!', pronunciation: '아이 라이크 카즈' },
+    ],
+    자연: [
+      { english: 'Green tree!', korean: '초록 나무!', pronunciation: '그린 트리' },
+      { english: 'I love nature!', korean: '나는 자연을 사랑해!', pronunciation: '아이 러브 네이처' },
+    ],
+    요리: [
+      { english: 'Yummy cake!', korean: '맛있는 케이크!', pronunciation: '야미 케이크' },
+      { english: "Let's cook!", korean: '함께 요리하자!', pronunciation: '렛츠 쿡' },
+    ],
     기본: [
       { english: 'Hello, friend!', korean: '안녕, 친구!', pronunciation: '헬로 프렌드' },
       { english: 'I love learning!', korean: '나는 배우는 게 좋아!', pronunciation: '아이 러브 러닝' },
     ],
   },
-  interests: ['동물', '우주', '공룡', '운동', '음악', '미술'],
+  interests: [
+    '동물', '우주', '공룡', '운동', '음악', '미술',
+    '바다', '자동차', '자연', '요리', '로봇', '공주', '색깔', '숫자',
+  ],
   experience: ['처음 시작해요', '가끔 해봤어요', '기초를 알고 있어요', '영어를 자주 접해요'],
 };

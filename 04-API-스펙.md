@@ -146,7 +146,7 @@
 | `birth_year` | optional int |
 | `ek_kindergarten` | bool |
 | `exposure` | `none` \| `some` \| `much` |
-| `session_length` | `10` \| `15` \| `20` (default 10) |
+| `session_length` | `10` \| `15` \| `20` \| `30` \| `40` \| `50` \| `60` \| `90` \| `120` (default 10) |
 | `diagnosis` | 5문항 전부 `none/some/many` — 하나라도 빠지면 `400` |
 | `materials`, `favorite_topics` | optional, 200자 이내 |
 
@@ -297,7 +297,7 @@
 ```json
 {"name": "수지", "session_length": 15}   // 둘 다 optional
 ```
-- `name` 20자, `session_length` 10/15/20. `200` → 갱신된 `child`.
+- `name` 20자, `session_length` 10/15/20/30/40/50/60/90/120. `200` → 갱신된 `child`.
 
 #### `GET /api/catalog?age=&level=&skill=&type=&keyword=` — 무인증
 

@@ -11,7 +11,7 @@ import datetime as dt
 import importlib.util
 import os
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 AI_ROOT = os.path.normpath(os.path.join(HERE, "..", "Bloomy-AI"))
@@ -51,7 +51,16 @@ def generate_plan(
         return None
     try:
         from ai.backend_adapter import recommendation_request
-        request = recommendation_request(child, dt.date.today().isoformat(), goal=goal)
+        # RAG는 session_minutes 10/15/20만 지원 → 큰 값은 20으로 캡
+        child_for_rag = dict(child)
+        raw_sl = child.get("session_length")
+        try:
+            sl = int(cast("int | float | str", raw_sl)) if raw_sl is not None else 10
+        except (TypeError, ValueError):
+            sl = 10
+        child_for_rag["session_length"] = min(sl, 20)
+        request = recommendation_request(
+            child_for_rag, dt.date.today().isoformat(), goal=goal)
         result = _engine().recommend(request)
         payload = result.to_backend_payload()
         return {

@@ -59,7 +59,7 @@ STATIC_TYPES = {
 }
 
 COMPLETIONS = ("full", "partial", "none")  # 잘 따라옴 / 일부 / 못 함
-SESSION_LENGTHS = (10, 15, 20)
+SESSION_LENGTHS = (10, 15, 20, 30, 40, 50, 60, 90, 120)
 EXPOSURES = ("none", "some", "much")
 DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 MONTH_RE = re.compile(r"\d{4}-\d{2}")

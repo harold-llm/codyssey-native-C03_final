@@ -241,6 +241,15 @@ a { color: var(--accent); text-decoration: none; }
   padding: 5px 12px;
 }
 .chip-accent { color: var(--accent); background: var(--accent-soft); }
+.chip-x {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0 0 4px;
+  line-height: 1;
+}
 .ai-badge {
   display: inline-flex;
   align-items: center;

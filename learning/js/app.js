@@ -246,6 +246,32 @@ function bindAuth() {
 }
 
 /* ---------------- onboarding (profile) ---------------- */
+function customChipsHtml() {
+  return state.onboard.interests
+    .filter((t) => !CONTENT.interests.includes(t))
+    .map((t) => `<span class="chip chip-accent">${esc(t)} <button type="button" class="chip-x" data-remove="${esc(t)}" aria-label="삭제">×</button></span>`)
+    .join('');
+}
+
+function refreshInterestUI() {
+  const list = document.getElementById('customInterestList');
+  if (list) list.innerHTML = customChipsHtml();
+  document.querySelectorAll('.interest-item input').forEach((cb) => {
+    cb.checked = state.onboard.interests.includes(cb.value);
+    const label = cb.closest('.interest-item');
+    if (label) label.classList.toggle('is-selected', cb.checked);
+  });
+  if (list) {
+    list.querySelectorAll('[data-remove]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const t = btn.getAttribute('data-remove');
+        state.onboard.interests = state.onboard.interests.filter((x) => x !== t);
+        refreshInterestUI();
+      });
+    });
+  }
+}
+
 function onboardingHtml() {
   const o = state.onboard;
   return `
@@ -278,11 +304,16 @@ function onboardingHtml() {
                 <span>${esc(t)}</span>
               </label>`).join('')}
           </div>
+          <div class="row mt16">
+            <input class="input" id="customInterestInput" maxlength="20" placeholder="직접 입력 (예: 로봇, 공주, 우주선)" style="flex:1" />
+            <button type="button" class="btn btn-ghost btn-sm" id="addInterestBtn">추가</button>
+          </div>
+          <div id="customInterestList" class="card-meta mt8">${customChipsHtml()}</div>
         </div>
         <div class="form-section">
           <h2 class="form-section-title">하루 학습 시간<span class="required-dot">필수</span></h2>
           <div class="choice-grid" data-group="studyTime">
-            ${[10, 15, 20].map((m) => `<button type="button" class="choice-btn ${o.studyTime === m ? 'is-selected' : ''}" data-value="${m}">${m}분</button>`).join('')}
+            ${[10, 15, 20, 30, 40, 50, 60, 90, 120].map((m) => `<button type="button" class="choice-btn ${o.studyTime === m ? 'is-selected' : ''}" data-value="${m}">${m}분</button>`).join('')}
           </div>
         </div>
         <div class="form-section">
@@ -331,6 +362,31 @@ function bindOnboarding() {
       state.onboard.interests = [...set];
     });
   });
+  const addInterestBtn = document.getElementById('addInterestBtn');
+  if (addInterestBtn) {
+    addInterestBtn.addEventListener('click', () => {
+      const input = document.getElementById('customInterestInput');
+      if (!input) return;
+      const val = (input.value || '').trim().slice(0, 20);
+      if (!val) return;
+      if (!state.onboard.interests.includes(val)) {
+        state.onboard.interests = [...state.onboard.interests, val];
+      }
+      input.value = '';
+      refreshInterestUI();
+    });
+  }
+  const customInput = document.getElementById('customInterestInput');
+  if (customInput) {
+    customInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const b = document.getElementById('addInterestBtn');
+        if (b) b.click();
+      }
+    });
+  }
+  refreshInterestUI();
   const ekCheck = document.getElementById('ekCheck');
   if (ekCheck) ekCheck.addEventListener('change', () => { state.onboard.ek = ekCheck.checked; });
   const materialsInput = document.getElementById('materialsInput');
@@ -379,6 +435,7 @@ function diagnosisHtml() {
           </div>`).join('')}
         <div class="form-message" id="diagMsg"></div>
         <button class="btn btn-block" id="diagSubmit">계획 만들기</button>
+        <button type="button" class="btn btn-ghost btn-block mt16" id="diagBack">← 이전: 프로필</button>
       </div>
     </div>
   </section>`;
@@ -434,6 +491,8 @@ function bindDiagnosis() {
       btn.disabled = false;
     }
   });
+  const back = document.getElementById('diagBack');
+  if (back) back.addEventListener('click', () => { state.view = 'onboarding'; render(); });
 }
 
 /* ---------------- plan approval ---------------- */
