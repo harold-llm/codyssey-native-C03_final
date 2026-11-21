@@ -84,9 +84,11 @@ bloomy/
 | `BLOOMY_HOST` / `--host` | `127.0.0.1` | 바인딩 주소 |
 | `BLOOMY_DB` | `backend/bloomy.db` | SQLite 경로 (로컬 모드) |
 | `BLOOMY_PEPPER` | 개발용 기본값 | 비밀번호 해시 pepper (운영 시 반드시 교체) |
-| `OPENAI_API_KEY` | — | 설정 시 LLM 코칭 활성화 (없으면 내장 룰베이스 코치) |
-| `BLOOMY_LLM_BASE_URL` | `https://api.openai.com/v1` | OpenAI 호환 API |
-| `BLOOMY_LLM_MODEL` | `gpt-4o-mini` | LLM 모델 |
+| `BLOOMY_LLM_PROVIDER` | 자동 | `anthropic`(Claude) 또는 `openai`(호환). 미설정 시 키 존재로 추론 |
+| `ANTHROPIC_API_KEY` | — | 설정 시 **Claude** 코칭 활성화 (`BLOOMY_LLM_PROVIDER=anthropic`) |
+| `OPENAI_API_KEY` | — | 설정 시 OpenAI 호환 LLM 코칭 활성화 |
+| `BLOOMY_LLM_BASE_URL` | 제공자별 | Anthropic `https://api.anthropic.com` / OpenAI `https://api.openai.com/v1` |
+| `BLOOMY_LLM_MODEL` | 제공자별 | Anthropic `claude-3-5-sonnet-latest` / OpenAI `gpt-4o-mini` |
 | `BLOOMY_DAILY_TIME` | `09:00` | 매일 아침 알림 시각 (로컬 스케줄러) |
 
 LLM 모드/룰베이스 모드 모두 동일한 A·B·C 케이스 규칙과 조정 동작을 따르며,

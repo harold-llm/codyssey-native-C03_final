@@ -775,11 +775,70 @@ def stats_payload(child: dict[str, object]) -> dict[str, object]:
 # LLM 전송 (OpenAI 호환, urllib)
 # ---------------------------------------------------------------------------
 
+def _llm_provider() -> str:
+    """LLM 제공자. BLOOMY_LLM_PROVIDER 우선, 없으면 키 존재로 추론."""
+    provider = os.environ.get("BLOOMY_LLM_PROVIDER", "").strip().lower()
+    if provider in ("anthropic", "claude"):
+        return "anthropic"
+    if provider in ("openai", "openai-compatible"):
+        return "openai"
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return "anthropic"
+    return "openai"
+
+
 def _llm_available() -> bool:
+    if _llm_provider() == "anthropic":
+        return bool(os.environ.get("ANTHROPIC_API_KEY"))
     return bool(os.environ.get("OPENAI_API_KEY"))
 
 
 def _call_llm(system: str, user: str) -> str | None:
+    if _llm_provider() == "anthropic":
+        return _call_anthropic(system, user)
+    return _call_openai(system, user)
+
+
+def _call_anthropic(system: str, user: str) -> str | None:
+    """Anthropic(Claude) Messages API. JSON은 프롬프트로 유도하고 호출부가 파싱."""
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        return None
+    base = os.environ.get("BLOOMY_LLM_BASE_URL", "https://api.anthropic.com").rstrip("/")
+    model = os.environ.get("BLOOMY_LLM_MODEL", "claude-3-5-sonnet-latest")
+    payload: dict[str, object] = {
+        "model": model,
+        "max_tokens": 1024,
+        "temperature": 0.7,
+        "system": system,
+        "messages": [{"role": "user", "content": user}],
+    }
+    try:
+        req = urllib.request.Request(
+            base + "/v1/messages",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "x-api-key": key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            },
+        )
+        resp = cast("io.BufferedIOBase", urllib.request.urlopen(req, timeout=40))
+        with resp:
+            out = cast("dict[str, object]", json.loads(resp.read()))
+        blocks = cast("list[dict[str, object]]", out.get("content") or [])
+        text = "".join(
+            cast("str", b.get("text") or "")
+            for b in blocks
+            if b.get("type") == "text"
+        )
+        return text or None
+    except Exception as exc:  # noqa: BLE001
+        print(f"[bloomy-coach] Anthropic call failed: {exc}")
+        return None
+
+
+def _call_openai(system: str, user: str) -> str | None:
     key = os.environ.get("OPENAI_API_KEY")
     if not key:
         return None
