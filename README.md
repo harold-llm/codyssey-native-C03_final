@@ -88,7 +88,7 @@ bloomy/
 | `ANTHROPIC_API_KEY` | — | 설정 시 **Claude** 코칭 활성화 (`BLOOMY_LLM_PROVIDER=anthropic`) |
 | `OPENAI_API_KEY` | — | 설정 시 OpenAI 호환 LLM 코칭 활성화 |
 | `BLOOMY_LLM_BASE_URL` | 제공자별 | Anthropic `https://api.anthropic.com` / OpenAI `https://api.openai.com/v1` |
-| `BLOOMY_LLM_MODEL` | 제공자별 | Anthropic `claude-3-5-sonnet-latest` / OpenAI `gpt-4o-mini` |
+| `BLOOMY_LLM_MODEL` | 제공자별 | Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` |
 | `BLOOMY_DAILY_TIME` | `09:00` | 매일 아침 알림 시각 (로컬 스케줄러) |
 
 LLM 모드/룰베이스 모드 모두 동일한 A·B·C 케이스 규칙과 조정 동작을 따르며,

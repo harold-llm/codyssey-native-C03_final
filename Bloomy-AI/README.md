@@ -28,7 +28,7 @@ python -m examples.integration_demo
 | 환경변수 | 용도 |
 |---|---|
 | `OPENAI_API_KEY` | API 키. 실제 호출 시 필요 |
-| `BLOOMY_LLM_MODEL` | Structured Outputs를 지원하는 모델. 기본값 `gpt-4o-mini` |
+| `BLOOMY_LLM_MODEL` | 기본값 Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` (Structured Outputs 지원 모델) |
 | `BLOOMY_LLM_BASE_URL` | OpenAI 호환 API의 베이스 URL. 기본값 `https://api.openai.com/v1` |
 
 ```text

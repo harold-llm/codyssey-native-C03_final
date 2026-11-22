@@ -69,7 +69,7 @@
 ```json
 {"id": 1, "child_id": 1, "feedback_id": 5, "date": "2026-11-18", "branch": "B",
  "memo_intent": "none", "body": "…\nAI가 작성한 코칭 메시지입니다.",
- "model": "gpt-4o-mini", "prompt_version": "bloomy-coach-v2-llm", "is_ai_generated": 1}
+ "model": "claude-haiku-5-5", "prompt_version": "bloomy-coach-v2-llm", "is_ai_generated": 1}
 ```
 - `branch`: `A|B|C` (휴식일 SKIP은 메시지로 저장되지 않는다)
 - `prompt_version`: `bloomy-coach-v2-rules`(룰베이스) | `bloomy-coach-v2-llm`(LLM)
@@ -237,10 +237,22 @@
  "adjust": {"type": "propose_swap", "reason": "큰 변경 — 부모 확인 후에만 반영 (6.1 승인 게이트)",
             "dates": [], "proposal": "슈퍼심플 레벨1: My Day"},
  "tomorrow": {"date": "2026-11-18", "content_id": "...", "title": "...",
-              "task": "...", "minutes": 10, "check_point": "..."} | null}
+              "task": "...", "minutes": 10, "check_point": "..."} | null,
+ "ai_review": {"case": "C",
+               "advice": "'Brown Bear…' — L1 리더스 자료로 듣기를 기르기 좋아요. …" | null,
+               "evidence": [{"content_id": "...", "title": "...", "source": "...",
+                             "link": "...", "excerpt": "..."}],
+               "proposal": {"date": "...", "content_id": "...", "task": "...",
+                            "minutes": 10, "check_point": "..."} | null,
+               "warnings": ["..."],
+               "agent_version": "bloomy-coach-local-v1"} | null}
 ```
 - `adjust` 구조: `{type, reason, dates[], proposal?}` — type은 아래 4절.
 - `tomorrow`는 **조정이 적용된 후**의 카드 (shrink/swap 반영).
+- `ai_review`: 핵심 AI ② **코치 Agent**(`Bloomy-AI/ai/agent`)의 읽기 전용 검토 결과.
+  RAG 근거(`evidence`), 질문·변경 요청에 대한 자료 안내(`advice`), 변경 요청의 승인 대기
+  후보(`proposal`), 가드레일 경고(`warnings`)를 담는다. 판정·조정·DB 반영은 하지 않으며
+  (`case`·`adjust`·`tomorrow`가 정답), 휴식일·Agent 미가용·입력 불일치·오류 시 `null`.
 
 #### `GET /api/children/{id}/messages`
 
@@ -250,7 +262,7 @@
 
 #### `GET /api/children/{id}/report?week_start=YYYY-MM-DD`
 
-- `week_start` 미지정 시 **지난 주(월~일)**. 형식 잘못 `400`.
+- `week_start` 미지정 시 **이번 주(월~일)**. 형식 잘못 `400`.
 - `200`:
 ```json
 {"week_start": "2026-11-09", "week_end": "2026-11-15", "record_days": 4,
@@ -506,9 +518,11 @@
 |------|------|------|------|
 | `DATABASE_URL` | 프로덕션 | —(없으면 SQLite) | Neon Postgres. 설정 시 `store_pg` 자동 전환 |
 | `BLOOMY_PEPPER` | 권장 | `bloomy-default-pepper` | 비밀번호 해시 페퍼 — **프로덕션에서 반드시 설정** |
-| `OPENAI_API_KEY` | 선택 | — | 없으면 룰베이스 코치로 동작(결정적) |
-| `BLOOMY_LLM_BASE_URL` | 선택 | `https://api.openai.com/v1` | LLM 엔드포인트 (호환 API 가능) |
-| `BLOOMY_LLM_MODEL` | 선택 | `gpt-4o-mini` | LLM 모델 |
+| `BLOOMY_LLM_PROVIDER` | 선택 | 키 존재로 추론 | `anthropic`(Claude) 또는 `openai`(호환) |
+| `ANTHROPIC_API_KEY` | 선택 | — | 설정 시 Claude 코칭·RAG 생성 활성화 |
+| `OPENAI_API_KEY` | 선택 | — | 설정 시 OpenAI 호환 LLM 사용. 키가 하나도 없으면 룰베이스(결정적) |
+| `BLOOMY_LLM_BASE_URL` | 선택 | 제공자별 | Anthropic `https://api.anthropic.com` / OpenAI `https://api.openai.com/v1` |
+| `BLOOMY_LLM_MODEL` | 선택 | Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` | LLM 모델 |
 | `BLOOMY_CRON_SECRET` | 프로덕션 | —(없으면 크론 401) | `POST /api/cron` Bearer 시크릿 |
 | `BLOOMY_DAILY_TIME` | 선택 | `09:00` | 로컬 프로세스 스케줄러 카드 발송 시각 |
 | `BLOOMY_DB` | 선택 | `backend/bloomy.db` | SQLite 경로 (로컬/테스트) |
