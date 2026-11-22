@@ -30,6 +30,7 @@ if os.path.exists(TEST_DB):
 
 import auth
 import catalog
+import clock
 import scheduler
 
 import main as bloomy_main
@@ -888,7 +889,7 @@ def section_delete_account(token1: str | None, child_ids: tuple[int, int]) -> No
 def main() -> int:
     store.init()
     _ = catalog.load()
-    today = dt.date.today()
+    today = clock.today()  # 서버와 같은 한국 시간 기준
     suffix = dt.datetime.now().strftime("%H%M%S")
 
     # 과거 계획 앵커: 최근 월요일(<= 오늘-3). d0..d4 = 월~금 모두 과거,

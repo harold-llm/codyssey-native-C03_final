@@ -7,11 +7,12 @@
 # pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false
 from __future__ import annotations
 
-import datetime as dt
 import importlib.util
 import os
 import sys
 from typing import TYPE_CHECKING, cast
+
+import clock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 AI_ROOT = os.path.normpath(os.path.join(HERE, "..", "Bloomy-AI"))
@@ -63,7 +64,7 @@ def generate_plan(
             sl = 10
         child_for_rag["session_length"] = min(sl, 20)
         request = recommendation_request(
-            child_for_rag, dt.date.today().isoformat(), goal=goal)
+            child_for_rag, clock.today().isoformat(), goal=goal)
         result = _engine().recommend(request)
         payload = result.to_backend_payload()
         return {

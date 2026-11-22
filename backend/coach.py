@@ -28,6 +28,7 @@ from typing import TypedDict, cast
 
 import branch
 import catalog
+import clock
 
 import store
 
@@ -126,7 +127,7 @@ def confidence_ok(
       ② 미해결 C 없음 (C 이후 full+이해도≥3 기록 존재)
       ③ 연속 B(캘린더 인접) 없음
     """
-    as_of = as_of or dt.date.today()
+    as_of = as_of or clock.today()
     reasons: list[str] = []
     cur = store.feedback_between(
         child_id, (as_of - dt.timedelta(days=6)).isoformat(), as_of.isoformat())
@@ -545,7 +546,7 @@ def build_message(
         try:
             as_of = dt.date.fromisoformat(cast("str", rec["date"]))
         except (TypeError, ValueError):
-            as_of = dt.date.today()
+            as_of = clock.today()
         conf = confidence_ok(cast("int", child["id"]), as_of)
     result: MessageResult | None = None
     if _llm_available():
@@ -574,7 +575,7 @@ def weekly_report(child: dict[str, object], week_start: str | None = None) -> di
     honest_note로 조정 사실을 솔직히 안내한다 (6.6 고정 삽입 금지).
     """
     child_id = cast("int", child["id"])
-    today = dt.date.today()
+    today = clock.today()
     if week_start:
         ws = dt.date.fromisoformat(week_start)
     else:
@@ -692,7 +693,7 @@ def monthly_achievement(
     child: dict[str, object], month: str | None = None,
 ) -> MonthlyAchievement:
     """월간 학습 성취 리포트 (5.5) — 요금·청구와 무관하게 성취만 보고."""
-    today = dt.date.today()
+    today = clock.today()
     if month is None:
         month = (today.replace(day=1) - dt.timedelta(days=1)).strftime("%Y-%m")
     m = dt.date.fromisoformat(month + "-01")
@@ -741,7 +742,7 @@ def monthly_achievement(
 def stats_payload(child: dict[str, object]) -> dict[str, object]:
     """학습 성취 대시보드 (5.6) — 진행·추이만 노출, 인센티브 조건으로 쓰이지 않음."""
     child_id = cast("int", child["id"])
-    today = dt.date.today()
+    today = clock.today()
     month = today.strftime("%Y-%m")
     rows = store.feedback_between(child_id, month + "-01", today.isoformat())
     mem = memory_summary(child_id)

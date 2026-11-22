@@ -33,6 +33,7 @@ import ai_bridge
 import auth
 import branch
 import catalog
+import clock
 import coach
 import consent
 import diagnosis
@@ -130,7 +131,7 @@ def _plan_data(
     data = ai_bridge.generate_plan(child, goal)
     if data is not None:
         return cast("catalog.PlanDraft", cast("object", data)), "rag_onboarding"
-    return catalog.generate_plan(child, dt.date.today()), "onboarding_rule"
+    return catalog.generate_plan(child, clock.today()), "onboarding_rule"
 
 
 def _plan_rows(
@@ -152,7 +153,7 @@ def _plan_rows(
 def ep_health() -> Resp:
     # LLM 설정 진단: 키 값은 노출하지 않고 등록 여부만 보여준다.
     return 200, {"ok": True, "service": "bloomy",
-                 "time": dt.datetime.now().isoformat(),
+                 "time": clock.now().isoformat(),
                  "llm": coach.llm_status(),
                  "ai_modules": {"rag_and_coach_agent": ai_bridge.available()}}, JSON
 
@@ -454,7 +455,7 @@ def ep_plan(child: dict[str, object]) -> Resp:
 
 
 def ep_today(child: dict[str, object]) -> Resp:
-    today = dt.date.today().isoformat()
+    today = clock.today().isoformat()
     cid = cast("int", child["id"])
     plan = store.approved_plan(cid)
     cards = store.cards_for_plan(cast("int", plan["id"])) if plan else []
@@ -496,7 +497,7 @@ def ep_feedback(_headers: Headers, child: dict[str, object], body: Body) -> Resp
     """1분 피드백 (5.3) → 3단계 코치 (6.3) → 조정·메시지.
 
     rest_day=true면 분기 건너뜀(SKIP): 메시지 미생성, 성취 분모 제외 (5.4)."""
-    today = dt.date.today().isoformat()
+    today = clock.today().isoformat()
     cid = cast("int", child["id"])
     date = str(body.get("date") or today)
     if not DATE_RE.fullmatch(date):

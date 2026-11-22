@@ -550,6 +550,7 @@
 | `BLOOMY_LLM_BASE_URL` | 선택 | 제공자별 | Anthropic `https://api.anthropic.com` / OpenAI `https://api.openai.com/v1` |
 | `BLOOMY_LLM_MODEL` | 선택 | Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` | LLM 모델 |
 | `BLOOMY_CRON_SECRET` | 프로덕션 | —(없으면 크론 401) | `POST /api/cron` Bearer 시크릿 |
+| `BLOOMY_TZ_OFFSET_HOURS` | 선택 | `9` | 서비스 기준 시간대(UTC 오프셋). 모든 '오늘' 계산은 `backend/clock.py` 기준 |
 | `BLOOMY_DAILY_TIME` | 선택 | `09:00` | 로컬 프로세스 스케줄러 카드 발송 시각 |
 | `BLOOMY_DB` | 선택 | `backend/bloomy.db` | SQLite 경로 (로컬/테스트) |
 | `BLOOMY_PORT` / `BLOOMY_HOST` | 선택 | `8787` / `127.0.0.1` | 로컬 서버 |

@@ -17,6 +17,7 @@ import time
 from typing import cast
 
 import catalog
+import clock
 import coach
 
 import store
@@ -62,7 +63,7 @@ def _item(card: dict[str, object] | None) -> catalog.Item | None:
 
 def daily(date: str | None = None) -> None:
     """매일 아침: 오늘 학습 카드 발송 (pending → sent)."""
-    today = date or dt.date.today().isoformat()
+    today = date or clock.today().isoformat()
     for child in store.all_children():
         cid = cast("int", child["id"])
         key = f"daily:{cid}:{today}"
@@ -99,7 +100,7 @@ def remind(date: str | None = None) -> None:
 
     Vercel 무료 플랜은 크론이 하루 1회라, 다음 날 아침 run_daily가
     어젯셈의 미기록을 대신 확인하는 '캐치업' 용도로도 호출된다."""
-    target = date or (dt.date.today() - dt.timedelta(days=1)).isoformat()
+    target = date or (clock.today() - dt.timedelta(days=1)).isoformat()
     for child in store.all_children():
         cid = cast("int", child["id"])
         key = f"remind:{cid}:{target}"
@@ -121,7 +122,7 @@ def remind(date: str | None = None) -> None:
 
 def weekly(date: str | None = None) -> None:
     """일요일: 지난 주(월~일) 주간 리포트. 확신 문구는 데이터 조건부 (6.6)."""
-    d = dt.date.fromisoformat(date) if date else dt.date.today()
+    d = dt.date.fromisoformat(date) if date else clock.today()
     if d.weekday() != 6:  # 일요일만
         return
     ws = d - dt.timedelta(days=7)  # 지난 주 월요일
@@ -160,7 +161,7 @@ def weekly(date: str | None = None) -> None:
 
 def monthly(date: str | None = None) -> None:
     """1일: 전월 학습 성취 리포트 — 요금·청구와 무관하게 성취만 (5.5)."""
-    d = dt.date.fromisoformat(date) if date else dt.date.today()
+    d = dt.date.fromisoformat(date) if date else clock.today()
     if d.day != 1:  # 1일만
         return
     month = (d - dt.timedelta(days=1)).strftime("%Y-%m")
@@ -196,7 +197,7 @@ def run_daily(date: str | None = None) -> None:
 
     ① 카드 발송 → ② 어젯셈 미기록 리마인더 → ③(일요일) 주간 → ④(1일) 월간.
     """
-    d = dt.date.fromisoformat(date) if date else dt.date.today()
+    d = dt.date.fromisoformat(date) if date else clock.today()
     daily(date=d.isoformat())
     remind(date=(d - dt.timedelta(days=1)).isoformat())
     if d.weekday() == 6:
@@ -211,7 +212,7 @@ def run_daily(date: str | None = None) -> None:
 
 def tick() -> None:
     """한 번의 스케줄 검사. (스모크 테스트에서 직접 호출할 수도 있다.)"""
-    now = dt.datetime.now()
+    now = clock.now()
     if (now.hour, now.minute) >= (DAILY_HH, DAILY_MM):
         daily()
     if (now.hour, now.minute) >= (REMIND_HH, REMIND_MM):

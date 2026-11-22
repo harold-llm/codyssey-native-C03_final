@@ -89,6 +89,7 @@ bloomy/
 | `OPENAI_API_KEY` | — | 설정 시 OpenAI 호환 LLM 코칭 활성화 |
 | `BLOOMY_LLM_BASE_URL` | 제공자별 | Anthropic `https://api.anthropic.com` / OpenAI `https://api.openai.com/v1` |
 | `BLOOMY_LLM_MODEL` | 제공자별 | Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` |
+| `BLOOMY_TZ_OFFSET_HOURS` | `9` | 서비스 기준 시간대(UTC 오프셋). '오늘'·미래 날짜 검사·크론 날짜 계산 기준 (서버가 UTC여도 한국 날짜) |
 | `BLOOMY_DAILY_TIME` | `09:00` | 매일 아침 알림 시각 (로컬 스케줄러) |
 
 LLM 모드/룰베이스 모드 모두 동일한 A·B·C 케이스 규칙과 조정 동작을 따르며,
