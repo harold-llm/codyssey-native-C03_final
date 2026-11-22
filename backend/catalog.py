@@ -354,6 +354,21 @@ class PlanDraft(TypedDict):
     cards: list[Card]
 
 
+def _owned_matcher(child: dict[str, object]):
+    """보유 교재 판정 함수. Bloomy-AI의 별칭 매처를 쓰고, 없으면 제목 부분 일치로 대신한다."""
+    terms = [t.strip() for t in str(child.get("materials") or "").replace(";", ",").split(",") if t.strip()]
+    if not terms:
+        return lambda _item: False
+    try:
+        import ai_bridge  # Bloomy-AI 경로 등록
+        _ = ai_bridge.AI_ROOT
+        from ai.rag.materials import is_owned  # pyright: ignore[reportMissingImports]
+        return lambda item: bool(is_owned(item, terms))  # pyright: ignore[reportUnknownLambdaType]
+    except Exception:  # noqa: BLE001
+        lowered = [t.casefold() for t in terms]
+        return lambda item: any(t in str(item["title"]).casefold() for t in lowered)
+
+
 def generate_plan(child: dict[str, object], start: dt.date) -> PlanDraft:
     """4주(20 학습일) 계획 초안 (규칙 기반 기본 생성기).
 
@@ -367,6 +382,7 @@ def generate_plan(child: dict[str, object], start: dt.date) -> PlanDraft:
     base = max(1, min(5, int(cast("int | float | str", child.get("level") or 2))))
     age = int(cast("int | float | str", child["age"]))
     dates = next_weekdays(start, 20)
+    owned = _owned_matcher(child)  # 집에 있는 교재 우선 (기획서 5.2)
     used: dict[int, int] = {}
     cards: list[Card] = []
     for i, d in enumerate(dates):
@@ -383,6 +399,7 @@ def generate_plan(child: dict[str, object], start: dt.date) -> PlanDraft:
             or items_by_level(level)
             or list(_ITEMS)
         )
+        pool = sorted(pool, key=lambda it: not owned(it))  # 안정 정렬: 보유 교재를 앞으로
         item = pool[used.get(level, 0) % len(pool)] if pool else None
         used[level] = used.get(level, 0) + 1
         if item is None:

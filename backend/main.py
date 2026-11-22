@@ -155,7 +155,8 @@ def ep_health() -> Resp:
     return 200, {"ok": True, "service": "bloomy",
                  "time": clock.now().isoformat(),
                  "llm": coach.llm_status(),
-                 "ai_modules": {"rag_and_coach_agent": ai_bridge.available()}}, JSON
+                 "ai_modules": {"rag_and_coach_agent": ai_bridge.available(),
+                                "rag": ai_bridge.rag_status()}}, JSON
 
 
 def ep_diagnosis_questions() -> Resp:

@@ -86,12 +86,14 @@
 | `GET /api/health` | `200 {"ok": true, "service": "bloomy", "time": "...", "llm": {...}, "ai_modules": {...}}` — 무인증 |
 | `GET /api/diagnosis/questions` | 온보딩 5문항 정의 (F UI용) — 무인증 |
 
-`GET /api/health`의 `llm`은 배포 환경의 LLM **설정** 진단이다 (키 값은 노출하지 않음, 실제 호출 성공 여부는 아님 — 호출 실패는 서버 로그 `[bloomy-coach] Anthropic call failed`로 확인):
+`GET /api/health`의 `llm`은 배포 환경의 LLM **설정** 진단이다. `ai_modules.rag`는 RAG 엔진 생성 가능 여부와 이 인스턴스의 최근 계획 생성 실패 사유(`last_plan_error`, 실패 시 규칙 기반 계획으로 폴백) (키 값은 노출하지 않음, 실제 호출 성공 여부는 아님 — 호출 실패는 서버 로그 `[bloomy-coach] Anthropic call failed`로 확인):
 
 ```json
 {"llm": {"provider": "anthropic", "model": "claude-haiku-5-5",
          "key_configured": true, "mode": "llm", "model_from_env": true},
- "ai_modules": {"rag_and_coach_agent": true}}
+ "ai_modules": {"rag_and_coach_agent": true,
+                "rag": {"importable": true, "engine": "ok", "catalog_items": 62,
+                        "llm": "AnthropicClient", "last_plan_error": null}}}
 ```
 
 `GET /api/diagnosis/questions` 응답:

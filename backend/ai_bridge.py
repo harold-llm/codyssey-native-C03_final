@@ -67,13 +67,37 @@ def generate_plan(
             child_for_rag, clock.today().isoformat(), goal=goal)
         result = _engine().recommend(request)
         payload = result.to_backend_payload()
+        global _last_plan_error
+        _last_plan_error = None
         return {
             "cards": payload["days"],
             "explanation": payload["explanation"],
             "base_level": payload["base_level"],
         }
-    except Exception:  # noqa: BLE001
+    except Exception as exc:  # noqa: BLE001
+        # 조용히 폴백하면 운영에서 원인을 알 수 없다 → 로그와 health에 남긴다.
+        _last_plan_error = f"{type(exc).__name__}: {exc}"[:300]
+        print(f"[bloomy-ai] RAG plan failed, rule fallback: {_last_plan_error}")
         return None
+
+
+_last_plan_error: str | None = None
+
+
+def rag_status() -> dict[str, object]:
+    """/api/health용: RAG 엔진을 실제로 만들 수 있는지 + 최근 계획 생성 실패 사유."""
+    status: dict[str, object] = {"importable": available(), "last_plan_error": _last_plan_error}
+    if not available():
+        status["engine"] = "unavailable"
+        return status
+    try:
+        engine = _engine()
+        status["engine"] = "ok"
+        status["catalog_items"] = len(engine.catalog)
+        status["llm"] = type(engine.llm).__name__ if engine.llm is not None else None
+    except Exception as exc:  # noqa: BLE001
+        status["engine"] = f"error: {type(exc).__name__}: {exc}"[:300]
+    return status
 
 
 # ---------------------------------------------------------------------------
