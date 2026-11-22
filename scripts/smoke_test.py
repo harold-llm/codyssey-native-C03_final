@@ -111,6 +111,13 @@ def section_auth(suffix: str) -> str | None:
     st, d = req("GET", "/api/health")
     d = cast("dict[str, object]", d)
     check("health", st == 200 and d.get("ok") is True, str(d))
+    llm = cast("dict[str, object]", d.get("llm") or {})
+    check(
+        "health llm 진단 (키 미노출)",
+        llm.get("mode") == "rule_based" and llm.get("key_configured") is False
+        and "sk-" not in json.dumps(d),
+        str(llm),
+    )
     st, d = req("GET", "/")
     d = cast("str", d)
     check("frontend /", st == 200 and "꽃피다" in d, f"status={st}")

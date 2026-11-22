@@ -803,6 +803,19 @@ def _llm_model() -> str:
     return os.environ.get("BLOOMY_LLM_MODEL") or default
 
 
+def llm_status() -> dict[str, object]:
+    """/api/health용 LLM 설정 요약 (비밀값 없음). 실제 호출 성공 여부는 아니다."""
+    provider = _llm_provider()
+    key_configured = _llm_available()
+    return {
+        "provider": provider,
+        "model": _llm_model(),
+        "key_configured": key_configured,
+        "mode": "llm" if key_configured else "rule_based",
+        "model_from_env": bool(os.environ.get("BLOOMY_LLM_MODEL")),
+    }
+
+
 def _call_llm(system: str, user: str) -> str | None:
     if _llm_provider() == "anthropic":
         return _call_anthropic(system, user)

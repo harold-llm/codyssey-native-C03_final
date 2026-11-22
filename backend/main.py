@@ -149,8 +149,11 @@ def _plan_rows(
 # ---------------------------------------------------------------------------
 
 def ep_health() -> Resp:
+    # LLM 설정 진단: 키 값은 노출하지 않고 등록 여부만 보여준다.
     return 200, {"ok": True, "service": "bloomy",
-                 "time": dt.datetime.now().isoformat()}, JSON
+                 "time": dt.datetime.now().isoformat(),
+                 "llm": coach.llm_status(),
+                 "ai_modules": {"rag_and_coach_agent": ai_bridge.available()}}, JSON
 
 
 def ep_diagnosis_questions() -> Resp:

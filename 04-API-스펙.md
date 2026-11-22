@@ -83,8 +83,16 @@
 
 | | |
 |---|---|
-| `GET /api/health` | `200 {"ok": true, "service": "bloomy", "time": "..."}` — 무인증 |
+| `GET /api/health` | `200 {"ok": true, "service": "bloomy", "time": "...", "llm": {...}, "ai_modules": {...}}` — 무인증 |
 | `GET /api/diagnosis/questions` | 온보딩 5문항 정의 (F UI용) — 무인증 |
+
+`GET /api/health`의 `llm`은 배포 환경의 LLM **설정** 진단이다 (키 값은 노출하지 않음, 실제 호출 성공 여부는 아님 — 호출 실패는 서버 로그 `[bloomy-coach] Anthropic call failed`로 확인):
+
+```json
+{"llm": {"provider": "anthropic", "model": "claude-haiku-5-5",
+         "key_configured": true, "mode": "llm", "model_from_env": true},
+ "ai_modules": {"rag_and_coach_agent": true}}
+```
 
 `GET /api/diagnosis/questions` 응답:
 
