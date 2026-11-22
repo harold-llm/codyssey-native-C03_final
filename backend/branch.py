@@ -100,7 +100,7 @@ def decide(
                 except (TypeError, ValueError):
                     pass
 
-    intent_c = intent in ("question", "change_request")
+    intent_c = intent in ("question", "change_request", "out_of_scope")
     is_c = intent_c or streak >= 2
     is_b = completion in ("partial", "none") or comprehension < 3
 

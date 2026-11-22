@@ -70,7 +70,7 @@ def _strip_fences(text):
 class AnthropicClient:
     """Anthropic(Claude) Messages API. JSON 출력을 프롬프트로 유도하고 파싱한다."""
 
-    def __init__(self, api_key, model="claude-3-5-sonnet-latest", base_url="https://api.anthropic.com"):
+    def __init__(self, api_key, model="claude-haiku-5-5", base_url="https://api.anthropic.com"):
         self.api_key = api_key
         self.model = model
         self.base_url = base_url.rstrip("/")
@@ -80,7 +80,7 @@ class AnthropicClient:
         key = os.getenv("ANTHROPIC_API_KEY")
         if not key or not key.strip():
             return None
-        return cls(key, os.getenv("BLOOMY_LLM_MODEL") or "claude-3-5-sonnet-latest",
+        return cls(key, os.getenv("BLOOMY_LLM_MODEL") or "claude-haiku-5-5",
                    os.getenv("BLOOMY_LLM_BASE_URL") or "https://api.anthropic.com")
 
     def generate(self, name, instructions, data, schema):
@@ -92,8 +92,9 @@ class AnthropicClient:
         )
         payload = {
             "model": self.model,
-            "max_tokens": 2048,
-            "temperature": 0.3,
+            # Claude Haiku 5.5: temperature 변경 시 400. 사고 토큰 포함해 여유 있게.
+            "max_tokens": 8192,
+            "output_config": {"effort": "low"},
             "system": system,
             "messages": [{"role": "user", "content": json.dumps(data, ensure_ascii=False)}],
         }

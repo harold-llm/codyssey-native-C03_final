@@ -526,7 +526,7 @@ def _try_llm_message(
             "case": decision["case"],
             "message": body,
             "prompt_version": LLM_VERSION,
-            "model": os.environ.get("BLOOMY_LLM_MODEL", "gpt-4o-mini"),
+            "model": _llm_model(),
             "is_ai_generated": True,
         }
     except Exception:  # noqa: BLE001 — 스키마 밖 출력/호출 실패 → 폴백 (6.6)
@@ -793,6 +793,16 @@ def _llm_available() -> bool:
     return bool(os.environ.get("OPENAI_API_KEY"))
 
 
+DEFAULT_ANTHROPIC_MODEL = "claude-haiku-5-5"
+DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
+
+
+def _llm_model() -> str:
+    """현재 제공자에서 실제로 호출하는 모델 ID (응답 메타데이터에도 이 값을 기록)."""
+    default = DEFAULT_ANTHROPIC_MODEL if _llm_provider() == "anthropic" else DEFAULT_OPENAI_MODEL
+    return os.environ.get("BLOOMY_LLM_MODEL") or default
+
+
 def _call_llm(system: str, user: str) -> str | None:
     if _llm_provider() == "anthropic":
         return _call_anthropic(system, user)
@@ -805,11 +815,12 @@ def _call_anthropic(system: str, user: str) -> str | None:
     if not key:
         return None
     base = os.environ.get("BLOOMY_LLM_BASE_URL", "https://api.anthropic.com").rstrip("/")
-    model = os.environ.get("BLOOMY_LLM_MODEL", "claude-3-5-sonnet-latest")
+    # Claude Haiku 5.5: temperature 등 샘플링 값을 바꾸면 400 → 보내지 않는다.
+    # 적응형 사고가 기본으로 켜져 있어 사고 토큰도 max_tokens에 포함되므로 여유를 둔다.
     payload: dict[str, object] = {
-        "model": model,
-        "max_tokens": 1024,
-        "temperature": 0.7,
+        "model": _llm_model(),
+        "max_tokens": 4096,
+        "output_config": {"effort": "low"},
         "system": system,
         "messages": [{"role": "user", "content": user}],
     }
@@ -843,7 +854,7 @@ def _call_openai(system: str, user: str) -> str | None:
     if not key:
         return None
     base = os.environ.get("BLOOMY_LLM_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    model = os.environ.get("BLOOMY_LLM_MODEL", "gpt-4o-mini")
+    model = _llm_model()
     last_err: Exception | None = None
     for use_json_mode in (True, False):
         payload: dict[str, object] = {
