@@ -113,10 +113,13 @@
 #### `POST /api/register` — 무인증
 
 ```json
-{"email": "p@test.com", "password": "secret123"}
+{"email": "p@test.com", "password": "secret123",
+ "agree_privacy": true, "agree_guardian": true}
 ```
 - 검증: 이메일 형식, 비밀번호 ≥6자 → 아니면 `400`. 중복 이메일 → `409`.
-- `201` `{"token": "...", "account": {"id": 1, "email": "..."}, "children": []}`
+- **개인정보 동의 필수**: `agree_privacy`(수집·이용 및 AI 처리), `agree_guardian`(만 14세 미만 아이의 법정대리인 동의)
+  둘 다 `true`가 아니면 `400 {"error", "missing": [...]}`. 동의 버전·시각을 `users`에 기록한다.
+- `201` `{"token": "...", "account": {"id": 1, "email": "...", "consent": {"version": "2026-11-23", "consented_at": "..."}}, "children": []}`
 
 #### `POST /api/login` — 무인증
 
@@ -128,7 +131,22 @@
 
 #### `GET /api/me`
 
-- `200` `{"account": {"id", "email"}, "children": [child, ...]}` / `401`
+- `200` `{"account": {"id", "email", "consent": {"version", "consented_at"}}, "children": [child, ...]}` / `401`
+- `consent.version`이 `null`이면 동의 기능 도입 전 가입자 → 프론트가 동의 화면을 먼저 띄운다.
+
+#### `GET /api/privacy` — 무인증
+
+- `200` 개인정보 수집·이용 안내 `{version, title, items: [{label, value}], required: {agree_privacy: "...", agree_guardian: "..."}}`
+  (수집 항목·이용 목적·AI 처리(Anthropic 전송)·보관 기간·동의 거부 권리). 가입·동의 화면의 단일 출처.
+
+#### `POST /api/me/consent` — 인증
+
+- 기존 가입자의 동의 기록. 본문 `{"agree_privacy": true, "agree_guardian": true}`. 누락 시 `400`. `200 {"account": {...}}`
+
+#### `POST /api/me/delete` — 인증 (탈퇴 = 동의 철회)
+
+- 본문 `{"password": "..."}`. 비밀번호 불일치 `403`.
+- `200 {"deleted": true}` — 계정·아이 프로필·계획·카드·피드백·코칭 메시지·메모리·알림을 **한 트랜잭션으로 즉시 삭제**. 이후 기존 토큰은 `401`.
 
 ### 2.3 온보딩 (프로필 + 5문항 → 계획 초안)
 

@@ -149,6 +149,11 @@ def init() -> None:
     c = conn()
     try:
         _ = c.executescript(SCHEMA)
+        # 마이그레이션: 개인정보 동의 기록 컬럼 (기존 DB에도 추가)
+        cols = {r[1] for r in c.execute("PRAGMA table_info(users)").fetchall()}
+        for col in ("consent_version", "consented_at"):
+            if col not in cols:
+                _ = c.execute(f"ALTER TABLE users ADD COLUMN {col} TEXT")
         c.commit()
     finally:
         c.close()
@@ -184,11 +189,45 @@ def execute(sql: str, args: tuple[object, ...] = ()) -> int | None:
 
 # --- users ------------------------------------------------------------------
 
-def create_user(email: str, pw_hash: str, salt: str) -> int:
+def create_user(
+    email: str, pw_hash: str, salt: str, consent_version: str | None = None,
+) -> int:
     return cast("int", execute(
-        "INSERT INTO users(email, password_hash, salt) VALUES (?, ?, ?)",
-        (email, pw_hash, salt),
+        "INSERT INTO users(email, password_hash, salt, consent_version, consented_at) "
+        "VALUES (?, ?, ?, ?, CASE WHEN ? IS NULL THEN NULL ELSE datetime('now') END)",
+        (email, pw_hash, salt, consent_version, consent_version),
     ))
+
+
+def record_consent(user_id: int, version: str) -> None:
+    _ = execute(
+        "UPDATE users SET consent_version=?, consented_at=datetime('now') WHERE id=?",
+        (version, user_id),
+    )
+
+
+# 탈퇴 시 삭제 순서 (FK 참조 역순). child_id/user_id 기준.
+_CHILD_TABLES = ("feedbacks", "coach_messages", "memory_facts", "cards", "plans")
+
+
+def delete_account(user_id: int) -> None:
+    """동의 철회(탈퇴): 계정과 아이 관련 데이터를 한 트랜잭션으로 모두 삭제."""
+    c = conn()
+    try:
+        child_ids = [r[0] for r in c.execute(
+            "SELECT id FROM children WHERE user_id=?", (user_id,)).fetchall()]
+        for cid in child_ids:
+            for table in _CHILD_TABLES:
+                _ = c.execute(f"DELETE FROM {table} WHERE child_id=?", (cid,))
+        _ = c.execute("DELETE FROM children WHERE user_id=?", (user_id,))
+        _ = c.execute("DELETE FROM notifications WHERE user_id=?", (user_id,))
+        _ = c.execute("DELETE FROM users WHERE id=?", (user_id,))
+        c.commit()
+    except Exception:
+        c.rollback()
+        raise
+    finally:
+        c.close()
 
 
 def get_user(user_id: int) -> dict[str, object] | None:

@@ -25,6 +25,7 @@ const state = {
   report: null,
   achievement: null,
   aiRec: null,
+  privacy: null,
   error: '',
 };
 
@@ -114,14 +115,158 @@ async function afterAuth(data) {
   state.token = data.token;
   state.account = data.account;
   localStorage.setItem(TOKEN_KEY, data.token);
-  if (data.children && data.children.length) {
-    state.child = data.children[0];
+  state.child = data.children && data.children.length ? data.children[0] : null;
+  await routeAfterAccount();
+  render();
+}
+
+function hasConsent() {
+  return !!(state.account && state.account.consent && state.account.consent.version);
+}
+
+/* 동의 기록이 없는 기존 가입자는 동의 화면을 먼저 거친다 */
+async function routeAfterAccount() {
+  if (!hasConsent()) {
+    await loadPrivacy();
+    state.view = 'consent';
+  } else if (state.child) {
     await loadToday();
     state.view = 'today';
   } else {
     state.view = 'onboarding';
   }
-  render();
+}
+
+async function loadPrivacy() {
+  if (state.privacy) return state.privacy;
+  try { state.privacy = await api('GET', '/api/privacy'); } catch (e) { state.privacy = null; }
+  return state.privacy;
+}
+
+/* ---------------- privacy consent ---------------- */
+function privacyDetailsHtml(open) {
+  const p = state.privacy;
+  if (!p) return '<p class="muted">개인정보 안내를 불러오지 못했어요. 새로고침 해 주세요.</p>';
+  const rows = p.items.map((it) => `<li><strong>${esc(it.label)}</strong> — ${esc(it.value)}</li>`).join('');
+  return `<details class="privacy-details"${open ? ' open' : ''}>
+      <summary>${esc(p.title)} 안내 보기</summary>
+      <ul class="privacy-list">${rows}</ul>
+    </details>`;
+}
+
+function consentChecksHtml() {
+  const p = state.privacy;
+  if (!p) return '';
+  return Object.entries(p.required).map(([key, label]) => `
+    <label class="consent-item">
+      <input type="checkbox" name="${esc(key)}" required />
+      <span>${esc(label)}</span>
+    </label>`).join('');
+}
+
+function consentValues(form) {
+  const out = {};
+  if (state.privacy) Object.keys(state.privacy.required).forEach((k) => { out[k] = !!(form[k] && form[k].checked); });
+  return out;
+}
+
+function consentHtml() {
+  return `
+  <section class="screen">
+    <div class="auth-wrap">
+      <div class="hero" style="padding:48px 0 20px">
+        <span class="eyebrow">개인정보 동의</span>
+        <h1 class="hero-title">계속하기 전에<br>동의가 필요해요</h1>
+        <p class="hero-sub">아이 정보를 안전하게 다루기 위해 보호자 동의를 받고 있어요.</p>
+      </div>
+      <div class="card">
+        <form id="consentForm">
+          ${privacyDetailsHtml(true)}
+          ${consentChecksHtml()}
+          <div class="form-message" id="consentMsg"></div>
+          <button class="btn btn-block" type="submit">동의하고 계속하기</button>
+          <button class="btn btn-ghost btn-block consent-alt" type="button" id="consentDecline">동의하지 않음 (로그아웃)</button>
+        </form>
+      </div>
+    </div>
+  </section>`;
+}
+
+function bindConsent() {
+  const form = document.getElementById('consentForm');
+  document.getElementById('consentDecline').addEventListener('click', logout);
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('consentMsg');
+    try {
+      const data = await api('POST', '/api/me/consent', consentValues(form));
+      state.account = data.account;
+      await routeAfterAccount();
+      render();
+    } catch (err) {
+      msg.className = 'form-message is-error';
+      msg.textContent = err.message;
+    }
+  });
+}
+
+/* ---------------- account (내 계정 · 탈퇴 = 동의 철회) ---------------- */
+/* 서버 시각은 UTC (SQLite는 타임존 표기 없음) → 사용자 지역 날짜로 표시 */
+function consentDate(raw) {
+  let iso = String(raw).trim().replace(' ', 'T');
+  if (!/[zZ]|[+-]\d\d:?\d\d$/.test(iso)) iso += 'Z';
+  const d = new Date(iso);
+  return isNaN(d) ? String(raw).slice(0, 10) : d.toLocaleDateString('ko-KR');
+}
+
+function accountHtml() {
+  const a = state.account || {};
+  const c = a.consent || {};
+  const when = c.consented_at ? consentDate(c.consented_at) : '-';
+  return `
+  <section class="screen">
+    <div class="auth-wrap">
+      <div class="hero" style="padding:48px 0 20px">
+        <span class="eyebrow">내 계정</span>
+        <h1 class="hero-title">계정 관리</h1>
+        <p class="hero-sub account-email">${esc(a.email || '')}<br>개인정보 동의 ${esc(when)} · 버전 ${esc(c.version || '-')}</p>
+      </div>
+      <div class="card">
+        ${privacyDetailsHtml(false)}
+        <button class="btn btn-ghost btn-block" type="button" id="logoutBtn">로그아웃</button>
+      </div>
+      <div class="card danger-zone">
+        <h2 class="card-title">탈퇴 (동의 철회)</h2>
+        <p class="muted">탈퇴하면 계정과 아이의 프로필·학습 계획·기록·코칭 메시지가 <strong>즉시 모두 삭제</strong>되며 되돌릴 수 없어요.</p>
+        <form id="deleteForm">
+          <label class="field">
+            <span class="field-label">비밀번호 확인</span>
+            <input class="input" type="password" name="password" autocomplete="current-password" required minlength="6" maxlength="128" />
+          </label>
+          <div class="form-message" id="deleteMsg"></div>
+          <button class="btn btn-block btn-danger" type="submit">탈퇴하고 모든 데이터 삭제</button>
+        </form>
+      </div>
+    </div>
+  </section>`;
+}
+
+function bindAccount() {
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  const form = document.getElementById('deleteForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!confirm('정말 탈퇴할까요? 모든 데이터가 즉시 삭제되며 되돌릴 수 없어요.')) return;
+    const msg = document.getElementById('deleteMsg');
+    try {
+      await api('POST', '/api/me/delete', { password: form.password.value });
+      alert('탈퇴가 완료되었고 모든 데이터를 삭제했어요.');
+      logout();
+    } catch (err) {
+      msg.className = 'form-message is-error';
+      msg.textContent = err.message;
+    }
+  });
 }
 
 /* ---------------- data loaders ---------------- */
@@ -193,6 +338,8 @@ function render() {
   switch (state.view) {
     case 'loading': app.innerHTML = loadingHtml(); break;
     case 'auth': app.innerHTML = authHtml(); bindAuth(); break;
+    case 'consent': app.innerHTML = consentHtml(); bindConsent(); break;
+    case 'account': app.innerHTML = accountHtml(); bindAccount(); break;
     case 'onboarding': app.innerHTML = onboardingHtml(); bindOnboarding(); break;
     case 'diagnosis': app.innerHTML = diagnosisHtml(); bindDiagnosis(); break;
     case 'plan': app.innerHTML = planHtml(); bindPlan(); break;
@@ -239,8 +386,9 @@ function authHtml() {
             <span class="field-label">비밀번호</span>
             <input class="input" type="password" name="password" autocomplete="current-password" required minlength="6" maxlength="128" />
           </label>
+          ${isLogin ? '' : `<div class="consent-block">${privacyDetailsHtml(false)}${consentChecksHtml()}</div>`}
           <div class="form-message" id="authMsg"></div>
-          <button class="btn btn-block" type="submit">${isLogin ? '로그인' : '회원가입'}</button>
+          <button class="btn btn-block" type="submit">${isLogin ? '로그인' : '동의하고 회원가입'}</button>
         </form>
       </div>
     </div>
@@ -249,8 +397,9 @@ function authHtml() {
 
 function bindAuth() {
   document.querySelectorAll('[data-auth]').forEach((b) => {
-    b.addEventListener('click', () => {
+    b.addEventListener('click', async () => {
       state.authMode = b.getAttribute('data-auth');
+      if (state.authMode === 'register') await loadPrivacy();
       render();
     });
   });
@@ -264,7 +413,8 @@ function bindAuth() {
     btn.disabled = true;
     try {
       const path = state.authMode === 'login' ? '/api/login' : '/api/register';
-      const data = await api('POST', path, { email, password });
+      const body = state.authMode === 'login' ? { email, password } : { email, password, ...consentValues(form) };
+      const data = await api('POST', path, body);
       await afterAuth(data);
     } catch (err) {
       msg.className = 'form-message is-error';
@@ -939,7 +1089,9 @@ function bindGlobalNav() {
     b.addEventListener('click', async (e) => {
       e.preventDefault();
       const target = b.getAttribute('data-nav');
-      if (target === 'home') {
+      if (state.token && state.account && !hasConsent()) {
+        state.view = 'consent';  // 동의 전에는 다른 화면으로 이동하지 않는다
+      } else if (target === 'home') {
         if (!state.token) { state.view = 'auth'; }
         else if (state.child) { await loadToday(); state.view = 'today'; }
         else { state.view = 'onboarding'; }
@@ -962,7 +1114,10 @@ async function init() {
   applyTheme();
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
   document.getElementById('accountBtn').addEventListener('click', () => {
-    if (state.token) {
+    if (state.token && state.account) {
+      state.view = hasConsent() ? 'account' : 'consent';
+      render();
+    } else if (state.token) {
       if (confirm('로그아웃할까요?')) logout();
     } else {
       state.view = 'auth';
@@ -975,13 +1130,8 @@ async function init() {
     try {
       const me = await api('GET', '/api/me');
       state.account = me.account;
-      if (me.children && me.children.length) {
-        state.child = me.children[0];
-        await loadToday();
-        state.view = 'today';
-      } else {
-        state.view = 'onboarding';
-      }
+      state.child = me.children && me.children.length ? me.children[0] : null;
+      await routeAfterAccount();
     } catch (e) {
       state.view = 'auth';
     }

@@ -28,6 +28,7 @@ _ = os.environ.pop("BLOOMY_CRON_SECRET", None)
 if os.path.exists(TEST_DB):
     os.remove(TEST_DB)
 
+import auth
 import catalog
 import scheduler
 
@@ -38,6 +39,9 @@ pass_count = 0
 fail_count = 0
 AI_LABEL = "AI가 작성한 코칭 메시지입니다."
 DIAG_KEYS = ("alphabet", "phonics", "readers", "response", "focus")
+
+
+CONSENT = {"agree_privacy": True, "agree_guardian": True}
 
 
 def check(name: str, cond: bool, extra: str = "") -> None:
@@ -131,21 +135,33 @@ def section_auth(suffix: str) -> str | None:
     d = cast("str", d)
     check("frontend /learning/js", st == 200 and "Bloomy" in d, f"status={st}")
 
-    # 2. 회원가입 / 로그인
+    # 2. 회원가입 / 로그인 (개인정보 동의 필수)
     email1 = f"parent{suffix}@test.bloomy"
+    st, d = req("GET", "/api/privacy")
+    d = cast("dict[str, object]", d)
+    check("privacy notice", st == 200 and "agree_guardian" in cast("dict[str, object]", d["required"]), str(d)[:160])
+    st, d = req("POST", "/api/register", body={"email": email1, "password": "secret123"})
+    check("register without consent -> 400", st == 400, str(d)[:160])
+    st, d = req("POST", "/api/register",
+                body={"email": email1, "password": "secret123", "agree_privacy": True})
+    check("register without guardian consent -> 400",
+          st == 400 and cast("dict[str, object]", d)["missing"] == ["agree_guardian"], str(d)[:160])
     st, d = req(
-        "POST", "/api/register", body={"email": email1, "password": "secret123"}
+        "POST", "/api/register", body={"email": email1, "password": "secret123", **CONSENT}
     )
     d = cast("dict[str, object]", d)
     check("register", st == 201 and "token" in d, str(d)[:200])
+    consent_rec = cast("dict[str, object]", cast("dict[str, object]", d.get("account") or {}).get("consent") or {})
+    check("register records consent version+time",
+          bool(consent_rec.get("version")) and bool(consent_rec.get("consented_at")), str(consent_rec))
     token1 = cast("str | None", d.get("token"))
     st, d = req(
-        "POST", "/api/register", body={"email": email1, "password": "secret123"}
+        "POST", "/api/register", body={"email": email1, "password": "secret123", **CONSENT}
     )
     check("register duplicate -> 409", st == 409, str(d))
     st, d = req("POST", "/api/login", body={"email": email1, "password": "wrongpw!"})
     check("login wrong pw -> 401", st == 401, str(d))
-    st, d = req("POST", "/api/login", body={"email": email1, "password": "secret123"})
+    st, d = req("POST", "/api/login", body={"email": email1, "password": "secret123", **CONSENT})
     d = cast("dict[str, object]", d)
     check("login", st == 200 and "token" in d, str(d)[:200])
     token1 = cast("str | None", d.get("token", token1))
@@ -687,7 +703,7 @@ def section_other_accounts(
     # 8. 타 계정 접근 차단
     email2 = f"parent2{suffix}@test.bloomy"
     st, d = req(
-        "POST", "/api/register", body={"email": email2, "password": "secret123"}
+        "POST", "/api/register", body={"email": email2, "password": "secret123", **CONSENT}
     )
     d = cast("dict[str, object]", d)
     token2 = cast("str | None", d.get("token"))
@@ -836,6 +852,39 @@ def section_learning(token: str | None) -> None:
     check("learning empty words -> 400", st == 400, str(d))
 
 
+def section_delete_account(token1: str | None, child_ids: tuple[int, int]) -> None:
+    """동의 철회(탈퇴) → 계정·아이 데이터 전부 삭제."""
+    st, d = req("POST", "/api/me/delete", token=token1, body={"password": "wrongpw!"})
+    check("delete account wrong pw -> 403", st == 403, str(d))
+    st, d = req("POST", "/api/me/delete", body={"password": "secret123"})
+    check("delete account no auth -> 401", st == 401, str(d))
+    st, d = req("POST", "/api/me/delete", token=token1, body={"password": "secret123"})
+    check("delete account -> 200", st == 200 and cast("dict[str, object]", d)["deleted"] is True, str(d))
+    st, d = req("GET", "/api/me", token=token1)
+    check("deleted account token -> 401", st == 401, str(d))
+    left = 0
+    for cid in child_ids:
+        for table in ("children", "feedbacks", "coach_messages", "memory_facts", "cards", "plans"):
+            col = "id" if table == "children" else "child_id"
+            left += len(store.query(f"SELECT 1 FROM {table} WHERE {col}=?", (cid,)))
+    check("deleted account leaves no child data", left == 0, f"rows left={left}")
+
+    # 기존 가입자(동의 기록 없음) → 로그인 후 동의
+    salt = auth.new_salt()
+    _ = store.create_user("legacy@test.bloomy", auth.hash_password("secret123", salt), salt)
+    st, d = req("POST", "/api/login", body={"email": "legacy@test.bloomy", "password": "secret123"})
+    d = cast("dict[str, object]", d)
+    legacy_token = cast("str | None", d.get("token"))
+    legacy_consent = cast("dict[str, object]", cast("dict[str, object]", d["account"])["consent"])
+    check("legacy account has no consent", legacy_consent["version"] is None, str(legacy_consent))
+    st, d = req("POST", "/api/me/consent", token=legacy_token, body={"agree_privacy": True})
+    check("legacy consent partial -> 400", st == 400, str(d)[:160])
+    st, d = req("POST", "/api/me/consent", token=legacy_token, body=CONSENT)
+    acc = cast("dict[str, object]", cast("dict[str, object]", d)["account"])
+    check("legacy consent recorded",
+          st == 200 and bool(cast("dict[str, object]", acc["consent"])["version"]), str(d)[:200])
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -856,6 +905,7 @@ def main() -> int:
     section_other_accounts(token1, child1, child2, d5, suffix)
     section_scheduler_cron(token1, m, d5)
     section_learning(token1)
+    section_delete_account(token1, (child1, child2))
 
     try:
         os.remove(TEST_DB)

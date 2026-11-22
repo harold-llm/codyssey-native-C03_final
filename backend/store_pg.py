@@ -156,6 +156,9 @@ def conn() -> psycopg.Connection[dict[str, object]]:
 def init() -> None:
     c = conn()
     _ = c.execute(SCHEMA)
+    # 마이그레이션: 개인정보 동의 기록 컬럼 (기존 DB에도 추가)
+    _ = c.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS consent_version TEXT")
+    _ = c.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS consented_at TIMESTAMPTZ")
 
 
 def _pg(sql: str, args: tuple[object, ...]) -> tuple[str, tuple[object, ...]]:
@@ -186,11 +189,37 @@ def execute(sql: str, args: tuple[object, ...] = ()) -> object | None:
 
 # --- users ------------------------------------------------------------------
 
-def create_user(email: str, pw_hash: str, salt: str) -> object | None:
+def create_user(
+    email: str, pw_hash: str, salt: str, consent_version: str | None = None,
+) -> object | None:
     return execute(
-        "INSERT INTO users(email, password_hash, salt) VALUES (?, ?, ?)",
-        (email, pw_hash, salt),
+        "INSERT INTO users(email, password_hash, salt, consent_version, consented_at) "
+        "VALUES (?, ?, ?, ?, CASE WHEN ?::text IS NULL THEN NULL ELSE now() END)",
+        (email, pw_hash, salt, consent_version, consent_version),
     )
+
+
+def record_consent(user_id: int, version: str) -> None:
+    _ = execute(
+        "UPDATE users SET consent_version=?, consented_at=now() WHERE id=?",
+        (version, user_id),
+    )
+
+
+_CHILD_TABLES = ("feedbacks", "coach_messages", "memory_facts", "cards", "plans")
+
+
+def delete_account(user_id: int) -> None:
+    """동의 철회(탈퇴): 계정과 아이 관련 데이터를 한 트랜잭션으로 모두 삭제."""
+    c = conn()
+    with c.transaction():
+        rows = c.execute("SELECT id FROM children WHERE user_id=%s", (user_id,)).fetchall()
+        for row in rows:
+            for table in _CHILD_TABLES:
+                _ = c.execute(f"DELETE FROM {table} WHERE child_id=%s", (row["id"],))  # pyright: ignore[reportArgumentType]
+        _ = c.execute("DELETE FROM children WHERE user_id=%s", (user_id,))
+        _ = c.execute("DELETE FROM notifications WHERE user_id=%s", (user_id,))
+        _ = c.execute("DELETE FROM users WHERE id=%s", (user_id,))
 
 
 def get_user(user_id: int) -> dict[str, object] | None:

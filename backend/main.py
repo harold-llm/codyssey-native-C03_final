@@ -34,6 +34,7 @@ import auth
 import branch
 import catalog
 import coach
+import consent
 import diagnosis
 import scheduler
 
@@ -172,13 +173,55 @@ def ep_catalog(q: Q) -> Resp:
     return 200, items, JSON
 
 
+def _account_public(acc: dict[str, object]) -> dict[str, object]:
+    consented_at = acc.get("consented_at")
+    return {
+        "id": acc["id"], "email": acc["email"],
+        "consent": {"version": acc.get("consent_version"),
+                    "consented_at": str(consented_at) if consented_at else None},
+    }
+
+
+def ep_privacy() -> Resp:
+    """개인정보 수집·이용 안내 + 필수 동의 항목 (가입 화면용, 무인증)."""
+    return 200, consent.NOTICE, JSON
+
+
+def ep_delete_account(headers: Headers, body: Body) -> Resp:
+    """동의 철회 = 탈퇴. 비밀번호 재확인 후 계정·아이 데이터 즉시 전부 삭제."""
+    acc = _account_from(headers)
+    if not acc:
+        return 401, {"error": "로그인이 필요합니다"}, JSON
+    password = cast("str", body.get("password") or "")
+    digest = auth.hash_password(password, cast("str", acc["salt"]))
+    if not hmac.compare_digest(digest, cast("str", acc["password_hash"])):
+        return 403, {"error": "비밀번호가 올바르지 않습니다"}, JSON
+    store.delete_account(cast("int", acc["id"]))
+    return 200, {"deleted": True}, JSON
+
+
+def ep_give_consent(headers: Headers, body: Body) -> Resp:
+    """기존 가입자(동의 기록 없음)가 로그인 후 동의를 남기는 경로."""
+    acc = _account_from(headers)
+    if not acc:
+        return 401, {"error": "로그인이 필요합니다"}, JSON
+    if consent.missing(body):
+        return 400, {"error": "필수 동의 항목에 모두 동의해야 합니다",
+                     "missing": consent.missing(body)}, JSON
+    store.record_consent(cast("int", acc["id"]), consent.CONSENT_VERSION)
+    refreshed = store.get_user(cast("int", acc["id"]))
+    if not refreshed:
+        return 500, {"error": "서버 오류가 발생했습니다"}, JSON
+    return 200, {"account": _account_public(refreshed)}, JSON
+
+
 def ep_me(headers: Headers) -> Resp:
     acc = _account_from(headers)
     if not acc:
         return 401, {"error": "로그인이 필요합니다"}, JSON
     uid = cast("int", acc["id"])
     return 200, {
-        "account": {"id": acc["id"], "email": acc["email"]},
+        "account": _account_public(acc),
         "children": [store.child_public(c) for c in store.get_children(uid)],
     }, JSON
 
@@ -190,16 +233,20 @@ def ep_register(body: Body) -> Resp:
         return 400, {"error": "올바른 이메일을 입력해주세요"}, JSON
     if len(password) < 6:
         return 400, {"error": "비밀번호는 6자 이상이어야 합니다"}, JSON
+    if consent.missing(body):
+        return 400, {"error": "개인정보 수집·이용 및 보호자 동의(필수)에 모두 동의해야 가입할 수 있습니다",
+                     "missing": consent.missing(body)}, JSON
     if store.get_user_by_email(email):
         return 409, {"error": "이미 가입된 이메일입니다"}, JSON
     salt = auth.new_salt()
-    _ = store.create_user(email, auth.hash_password(password, salt), salt)
+    _ = store.create_user(email, auth.hash_password(password, salt), salt,
+                          consent.CONSENT_VERSION)
     acc = store.get_user_by_email(email)
     if not acc:
         return 500, {"error": "서버 오류가 발생했습니다"}, JSON
     return 201, {
         "token": auth.make_token(cast("int", acc["id"])),
-        "account": {"id": acc["id"], "email": acc["email"]},
+        "account": _account_public(acc),
         "children": [],
     }, JSON
 
@@ -215,7 +262,7 @@ def ep_login(body: Body) -> Resp:
         return 401, {"error": "이메일 또는 비밀번호가 올바르지 않습니다"}, JSON
     return 200, {
         "token": auth.make_token(cast("int", acc["id"])),
-        "account": {"id": acc["id"], "email": acc["email"]},
+        "account": _account_public(acc),
         "children": [store.child_public(c) for c in store.get_children(cast("int", acc["id"]))],
     }, JSON
 
@@ -670,6 +717,8 @@ def dispatch(
                 return ep_catalog(q)
             if p == "/api/me":
                 return ep_me(headers)
+            if p == "/api/privacy":
+                return ep_privacy()
             if p == "/api/cron":
                 # Vercel Cron은 GET으로 호출한다 (job 기본값 daily).
                 return ep_cron(headers, None)
@@ -708,6 +757,10 @@ def dispatch(
                 return ep_register(body)
             if p == "/api/login":
                 return ep_login(body)
+            if p == "/api/me/delete":
+                return ep_delete_account(headers, body)
+            if p == "/api/me/consent":
+                return ep_give_consent(headers, body)
             if p == "/api/children":
                 return ep_create_child(headers, body)
             m = re.fullmatch(r"/api/children/(\d+)/plans/(\d+)/approve", p)

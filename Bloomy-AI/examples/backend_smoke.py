@@ -37,7 +37,7 @@ def verify():
     catalog.load()
     rag = RecommendationEngine(shared_catalog(catalog.search(), samples))
     coach = CoachAgent(rag)
-    parent = call("POST", "/api/register", 201, {"email": "demo@example.org", "password": "demo-only-password"})
+    parent = call("POST", "/api/register", 201, {"email": "demo@example.org", "password": "demo-only-password", "agree_privacy": True, "agree_guardian": True})
     token = parent["token"]
     today = date.today()
     monday = today - timedelta(days=today.weekday() + 7)
