@@ -251,15 +251,20 @@ def ep_register(body: Body) -> Resp:
     }, JSON
 
 
+# 계정 존재 여부를 노출하지 않도록 두 경우 모두 같은 문구를 쓴다 (계정 열거 방지).
+LOGIN_FAILED = ("가입되지 않은 이메일이거나 비밀번호가 올바르지 않습니다. "
+                "탈퇴한 계정이라면 다시 회원가입해 주세요.")
+
+
 def ep_login(body: Body) -> Resp:
     email = cast("str", body.get("email") or "").strip().lower()
     password = cast("str", body.get("password") or "")
     acc = store.get_user_by_email(email)
     if not acc:
-        return 401, {"error": "이메일 또는 비밀번호가 올바르지 않습니다"}, JSON
+        return 401, {"error": LOGIN_FAILED}, JSON
     digest = auth.hash_password(password, cast("str", acc["salt"]))
     if not hmac.compare_digest(digest, cast("str", acc["password_hash"])):
-        return 401, {"error": "이메일 또는 비밀번호가 올바르지 않습니다"}, JSON
+        return 401, {"error": LOGIN_FAILED}, JSON
     return 200, {
         "token": auth.make_token(cast("int", acc["id"])),
         "account": _account_public(acc),

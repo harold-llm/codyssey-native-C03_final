@@ -48,7 +48,9 @@ async function api(method, path, body) {
   });
   let data = null;
   try { data = await res.json(); } catch (e) { /* non-JSON */ }
-  if (res.status === 401) {
+  // 토큰을 보낸 요청의 401만 세션 만료로 처리한다.
+  // (로그인 실패 401에서 logout()을 부르면 화면이 다시 그려져 오류 메시지가 사라진다)
+  if (res.status === 401 && headers['Authorization']) {
     logout();
     throw new Error('로그인이 필요합니다');
   }
