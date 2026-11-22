@@ -15,7 +15,11 @@ def object_schema(**properties):
 
 
 def complete(client, name, instructions, data, schema):
-    from jsonschema import Draft202012Validator
+    try:
+        from jsonschema import Draft202012Validator
+    except ImportError:
+        # 의존성 누락이 계획 생성 전체를 깨뜨리지 않도록 LLM 단계만 실패 처리 → 로컬 RAG 폴백
+        raise LLMError("jsonschema is not installed") from None
 
     try:
         output = client.generate(name, instructions, data, schema)
