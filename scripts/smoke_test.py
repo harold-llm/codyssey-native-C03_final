@@ -408,6 +408,13 @@ def section_child2(
         d["memo_intent"] == "none" and record["memo_intent"] == "none",
         str(d)[:160],
     )
+    review = cast("dict[str, object] | None", d.get("ai_review"))
+    check(
+        "d0 ai_review (코치 Agent 연결: RAG 근거 포함)",
+        review is not None and review["case"] == d["case"]
+        and len(cast("list[object]", review["evidence"])) >= 1,
+        str(review)[:200],
+    )
 
     # d1(화): 흥미2 2일 연속 → C → 내일 카드 swap
     st, d = fb(
@@ -455,6 +462,13 @@ def section_child2(
         "d2 propose only (자동 적용 X)",
         adjust["type"] == "propose_swap" and adjust["dates"] == [],
         str(adjust),
+    )
+    review = cast("dict[str, object] | None", d.get("ai_review"))
+    check(
+        "d2 ai_review 변경 요청 → 자료 안내·근거 (Agent)",
+        review is not None and review["case"] == "C"
+        and bool(review["advice"]) and len(cast("list[object]", review["evidence"])) >= 1,
+        str(review)[:300],
     )
 
     # d3(목): 이해도 2 → B → 내일 분량 축소

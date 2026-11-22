@@ -499,9 +499,18 @@ def ep_feedback(_headers: Headers, child: dict[str, object], body: Body) -> Resp
 
     adjust: dict[str, object] = {"type": "none", "reason": "", "dates": []}
     message: str | None = None
+    ai_review: dict[str, object] | None = None
     if decision["case"] != "SKIP":
-        # 조정 → 다음 카드 반영
         tomorrow = store.next_card_for_child(cid, date)
+        # 핵심 AI ② 코치 Agent 검토 (읽기 전용, 조정 반영 전 카드 기준, 실패 시 None)
+        since = (dt.date.fromisoformat(date) - dt.timedelta(days=14)).isoformat()
+        before = (dt.date.fromisoformat(date) - dt.timedelta(days=1)).isoformat()
+        ai_review = ai_bridge.coach_review(
+            child, rec, intent=intent, intent_reason=intent_reason,
+            today_card=card, next_card=tomorrow,
+            history=store.feedback_between(cid, since, before, include_rest=True),
+        )
+        # 조정 → 다음 카드 반영
         adjust = coach.apply_adjustment(child, rec, decision, tomorrow)
         tomorrow = store.next_card_for_child(cid, date)
         # 3단계: 메시지 생성 (규칙 case 우선, 확신 문구 데이터 조건부)
@@ -536,6 +545,7 @@ def ep_feedback(_headers: Headers, child: dict[str, object], body: Body) -> Resp
         "message": message,
         "adjust": adjust,
         "tomorrow": coach.tomorrow_payload(store.next_card_for_child(cid, date)),
+        "ai_review": ai_review,
     }, JSON
 
 

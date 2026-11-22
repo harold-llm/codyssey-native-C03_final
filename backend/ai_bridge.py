@@ -73,3 +73,87 @@ def generate_plan(
         }
     except Exception:  # noqa: BLE001
         return None
+
+
+# ---------------------------------------------------------------------------
+# 핵심 AI ② — 코치 Agent 보강형 연결
+#
+# 피드백 판정·카드 조정·DB 반영·코칭 메시지는 backend/coach.py가 그대로 담당한다.
+# Agent는 같은 피드백을 읽기 전용으로 검토해 RAG 근거(evidence), 질문에 대한 자료
+# 안내, 부모 변경 요청의 승인 대기 후보, 가드레일 경고를 덧붙인다.
+# Agent가 실패해도 피드백 응답은 영향을 받지 않는다 (None 반환).
+# ---------------------------------------------------------------------------
+
+_agent_rag: RecommendationEngine | None = None
+ADVICE_PREFIX = "자료 안내:"
+
+
+class _FixedIntent:
+    """백엔드가 이미 분류한 의도를 그대로 넘긴다 (LLM 중복 호출·판정 불일치 방지)."""
+
+    def __init__(self, intent: str, reason: str) -> None:
+        self.intent = intent
+        self.reason = reason or "백엔드 의도 분류"
+
+    def classify(self, _memo: str) -> dict[str, str]:
+        return {"intent": self.intent, "reason": self.reason, "version": "backend-intent"}
+
+
+def _agent_engine() -> RecommendationEngine:
+    """Agent 전용 RAG 엔진 — LLM 없이 로컬 TF-IDF만 사용 (추가 API 비용 없음)."""
+    global _agent_rag
+    if _agent_rag is None:
+        from ai.rag import RecommendationEngine
+        _agent_rag = RecommendationEngine.from_file(CATALOG_PATH)
+    return _agent_rag
+
+
+def coach_review(
+    child: dict[str, object],
+    feedback: dict[str, object],
+    *,
+    intent: str,
+    intent_reason: str,
+    today_card: dict[str, object] | None,
+    next_card: dict[str, object] | None,
+    history: list[dict[str, object]],
+) -> dict[str, object] | None:
+    """코치 Agent 검토 결과. 미가용·입력 불일치·오류 시 None."""
+    if not available() or feedback.get("rest_day"):
+        return None
+    try:
+        from ai.agent import CoachAgent
+        from ai.backend_adapter import coaching_request
+
+        engine = _agent_engine()
+        child_for_ai = dict(child)
+        raw_sl = child.get("session_length")
+        try:
+            sl = int(cast("int | float | str", raw_sl)) if raw_sl is not None else 10
+        except (TypeError, ValueError):
+            sl = 10
+        child_for_ai["session_length"] = 20 if sl >= 20 else (15 if sl >= 15 else 10)
+        # 백엔드 카드는 승인된 계획에서만 조회된다 → 카드가 있으면 approved
+        plan_status = "approved" if (today_card or next_card) else "draft"
+        request = coaching_request(
+            child_for_ai, feedback, catalog=engine.catalog, plan_status=plan_status,
+            today=today_card, next_card=next_card, history=history,
+        )
+        agent = CoachAgent(engine, intent_classifier=_FixedIntent(intent, intent_reason))
+        result = agent.coach(request).to_dict()
+        message = cast("str", result.get("message") or "")
+        advice = next((line[len(ADVICE_PREFIX):].strip() for line in message.splitlines()
+                       if line.startswith(ADVICE_PREFIX)), None)
+        adjust = cast("dict[str, object]", result["adjust"])
+        proposal = adjust.get("proposal") if adjust.get("requires_parent_approval") else None
+        return {
+            "case": result["case"],
+            "advice": advice,
+            "evidence": result["evidence"],
+            "proposal": proposal,
+            "warnings": result["warnings"],
+            "agent_version": result["prompt_version"],
+        }
+    except Exception as exc:  # noqa: BLE001
+        print(f"[bloomy-ai] coach_review skipped: {exc}")
+        return None
