@@ -10,13 +10,17 @@ const CONTENT = window.BLOOMY_CONTENT;
 const TOKEN_KEY = 'bloomy_token';
 const THEME_KEY = 'bloomy_theme';
 
+function freshOnboard() {
+  return { age: null, experience: null, interests: [], studyTime: null, ek: false, materials: '', goal: '듣기' };
+}
+
 const state = {
   token: localStorage.getItem(TOKEN_KEY) || null,
   account: null,
   child: null,
   view: 'loading',
   authMode: 'login',
-  onboard: { age: null, experience: null, interests: [], studyTime: null, ek: false, materials: '', goal: '듣기' },
+  onboard: freshOnboard(),
   diagnosisQuestions: [],
   diagnosis: {},
   today: null,
@@ -108,6 +112,16 @@ function logout() {
   state.today = null;
   state.report = null;
   state.achievement = null;
+  // 이전 사용자의 입력이 다음 가입·로그인 화면에 남지 않도록 사용자별 상태를 모두 초기화
+  state.onboard = freshOnboard();
+  state.diagnosis = {};
+  state.nextCard = null;
+  state.lastFeedback = null;
+  state.aiRec = null;
+  state.plan = null;
+  state.cards = null;
+  state.reportWeek = null;
+  state.error = '';
   localStorage.removeItem(TOKEN_KEY);
   state.view = 'auth';
   render();
