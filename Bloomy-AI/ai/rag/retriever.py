@@ -3,6 +3,7 @@ from collections import Counter
 import math
 import re
 from typing import Protocol
+from .materials import is_owned as is_owned_material
 
 ALIASES = {"듣기": "listening", "말하기": "speaking", "읽기": "reading", "쓰기": "writing", "파닉스": "phonics"}
 
@@ -36,16 +37,16 @@ class LocalRetriever:
 
     def search(self, request):
         query = Counter(tokens(" ".join((request.goal, *request.favorite_topics))))
-        owned = [v.casefold() for v in request.owned_materials]
         skill_terms = tokens(request.goal)
         hits = []
         for item in self.catalog:
-            if not (item["age_min"] <= request.age <= item["age_max"] and
-                    item["level"] == request.base_level and item["session_minutes"] <= request.session_minutes):
+            is_owned = is_owned_material(item, request.owned_materials)
+            # 보유 교재는 1회 길이가 설정보다 길어도 후보로 두고, 카드 분량을 설정 시간에 맞춘다.
+            if not (item["age_min"] <= request.age <= item["age_max"] and item["level"] == request.base_level
+                    and (is_owned or item["session_minutes"] <= request.session_minutes)):
                 continue
             candidates = [(self.similarity(query, v), c) for c, v in zip(self.chunks, self.vectors) if c["content_id"] == item["id"]]
             similarity, chunk = max(candidates, key=lambda pair: (pair[0], pair[1]["chunk_id"]))
-            is_owned = any(v in item["title"].casefold() or v == item["id"].casefold() for v in owned)
             skill_match = item["skill"] in skill_terms or item["type"] in skill_terms
             score = similarity + (1 if skill_match else 0)
             hits.append({"item": item, "score": round(score, 6), "owned": is_owned,

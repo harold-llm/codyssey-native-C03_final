@@ -18,7 +18,7 @@ def validate_result(result, request, catalog):
             raise ValueError("ungrounded content_id")
         if not (item["age_min"] <= request.age <= item["age_max"] and item["level"] == request.base_level):
             raise ValueError("content violates age or level constraint")
-        if not 5 <= day["minutes"] <= request.session_minutes or day["minutes"] != item["session_minutes"]:
+        if not 5 <= day["minutes"] <= request.session_minutes or day["minutes"] != min(item["session_minutes"], request.session_minutes):
             raise ValueError("invalid duration")
         if day["task"] != item["task"] or day["check_point"] != item["check_point"]:
             raise ValueError("ungrounded instructions")

@@ -37,8 +37,9 @@ class RecommendationEngine:
             chunk = self._chunks.get(hit["chunk_id"])
             if item is None or chunk is None or chunk["content_id"] != item["id"]:
                 continue
+            # 보유 교재는 설정 시간보다 길어도 허용 (카드 분량은 설정 시간으로 맞춘다)
             if (item["age_min"] <= request.age <= item["age_max"] and item["level"] == request.base_level
-                    and item["session_minutes"] <= request.session_minutes):
+                    and (hit["owned"] or item["session_minutes"] <= request.session_minutes)):
                 hits.append({**hit, "item": item, "excerpt": chunk["text"], "source": chunk["source"]})
         return hits
 
@@ -82,7 +83,7 @@ class RecommendationEngine:
                 hit = selected[len(days)]
                 item = hit["item"]
                 days.append({"date": current.isoformat(), "content_id": item["id"],
-                             "task": item["task"], "minutes": item["session_minutes"],
+                             "task": item["task"], "minutes": min(item["session_minutes"], request.session_minutes),
                              "check_point": item["check_point"]})
                 day_details.append({"date": current.isoformat(), "content_id": item["id"], "title": item["title"],
                              "learning_goal": item.get("learning_goal", {

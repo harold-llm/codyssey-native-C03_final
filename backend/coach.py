@@ -259,7 +259,7 @@ def write_memory(
 
 def _pick_swap(
     child: dict[str, object], card: dict[str, object] | None,
-    lower: bool = False,
+    lower: bool = False, exclude: set[object] | None = None,
 ) -> catalog.Item | None:
     """대체 콘텐츠 후보: (lower면 한 레벨 아래, 아니면 같은 레벨) 다른 항목.
     다른 유형을 우선해 '형식·소재 교체'를 실제로 체감하게 한다."""
@@ -272,7 +272,7 @@ def _pick_swap(
     age = cast("int | None", child.get("age"))
     pool = [it for it in (catalog.items_by_level(level, age)
                           or catalog.items_by_level(level))
-            if it["id"] != cur["id"]]
+            if it["id"] != cur["id"] and it["id"] not in (exclude or set())]
     diff = [it for it in pool if it["type"] != cur["type"]]
     if diff:
         return diff[0]
@@ -334,7 +334,10 @@ def apply_adjustment(
     if intent == "out_of_scope":
         return {"type": "none", "reason": "범위 밖 → 전문가 상담으로 전환", "dates": []}
     if intent == "change_request":
-        prop = _pick_swap(child, tomorrow, lower=flags["difficulty_adjust"])
+        # 부모가 바꾸고 싶은 건 오늘 한 자료다 → 오늘·다음 카드와 같은 자료는 제안하지 않는다
+        today_card = store.get_card_for_child(cast("int", child["id"]), cast("str", _rec["date"]))
+        prop = _pick_swap(child, tomorrow, lower=flags["difficulty_adjust"],
+                          exclude={today_card.get("content_id")} if today_card else None)
         return {"type": "propose_swap",
                 "reason": "큰 변경 — 부모 확인 후에만 반영 (6.1 승인 게이트)",
                 "dates": [],

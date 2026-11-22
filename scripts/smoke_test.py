@@ -487,6 +487,13 @@ def section_child2(
         adjust["type"] == "propose_swap" and adjust["dates"] == [],
         str(adjust),
     )
+    today_item = catalog.find_item(cast("dict[str, object]", d["record"])["content_id"])
+    check(
+        "d2 proposal != 오늘 자료 (같은 자료 재제안 금지)",
+        adjust.get("proposal") is None or today_item is None
+        or adjust["proposal"] != today_item["title"],
+        f"proposal={adjust.get('proposal')} today={today_item and today_item['title']}",
+    )
     review = cast("dict[str, object] | None", d.get("ai_review"))
     check(
         "d2 ai_review 변경 요청 → 자료 안내·근거 (Agent)",
