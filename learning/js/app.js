@@ -142,12 +142,41 @@ async function loadToday() {
   }
 }
 
+function ymd(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${dd}`;
+}
+
+function thisWeekMonday() {
+  const d = new Date();
+  const day = d.getDay(); // 0=Sun
+  const diff = day === 0 ? 6 : day - 1;
+  d.setDate(d.getDate() - diff);
+  return ymd(d);
+}
+
+function lastWeekMonday() {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = (day === 0 ? 6 : day - 1) + 7;
+  d.setDate(d.getDate() - diff);
+  return ymd(d);
+}
+
+function thisMonth() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
 async function loadReport() {
   if (!state.child) return;
   try {
+    const ws = state.reportWeek || thisWeekMonday();
     const [report, achievement] = await Promise.all([
-      api('GET', '/api/children/' + state.child.id + '/report'),
-      api('GET', '/api/children/' + state.child.id + '/achievement'),
+      api('GET', '/api/children/' + state.child.id + '/report?week_start=' + ws),
+      api('GET', '/api/children/' + state.child.id + '/achievement?month=' + thisMonth()),
     ]);
     state.report = report;
     state.achievement = achievement;
@@ -836,8 +865,12 @@ function reportHtml() {
   <section class="screen">
     <div class="hero" style="padding:40px 0 20px; text-align:left">
       <span class="eyebrow">리포트</span>
-      <h1 class="hero-title">이번 주의 기록</h1>
+      <h1 class="hero-title">주간 리포트</h1>
       <p class="hero-sub">${esc(r.week_start)} ~ ${esc(r.week_end)}</p>
+      <div class="row mt16">
+        <button class="btn btn-ghost btn-sm" data-week="last">← 지난 주</button>
+        <button class="btn btn-ghost btn-sm" data-week="this">이번 주 →</button>
+      </div>
     </div>
     <div class="stat-grid">
       <div class="stat"><div class="stat-num">${r.record_days}</div><div class="stat-lbl">학습한 날</div></div>
@@ -890,7 +923,15 @@ function fmtAvg(v) {
   return v == null ? '–' : Number(v).toFixed(1);
 }
 
-function bindReport() { /* 정적 렌더 */ }
+function bindReport() {
+  document.querySelectorAll('[data-week]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      state.reportWeek = b.getAttribute('data-week') === 'last' ? lastWeekMonday() : thisWeekMonday();
+      await loadReport();
+      render();
+    });
+  });
+}
 
 /* ---------------- navigation ---------------- */
 function bindGlobalNav() {
