@@ -31,6 +31,7 @@ if os.path.exists(TEST_DB):
 import auth
 import catalog
 import clock
+import curriculum
 import scheduler
 
 import main as bloomy_main
@@ -893,6 +894,34 @@ def section_delete_account(token1: str | None, child_ids: tuple[int, int]) -> No
           st == 200 and bool(cast("dict[str, object]", acc["consent"])["version"]), str(d)[:200])
 
 
+def section_curriculum() -> None:
+    """학습 단위 커리큘럼 + 카탈로그 안내 문서 (docs/catalog.md)."""
+    print("\n[curriculum] 학습 단위·카탈로그 문서")
+    guide_items = cast("dict[str, object]", curriculum.guide()["items"])
+    missing = [it["id"] for it in catalog.search() if it["id"] not in guide_items]
+    check("모든 카탈로그 항목에 안내(content_guide) 있음", not missing, str(missing))
+    t0 = curriculum.unit_text("ort-stage2", 0)
+    t1 = curriculum.unit_text("ort-stage2", 1)
+    t2 = curriculum.unit_text("ort-stage2", 2)
+    check("ORT Stage 2: 1권 첫 읽기", bool(t0 and "『The Big Egg』" in t0[0] and "첫 읽기" in t0[0]), str(t0))
+    check("ORT Stage 2: 1권 다시 읽기", bool(t1 and "『The Big Egg』" in t1[0] and "다시 읽기" in t1[0]), str(t1))
+    check("ORT Stage 2: 2권으로 진도", bool(t2 and "『Poor Floppy』" in t2[0]), str(t2))
+    check("단위 없는 자료는 그대로(None)", curriculum.unit_text("epic-full", 0) is None)
+    cards = [{"content_id": "ort-full", "task": "x", "check_point": "y"} for _ in range(3)]
+    curriculum.apply(cast("list[dict[str, object]]", cards), {"ort-full": 4})
+    check("이전 진도(4회)에 이어 3권부터", "『Put It Back』" in str(cards[0]["task"]), str(cards[0]["task"]))
+    draft = catalog.generate_plan({"age": 4, "level": 3, "materials": "ort", "session_length": 30},
+                                  clock.today())
+    curriculum.apply(cast("list[dict[str, object]]", draft["cards"]))
+    ort = [c for c in draft["cards"] if str(c["content_id"]).startswith("ort-")]
+    check("ORT 보유 아이 계획에 권 제목 카드", bool(ort) and all("『" in c["task"] for c in ort),
+          str([c["task"][:30] for c in ort[:2]]))
+    import subprocess
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "gen_catalog_doc.py"), "--check"],
+                       capture_output=True, text=True)
+    check("docs/catalog.md 최신 (gen_catalog_doc.py --check)", r.returncode == 0, r.stdout.strip())
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -914,6 +943,7 @@ def main() -> int:
     section_scheduler_cron(token1, m, d5)
     section_learning(token1)
     section_delete_account(token1, (child1, child2))
+    section_curriculum()
 
     try:
         os.remove(TEST_DB)

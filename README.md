@@ -17,6 +17,14 @@
 
 브랜치·통합 경위와 역할별 기여 근거(커밋·PR)는 [`docs/collaboration.md`](docs/collaboration.md)에 정리했습니다.
 
+## 추천 콘텐츠 카탈로그
+
+RAG가 추천하는 자료 62개가 각각 무엇인지(책·앱·영상), 어디서 무엇을 찾는지, 권 단위 학습 순서는 [`docs/catalog.md`](docs/catalog.md)에 정리돼 있습니다. 이 문서는 `backend/data/catalog.json`·`content_guide.json`에서 **자동 생성**됩니다.
+
+- 수동 생성: `python3 scripts/gen_catalog_doc.py`
+- 자동 갱신: 저장소마다 한 번 `git config core.hooksPath .githooks` → 두 JSON을 바꾼 커밋에 문서가 함께 갱신돼 들어갑니다.
+- smoke test가 문서가 오래됐는지 검사합니다.
+
 ## 빠르게 실행
 
 **로컬 개발 (의존성 0, 표준 라이브러리만):**

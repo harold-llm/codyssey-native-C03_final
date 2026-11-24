@@ -29,6 +29,7 @@ from typing import TypedDict, cast
 import branch
 import catalog
 import clock
+import curriculum
 
 import store
 
@@ -295,6 +296,10 @@ def _swap_card(
     new_item: catalog.Item,
 ) -> catalog.Item:
     task, check = catalog.card_text(new_item)
+    unit = curriculum.unit_text(
+        new_item["id"], curriculum.prior_counts(cast("int", child["id"])).get(new_item["id"], 0))
+    if unit is not None:
+        task, check = unit
     minutes = min(new_item["session_minutes"] or 10,
                   cast("int", child.get("session_length") or 10))
     store.update_card_content(cast("int", tomorrow["id"]), new_item["id"],

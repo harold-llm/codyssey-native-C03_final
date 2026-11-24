@@ -36,6 +36,7 @@ import catalog
 import clock
 import coach
 import consent
+import curriculum
 import diagnosis
 import scheduler
 
@@ -130,8 +131,13 @@ def _plan_data(
     """RAG 추천 우선, 실패/미가용 시 규칙 기반 계획으로 폴백. → (data, source)"""
     data = ai_bridge.generate_plan(child, goal)
     if data is not None:
-        return cast("catalog.PlanDraft", cast("object", data)), "rag_onboarding"
-    return catalog.generate_plan(child, clock.today()), "onboarding_rule"
+        draft, source = cast("catalog.PlanDraft", cast("object", data)), "rag_onboarding"
+    else:
+        draft, source = catalog.generate_plan(child, clock.today()), "onboarding_rule"
+    # 학습 단위가 있는 자료는 '어떤 책의 무엇을 할지'로 카드 문구를 바꾼다 (이전 진도에 이어서)
+    prior = curriculum.prior_counts(cast("int", child["id"])) if child.get("id") else {}
+    curriculum.apply(cast("list[dict[str, object]]", draft["cards"]), prior)
+    return draft, source
 
 
 def _plan_rows(
@@ -364,6 +370,9 @@ def ep_create_plan(_headers: Headers, child: dict[str, object], body: Body) -> R
         if item is None:
             return 400, {"error": f"days[{i}].content_id는 카탈로그에 없습니다 (6.6)"}, JSON
         task, check = catalog.card_text(item)
+        unit = curriculum.unit_text(item["id"], sum(1 for c in cards if c["content_id"] == item["id"]))
+        if unit is not None:
+            task, check = unit
         minutes = d.get("minutes") or min(
             int(item.get("session_minutes") or 10),
             int(cast("int | float | str", child.get("session_length") or 10)))
