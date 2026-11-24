@@ -224,17 +224,25 @@
 
 ### 2.4 데일리 루프
 
-#### `GET /api/children/{id}/today`
+#### `GET /api/children/{id}/today[?date=YYYY-MM-DD]`
 
+- `date` 생략 시 오늘. 지난 날짜를 주면 그날 카드·기록을 돌려준다(밀린 기록용). 미래 날짜·잘못된 형식 → `400`.
 - `200`:
 ```json
-{"date": "2026-11-17",
+{"date": "2026-11-17",          // 조회한 날짜
+ "today": "2026-11-24",         // 서비스 기준 오늘 (KST)
+ "plan_dates": ["2026-11-17", ...],  // 오늘까지의 계획 학습일 (날짜 선택용)
  "plan": plan(approved) | null,
  "draft_plan": plan(draft) | null,
- "card": card(오늘) | null,
- "record": feedback(오늘) | null,
+ "card": card | null,
+ "next_card": card(다음 학습일) | null,
+ "record": feedback(그날) | null,
  "message": coach_message(최근 1건) | null}
 ```
+- `card`·`next_card`에는 다음 필드가 붙는다:
+  - `guide`: `{title, kind, about, find, link, cost, why, help, specific}` — 자료가 무엇인지, 찾는 법, 공식 링크, 비용, 추천 이유, 부모 역할, 권·회차 지정 여부
+  - `basis`: 지난 기록에 근거한 추천 이유 문장 | null (기록이 없으면 null)
+  - `letters`: 알파벳 자료일 때 오늘의 글자 `[{letter, word, emoji}]` | null
 - 승인 전: `plan=null`, `draft_plan`=초안 (F는 승인 게이트 화면으로 유도).
 
 #### `POST /api/children/{id}/feedback` — **핵심** (1분 피드백 → 3단계 코치)
@@ -297,7 +305,9 @@
  "avg_interest": 3.5, "avg_comprehension": 4.0,
  "prev_avg_interest": 3.8, "prev_avg_comprehension": 3.5,
  "trend": ["흥미 3.8→3.5", "이해도 3.5→4.0"],
- "learned": ["Super Simple Songs: My Day"],
+ "learned": ["『The Big Egg』 (끝까지, 이해도 4점)"],
+ "days": [{"date": "2026-11-10", "what": "『The Big Egg』", "completion": "full",
+           "interest": 4, "comprehension": 4, "memo": "..."}],
  "branch_counts": {"A": 2, "B": 1, "C": 1, "SKIP": 0},
  "choices": ["현재 흐름 유지 (추이가 안정적이라면 추천)", "..."],
  "next_cards": [{"date": "...", "task": "...", "minutes": 10}],
@@ -307,7 +317,9 @@
  "summary": "이번 주 학습 4일. 추이: ..."}
 ```
 - `confidence_sentence`는 **데이터 조건부**(confidence_ok, 아래 5절) — 어떤 주에도 무조건 삽입되지 않는다. 하락·미해결 주에는 `honest_note`로 솔직히 안내 (6.6).
-- `learned` 기준: `completion=full`이고 `comprehension≥4`인 기록의 콘텐츠 (최대 3개).
+- `learned` 기준: `completion=full`이고 `comprehension≥4`인 기록. 서비스 이름 대신 카드의 권·회차 제목과 관찰 근거로 표시 (최대 3개).
+- `days`: 그 주에 부모가 남긴 기록을 날짜순으로 (리포트 "이번 주 기록 한눈에").
+- 기록이 3일 미만(`MIN_TREND_DAYS`)이면 추세·확신 문구를 내지 않고 `honest_note`로 "아직 추세를 말하기엔 이르다"고 안내.
 
 #### `GET /api/children/{id}/achievement?month=YYYY-MM`
 

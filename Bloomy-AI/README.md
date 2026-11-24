@@ -27,7 +27,8 @@ python -m examples.integration_demo
 
 | 환경변수 | 용도 |
 |---|---|
-| `OPENAI_API_KEY` | API 키. 실제 호출 시 필요 |
+| `ANTHROPIC_API_KEY` | Claude API 키. 배포 서비스는 이 키로 Claude(`claude-haiku-5-5`)를 사용 |
+| `OPENAI_API_KEY` | OpenAI 호환 API를 쓸 때의 키 (선택) |
 | `BLOOMY_LLM_MODEL` | 기본값 Anthropic `claude-haiku-5-5` / OpenAI `gpt-4o-mini` (Structured Outputs 지원 모델) |
 | `BLOOMY_LLM_BASE_URL` | OpenAI 호환 API의 베이스 URL. 기본값 `https://api.openai.com/v1` |
 
