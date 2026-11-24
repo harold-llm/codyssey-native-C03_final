@@ -910,6 +910,10 @@ def section_curriculum() -> None:
     cards = [{"content_id": "ort-full", "task": "x", "check_point": "y"} for _ in range(3)]
     curriculum.apply(cast("list[dict[str, object]]", cards), {"ort-full": 4})
     check("이전 진도(4회)에 이어 3권부터", "『Put It Back』" in str(cards[0]["task"]), str(cards[0]["task"]))
+    shared = [{"content_id": c, "task": "", "check_point": ""} for c in ("songbirds-1", "songbirds-full")]
+    curriculum.apply(cast("list[dict[str, object]]", shared))
+    check("같은 책을 공유하는 항목끼리 중복 배정 안 함", shared[0]["task"] != shared[1]["task"],
+          str([c["task"][:25] for c in shared]))
     draft = catalog.generate_plan({"age": 4, "level": 3, "materials": "ort", "session_length": 30},
                                   clock.today())
     curriculum.apply(cast("list[dict[str, object]]", draft["cards"]))

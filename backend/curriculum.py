@@ -84,12 +84,25 @@ def apply(
 ) -> None:
     """계획 카드의 task·check_point를 학습 단위 문구로 바꾼다 (단위가 있는 자료만, 제자리 수정)."""
     seen = dict(start or {})
+    # 같은 책을 여러 항목이 공유한다 (예: songbirds-1 ⊂ songbirds-full) → 이미 배정한 회차는 건너뛴다
+    assigned: set[tuple[str, int]] = set()
     for card in cards:
         cid = card.get("content_id")
         if not isinstance(cid, str):
             continue
-        text = unit_text(cid, seen.get(cid, 0))
+        us = units(cid)
+        if not us:
+            continue
+        n = seen.get(cid, 0)
+        for _ in range(len(us) * 2):
+            u = us[(n // 2) % len(us)]
+            if (u["pack"] + "|" + u["title"], n % 2) not in assigned:
+                break
+            n += 1
+        text = unit_text(cid, n)
         if text is None:
             continue
-        seen[cid] = seen.get(cid, 0) + 1
+        u = us[(n // 2) % len(us)]
+        assigned.add((u["pack"] + "|" + u["title"], n % 2))
+        seen[cid] = n + 1
         card["task"], card["check_point"] = text
