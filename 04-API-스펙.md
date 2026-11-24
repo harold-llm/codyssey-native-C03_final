@@ -303,7 +303,10 @@
 자료별 전체 커리큘럼 (카드의 "전체 커리큘럼 보기" 페이지). 없는 자료 `404`, 다른 계정 아이 `404`.
 - `200`:
 ```json
-{"item": {"id": "ort-stage2", "title": "...", "level": 3, "level_label": "L3 파닉스",
+{"path": {"source": "https://...", "note": "...",          // 출판사·서비스 공식 단계 전체 | null
+          "steps": [{"name": "Level 2 (Red)", "age": "4~5세", "desc": "...", "current": true,
+                     "items": [{"id": "ort-stage2", "title": "..."}]}]},
+ "item": {"id": "ort-stage2", "title": "...", "level": 3, "level_label": "L3 파닉스",
           "age": "4~6세", "skill": "읽기", "granularity": "units", "link": "..."},
  "series": {"key": "ort", "name": "Oxford Reading Tree (ORT)", "kind": "...", "about": "...",
             "official": "https://...", "cost": "..."},
@@ -314,6 +317,7 @@
             "status": "done|today|planned|missed|later", "dates": ["2026-11-25"]}],
  "days": [{"date": "2026-11-25", "task": "...", "status": "today"}]}
 ```
+- `path`: `content_guide.json`의 시리즈 공식 단계(출처 URL 포함). 단계 구분이 없는 자료(단권 그림책·영상 채널)는 `null`, 적응형 앱(Epic·Khan Kids)은 `steps: []`와 `note`만.
 - `steps`: 같은 시리즈의 카탈로그 항목을 단계 순으로. `units`: 학습 단위가 있는 자료만(묶음은 `[]`). `days`: 승인·완료된 계획에서 이 자료를 하는 날.
 
 ### 2.5 리포트·대시보드

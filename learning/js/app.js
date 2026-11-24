@@ -213,8 +213,8 @@ function curriculumHtml() {
         </div>
 
         <div class="card mt16">
-          <h2 class="card-title">단계별 경로</h2>
-          <p class="small muted mt8">꽃피다가 이 시리즈에서 추천하는 단계예요. 아이 단계가 오르면 다음 단계 자료로 넘어가요.</p>
+          <h2 class="card-title">꽃피다 추천 자료 (이 시리즈)</h2>
+          <p class="small muted mt8">아이 단계가 오르면 다음 단계 자료로 넘어가요.</p>
           <ol class="cur-steps mt16">
             ${(c.steps || []).map((x) => `<li class="${x.current ? 'is-current' : ''}">
               <span class="cur-level">${esc(x.level_label)}</span>
@@ -225,8 +225,12 @@ function curriculumHtml() {
       </div>
 
       <div>
-        ${(c.units || []).length ? `
         <div class="card">
+          <h2 class="card-title">단계별 경로</h2>
+          ${pathHtml(c)}
+        </div>
+        ${(c.units || []).length ? `
+        <div class="card mt16">
           <h2 class="card-title">학습 단위 순서</h2>
           <p class="small muted mt8">한 단위(책 한 권·회차·소리 묶음)를 처음 → 다시 하기로 두 번 하고 다음으로 넘어가요. 지금까지 ${doneN}/${c.units.length}개 완료.</p>
           <ol class="cur-units mt16">
@@ -237,9 +241,9 @@ function curriculumHtml() {
             </li>`).join('')}
           </ol>
         </div>` : `
-        <div class="card">
+        <div class="card mt16">
           <h2 class="card-title">학습 단위 순서</h2>
-          <p class="mt8 muted">이 자료는 아직 권·회차가 정해지지 않은 묶음이에요. 위 '찾는 법'과 공식 사이트에서 아이가 좋아하는 것을 하나 골라 주세요. 출처를 확인하면 권 단위로 나눠 드릴게요.</p>
+          <p class="mt8 muted">이 자료는 아직 권·회차가 정해지지 않은 묶음이에요. '찾는 법'과 공식 사이트에서 아이가 좋아하는 것을 하나 골라 주세요. 출처를 확인하면 권 단위로 나눠 드릴게요.</p>
         </div>`}
 
         <div class="card mt16">
@@ -251,6 +255,26 @@ function curriculumHtml() {
       </div>
     </div>
   </section>`;
+}
+
+/* 공식 단계 전체: 출판사·서비스가 정한 순서. 꽃피다 추천 자료가 있는 단계에 표시 */
+function pathHtml(c) {
+  const p = c.path;
+  if (!p) return '<p class="small muted mt8">이 자료는 출판사가 정한 단계 순서가 없어요(단권 그림책·영상 채널 등). 꽃피다가 이 시리즈에서 추천하는 자료는 왼쪽(휴대폰은 위)에 있어요.</p>';
+  const steps = p.steps || [];
+  return `
+    ${p.note ? `<p class="small muted mt8">${esc(p.note)}</p>` : ''}
+    ${steps.length ? `<ol class="cur-path mt16">
+      ${steps.map((st, i) => `<li class="${st.current ? 'is-current' : ''}">
+        <span class="cur-n">${i + 1}</span>
+        <div>
+          <div><strong>${esc(st.name)}</strong>${st.age ? ` <span class="muted small">· ${esc(st.age)}</span>` : ''}${st.current ? ' <span class="chip chip-accent">지금</span>' : ''}</div>
+          ${st.desc ? `<div class="small muted">${esc(st.desc)}</div>` : ''}
+          ${st.items.length ? `<div class="small mt4">꽃피다 추천: ${st.items.map((x) => esc(x.title)).join(', ')}</div>` : ''}
+        </div>
+      </li>`).join('')}
+    </ol>` : ''}
+    ${p.source ? `<p class="small muted mt8">출처: <a href="${esc(p.source)}" target="_blank" rel="noopener noreferrer">${esc(p.source.replace(/^https?:\/\//, '').split('/')[0])}</a></p>` : ''}`;
 }
 
 function bindCurriculum() {

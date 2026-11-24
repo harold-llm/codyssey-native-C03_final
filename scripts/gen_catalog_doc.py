@@ -94,6 +94,16 @@ def render() -> str:
         w("")
         w(info["about"])
         w("")
+        path = info.get("path")
+        if path:
+            w(f"**공식 단계 전체** — {path.get('note', '')} ([출처]({path['source']}))")
+            w("")
+            for n, st in enumerate(path.get("steps") or [], 1):
+                age = f" · {st['age']}" if st.get("age") else ""
+                desc = f" — {st['desc']}" if st.get("desc") else ""
+                mark = f" ← 꽃피다 추천: {', '.join(f'`{i}`' for i in st['items'])}" if st.get("items") else ""
+                w(f"{n}. {st['name']}{age}{desc}{mark}")
+            w("")
         w("| 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |")
         w("|---|---|---|---|---|---|---|---|")
         for it in sorted(its, key=lambda i: (i["level"], i["id"])):

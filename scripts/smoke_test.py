@@ -1039,6 +1039,18 @@ def section_curriculum_page(token: str | None, child_id: int) -> None:
     col = cast("dict[str, object]", curriculum.overview({"id": child_id}, "epic-full", clock.today().isoformat()))
     check("묶음 자료(Epic): 시리즈 안내·공식 링크, 권 목록은 비어 있음",
           bool(cast("dict[str, object]", col["series"]).get("official")) and col["units"] == [])
+    path = cast("dict[str, object]", ov["path"])
+    psteps = cast("list[dict[str, object]]", path["steps"])
+    check("ORT: 공식 단계 전체(Oxford Level 1~9) + 지금 단계·출처",
+          len(psteps) >= 9 and any(p_["current"] for p_ in psteps) and str(path["source"]).startswith("https://"))
+    abc = cast("dict[str, object]", curriculum.overview({"id": child_id}, "abcmouse", "2026-01-01"))
+    asteps = cast("list[dict[str, object]]", cast("dict[str, object]", abc["path"])["steps"])
+    check("ABCmouse: Toddler Time~Level 10 전체 단계", len(asteps) == 6 and "Toddler" in str(asteps[0]["name"]))
+    g = curriculum.guide()
+    bad_items = [i for sv in cast("dict[str, dict[str, object]]", g["series"]).values()
+                 for st in cast("list[dict[str, object]]", (sv.get("path") or {}).get("steps") or [])
+                 for i in cast("list[str]", st.get("items") or []) if not catalog.find_item(i)]
+    check("공식 단계에 연결한 추천 자료 ID가 모두 카탈로그에 있음", not bad_items, str(bad_items))
     check("없는 자료 → None", curriculum.overview({"id": child_id}, "no-such-item", "2026-01-01") is None)
     st, d = req("GET", f"/api/children/{child_id}/curriculum/ort-stage2", token=token)
     check("GET /curriculum/<자료> 200", st == 200 and bool(cast("dict[str, object]", d).get("units")))

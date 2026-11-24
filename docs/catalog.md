@@ -30,6 +30,15 @@
 
 미국 Age of Learning의 2~8세 유료 학습 앱. 단계별 '학습 경로(Step-by-Step Learning Path)'로 진행한다.
 
+**공식 단계 전체** — ABCmouse 'Step-by-Step Learning Path'. 10단계 + Toddler Time, 레슨 850개 이상. 앱이 다음 레슨을 순서대로 열어 줘요. ([출처](https://support.abcmouse.com/hc/en-us/articles/360047531194))
+
+1. Toddler Time · 18~36개월 — 노래·읽어 주는 책·간단한 퍼즐. 혼자 하기 전 단계라 어른과 함께
+2. Preschool — Level 1~2 ← 꽃피다 추천: `abcmouse`
+3. Pre-K — Level 3~4 ← 꽃피다 추천: `abcmouse`
+4. Kindergarten — Level 5~6
+5. 1st Grade — Level 7~8
+6. 2nd Grade — Level 9~10
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `abcmouse` | ABCmouse - Early Learning | 4~5세 | L1 | 앱·활동·듣기 | 10분 | 묶음 | ABCmouse 앱 → 학습 경로의 다음 레슨 |
@@ -152,6 +161,9 @@
 
 비영리 칸아카데미의 2~8세용 무료 앱. 앱 안의 '학습 경로(Learning Path)'가 아이 수준에 맞춰 활동을 차례로 제시한다.
 
+**공식 단계 전체** — 정해진 단계표 대신 아이 수준에 맞춰 자동으로 조절되는 학습 경로(만 2~8세)예요. 하루 5~20분, 앱이 다음 활동을 골라 줘요. ([출처](https://khankids.zendesk.com/hc/en-us/articles/360041615571))
+
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `khan-full` | Khan Academy Kids - Full Curriculum | 4~7세 | L1 | 앱·활동·듣기 | 10분 | 묶음 | Khan Academy Kids 앱 전체 — 학습 경로의 다음 활동 |
@@ -241,6 +253,13 @@
 
 미국 유아·초등 저학년용 읽기 사이트. 알파벳(ABCs) → 읽기 배우기(Learn to Read) → 나는 읽는다(I'm Reading) 순서로 메뉴가 나뉜다. 일부는 무료, 나머지는 회원제.
 
+**공식 단계 전체** — ABCs → Learn to Read → It's Fun to Read → I'm Reading 순서로 올라가요. ([출처](https://teach.starfall.com/guides/kindergarten/reading))
+
+1. ABCs · Pre-K~K — 알파벳 글자와 소리 ← 꽃피다 추천: `starfall-abcs`
+2. Learn to Read · K — 파닉스 책 15권(Zac the Rat부터) 순서대로, 짧은·긴 모음 ← 꽃피다 추천: `starfall-read`
+3. It's Fun to Read · K~1학년 — 시·수수께끼·말놀이로 뜻 읽기
+4. I'm Reading · 1학년~ — 짧은 극·옛이야기·논픽션 ← 꽃피다 추천: `starfall-imreading`
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `starfall-abcs` | Starfall - ABCs | 4~5세 | L1 | 앱·활동·읽기 | 10분 | 묶음 | starfall.com → ABCs 메뉴 → 알파벳 한 글자씩 (A부터) |
@@ -267,6 +286,13 @@
 *영국 출판사의 유아 그림책·리더스* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://usborne.com/)
 
 영국 어린이책 출판사. 'That's not my...' 촉감책, 'Phonics Readers' 파닉스 리더스, 'First Reading' 단계별 리더스가 있다.
+
+**공식 단계 전체** — Usborne Reading Programme: 8단계, 350권 이상. 촉감책(That's not my...)은 이 단계 밖의 유아 그림책이에요. ([출처](https://usborne.com/za/very-first-reading-how-it-works))
+
+1. Very First Reading — 첫 글자부터 혼자 읽기까지, 파닉스 순서(Letters and Sounds)대로
+2. Phonics Readers — 운율 있는 짧은 이야기. 출판사 설명상 파닉스로 읽기를 배우는 용도는 아님 ← 꽃피다 추천: `usborne-fox`
+3. First Reading Level 1~4 — 글 길이·난이도로 나눈 이야기 ← 꽃피다 추천: `usborne-first`
+4. Young Reading Series 1~3 — 혼자 읽기 시작한 아이의 자신감·유창성
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
@@ -304,6 +330,14 @@
 
 아주 짧은 문장으로 된 미국 파닉스 소책자 세트. Set 1은 짧은 모음 단어(CVC)만으로 읽기를 시작한다.
 
+**공식 단계 전체** — 세트마다 한 단계씩, 소책자를 1권부터 순서대로 읽어요. ([출처](https://en.wikipedia.org/wiki/Bob_Books))
+
+1. Set 1: Beginning Readers — 짧은 모음, 세 글자 단어 (12권) ← 꽃피다 추천: `bobbooks-1`
+2. Set 2: Advancing Beginners — 짧은 모음 계속, 단어·이야기가 조금 길어짐 ← 꽃피다 추천: `bobbooks-2`
+3. Set 3: Word Families — 단어 가족, 자음 블렌드, 어미 (10권)
+4. Set 4: Complex Words — 더 긴 책, 복잡한 단어·블렌드·사이트워드 (8권)
+5. Set 5: Long Vowels — 긴 모음과 silent e
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `bobbooks-1` | Bob Books - Set 1: Beginning Readers | 5~6세 | L2 | 리더스·그림책·읽기 | 15분 | 묶음 | Bob Books Set 1 소책자 1권부터 차례로 |
@@ -334,6 +368,19 @@
 *영국 옥스퍼드대출판부(OUP) 단계별 리더스* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://home.oxfordowl.co.uk/)
 
 Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더스. Stage 1(글 없는 책)부터 단계가 올라가며, 한 단계는 여러 '팩'(각 6권)으로 구성된다. 국내에서 '옥스포드 리딩 트리'로 많이 팔린다.
+
+**공식 단계 전체** — Oxford Level 1~20(영국 Reception~Year 6). 아래는 미취학~초기 단계인 Level 1~9예요. ([출처](https://home.oxfordowl.co.uk/reading/reading-schemes-oxford-levels/oxford-reading-tree-levels/))
+
+1. Level 1 (Lilac) · 3~4세 — 책과 친해지기, 글 없는 그림책, 아주 쉬운 단어 ← 꽃피다 추천: `ort-stage1`
+2. Level 1+ (Pink) · 4~5세 — sat·pin 같은 단어를 파닉스로 ← 꽃피다 추천: `ort-stage1`
+3. Level 2 (Red) · 4~5세 — 소리 지식으로 새 단어, 짧은 문장 ← 꽃피다 추천: `ort-stage2`
+4. Level 3 (Yellow) · 4~5세 — ee·oa·ch·th 같은 이중 글자 ← 꽃피다 추천: `ort-stage3`
+5. Level 4 (Light Blue) · 4~6세 — 빠른 해독, said·some 같은 tricky word ← 꽃피다 추천: `ort-stage4`
+6. Level 5 (Green) · 5~6세 — 다른 철자 패턴, didn't 같은 축약 ← 꽃피다 추천: `ort-stage5`
+7. Level 6 (Orange) · 5~6세 — 더 길고 복잡한 이야기
+8. Level 7 (Turquoise) · 5~6세 — 소리 내어 꽤 유창하게
+9. Level 8 (Purple) · 6~7세 — 장(chapter)이 있는 이야기
+10. Level 9 (Gold) · 6~8세 — 대부분 단어를 자동으로, 논픽션 목차·색인
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
@@ -568,6 +615,14 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 미국 Learning A-Z의 레벨별 전자책 앱. aa → A → B → C … 순서로 레벨이 올라가며, 듣기·읽기·퀴즈가 붙어 있다.
 
+**공식 단계 전체** — Learning A-Z 레벨(aA → A~Z → Z1·Z2) 순서로 올라가요. 최근에는 책에 학년·Lexile 표시로 바뀌는 중이에요. ([출처](https://www.readinga-z.com/updates/raz_correlation_chart.pdf))
+
+1. Level aA ← 꽃피다 추천: `razkids-aa`
+2. Level A ← 꽃피다 추천: `razkids-aa`
+3. Level B~C ← 꽃피다 추천: `razkids-bc`
+4. Level D~J
+5. Level K~Z, Z1~Z2
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `razkids-aa` | Raz-Kids - Level aa-A | 5~6세 | L2 | 앱·활동·읽기 | 10분 | 묶음 | Raz-Kids 앱 → Level aa 책부터 차례로, 그다음 Level A |
@@ -579,6 +634,14 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 *유료 읽기 학습 앱* · 비용: 유료 구독 (무료 체험 있음) · [공식 사이트](https://readingeggs.com/)
 
 호주의 읽기 학습 앱. 지도(Map) 위의 레슨을 1번부터 차례로 진행한다.
+
+**공식 단계 전체** — 지도(Map)를 따라 레슨이 순서대로 열려요. ([출처](https://kb.readingeggs.com/reading-eggs-program-overview))
+
+1. Reading Eggs Junior · 만 2~4세 — 소리 인식·알파벳 놀이, 읽어 주는 책
+2. Reading Eggs Level 1 — Starting Out · 만 3~7세 — 레슨 1~40, 처음 시작하는 아이 ← 꽃피다 추천: `readingeggs`
+3. Reading Eggs Level 2 — Beginning to Read · 만 3~7세 — 레슨 41~80
+4. Reading Eggs Level 3 — Building Confidence · 만 3~7세 — 레슨 81~120
+5. Reading Eggspress · 만 7~13세 — 이해·유창성
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
@@ -645,6 +708,9 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 만 12세 이하용 영어 전자책·오디오북·영상 구독 앱. 책이 수만 권이라 '무엇을 읽을지'를 정해 주지 않으면 지금 카드처럼 막연해진다. 책 제목으로 검색해 쓰는 것이 좋다.
 
+**공식 단계 전체** — Epic은 정해진 단계 순서가 없는 디지털 도서관이에요. 책마다 대상 나이·AR·Lexile이 표시돼요. 4~6세는 나이 필터로 고르고, 읽어 주는(Read-to-Me) 책부터 시작해요. ([출처](https://kids.getepic.com/))
+
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `epic` | Epic! - Digital Library | 6~7세 | L3 | 앱·활동·읽기 | 10분 | 묶음 | Epic! 앱/웹 → 검색창에 책 제목 입력. 어떤 책을 읽을지는 아직 지정되지 않음 |
@@ -666,6 +732,13 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 실제 동물 사진으로 된 논픽션 리더스. Pre-reader → Level 1 → Level 2 순서이며, 관심사가 동물인 아이에게 잘 맞는다.
 
+**공식 단계 전체** — 표지에 Pre-reader부터 Level 3까지 단계가 표시돼요. 'Co-reader'는 단계가 아니라 어른·아이가 번갈아 읽는 형식이에요. ([출처](https://www.rif.org/literacy-central/collections/national-geographic-kids-leveled-readers-collection))
+
+1. Pre-reader — 처음 읽는 아이. 기본 어휘·개념, 동물 주제가 많음 ← 꽃피다 추천: `natgeo-prereader`
+2. Level 1 (Co-reader 포함) — 초보 독자용 쉬운 정보 글
+3. Level 2 — 조금 더 긴 글과 새 어휘
+4. Level 3 — 능숙한 독자용, 정보가 여러 겹
+
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `natgeo-full` | National Geographic Kids - Full Collection | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 묶음 | National Geographic Kids Readers 전체 — 권이 지정되지 않음 |
@@ -676,6 +749,15 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 *OUP 파닉스 리더스 (Oxford Reading Tree 계열)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/)
 
 『The Gruffalo』 작가 Julia Donaldson이 쓴 Oxford Reading Tree 계열 파닉스 리더스 60권. Stage 1+부터 Stage 6까지 단계마다 새로 배우는 소리가 정해져 있어, 배운 소리만으로 읽을 수 있다. ORT 이야기책(Biff·Chip·Kipper)과 함께 많이 쓴다.
+
+**공식 단계 전체** — Oxford Reading Tree의 파닉스 시리즈, 전 60권. 단계마다 기본 6권 + More 6권. ([출처](https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/))
+
+1. Stage 1+ — 처음 파닉스를 시작하는 아이 ← 꽃피다 추천: `songbirds-1`
+2. Stage 2 ← 꽃피다 추천: `songbirds-2`
+3. Stage 3 ← 꽃피다 추천: `songbirds-2`
+4. Stage 4 — 1+~3단계 소리 복습 ← 꽃피다 추천: `songbirds-3`
+5. Stage 5 ← 꽃피다 추천: `songbirds-3`
+6. Stage 6 ← 꽃피다 추천: `songbirds-3`
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
@@ -869,6 +951,15 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 *초기 리더스 (I Can Read)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.icanread.com/)
 
 개구리와 두꺼비의 우정을 다룬 짧은 이야기 모음. 첫 권은 'Frog and Toad Are Friends'.
+
+**공식 단계 전체** — HarperCollins 'I Can Read!' 단계: My Very First → My First → Level 1~4. Frog and Toad는 Level 2예요. ([출처](https://icanread.com/levels))
+
+1. My Very First — 인쇄물 기초, 아주 짧은 문장
+2. My First — 쉬운 말·반복, 함께 읽기
+3. Level 1 — 소리와 문장을 소리 내어 읽기 시작
+4. Level 2 — 자신 있게 읽지만 도움이 조금 필요 ← 꽃피다 추천: `frog-and-toad`
+5. Level 3
+6. Level 4
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|

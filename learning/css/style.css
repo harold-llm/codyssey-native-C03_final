@@ -802,3 +802,8 @@ button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px 
   .cur-days li { grid-template-columns: 44px 1fr; }
   .cur-days li .small { grid-column: 1 / -1; }
 }
+.cur-path { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.cur-path li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; padding: 8px 10px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
+.cur-path li.is-current { background: var(--surface-2); outline: 1px solid var(--accent); }
+.cur-sub { font-size: 15px; font-weight: 700; }
+.mt4 { margin-top: 4px; }

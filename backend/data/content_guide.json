@@ -32,28 +32,149 @@
       "kind": "영국 출판사의 유아 그림책·리더스",
       "about": "영국 어린이책 출판사. 'That's not my...' 촉감책, 'Phonics Readers' 파닉스 리더스, 'First Reading' 단계별 리더스가 있다.",
       "official": "https://usborne.com/",
-      "cost": "책 구입 또는 도서관 대출"
+      "cost": "책 구입 또는 도서관 대출",
+      "path": {
+        "source": "https://usborne.com/za/very-first-reading-how-it-works",
+        "note": "Usborne Reading Programme: 8단계, 350권 이상. 촉감책(That's not my...)은 이 단계 밖의 유아 그림책이에요.",
+        "steps": [
+          {
+            "name": "Very First Reading",
+            "age": "",
+            "desc": "첫 글자부터 혼자 읽기까지, 파닉스 순서(Letters and Sounds)대로",
+            "items": []
+          },
+          {
+            "name": "Phonics Readers",
+            "age": "",
+            "desc": "운율 있는 짧은 이야기. 출판사 설명상 파닉스로 읽기를 배우는 용도는 아님",
+            "items": [
+              "usborne-fox"
+            ]
+          },
+          {
+            "name": "First Reading Level 1~4",
+            "age": "",
+            "desc": "글 길이·난이도로 나눈 이야기",
+            "items": [
+              "usborne-first"
+            ]
+          },
+          {
+            "name": "Young Reading Series 1~3",
+            "age": "",
+            "desc": "혼자 읽기 시작한 아이의 자신감·유창성",
+            "items": []
+          }
+        ]
+      }
     },
     "khan": {
       "name": "Khan Academy Kids",
       "kind": "무료 학습 앱",
       "about": "비영리 칸아카데미의 2~8세용 무료 앱. 앱 안의 '학습 경로(Learning Path)'가 아이 수준에 맞춰 활동을 차례로 제시한다.",
       "official": "https://learn.khanacademy.org/khan-academy-kids/",
-      "cost": "무료 앱"
+      "cost": "무료 앱",
+      "path": {
+        "source": "https://khankids.zendesk.com/hc/en-us/articles/360041615571",
+        "note": "정해진 단계표 대신 아이 수준에 맞춰 자동으로 조절되는 학습 경로(만 2~8세)예요. 하루 5~20분, 앱이 다음 활동을 골라 줘요.",
+        "steps": []
+      }
     },
     "starfall": {
       "name": "Starfall",
       "kind": "파닉스·읽기 웹사이트/앱",
       "about": "미국 유아·초등 저학년용 읽기 사이트. 알파벳(ABCs) → 읽기 배우기(Learn to Read) → 나는 읽는다(I'm Reading) 순서로 메뉴가 나뉜다. 일부는 무료, 나머지는 회원제.",
       "official": "https://www.starfall.com/",
-      "cost": "일부 무료, 나머지 유료 회원제"
+      "cost": "일부 무료, 나머지 유료 회원제",
+      "path": {
+        "source": "https://teach.starfall.com/guides/kindergarten/reading",
+        "note": "ABCs → Learn to Read → It's Fun to Read → I'm Reading 순서로 올라가요.",
+        "steps": [
+          {
+            "name": "ABCs",
+            "age": "Pre-K~K",
+            "desc": "알파벳 글자와 소리",
+            "items": [
+              "starfall-abcs"
+            ]
+          },
+          {
+            "name": "Learn to Read",
+            "age": "K",
+            "desc": "파닉스 책 15권(Zac the Rat부터) 순서대로, 짧은·긴 모음",
+            "items": [
+              "starfall-read"
+            ]
+          },
+          {
+            "name": "It's Fun to Read",
+            "age": "K~1학년",
+            "desc": "시·수수께끼·말놀이로 뜻 읽기",
+            "items": []
+          },
+          {
+            "name": "I'm Reading",
+            "age": "1학년~",
+            "desc": "짧은 극·옛이야기·논픽션",
+            "items": [
+              "starfall-imreading"
+            ]
+          }
+        ]
+      }
     },
     "abcmouse": {
       "name": "ABCmouse",
       "kind": "유료 학습 앱",
       "about": "미국 Age of Learning의 2~8세 유료 학습 앱. 단계별 '학습 경로(Step-by-Step Learning Path)'로 진행한다.",
       "official": "https://www.abcmouse.com/",
-      "cost": "유료 구독"
+      "cost": "유료 구독",
+      "path": {
+        "source": "https://support.abcmouse.com/hc/en-us/articles/360047531194",
+        "note": "ABCmouse 'Step-by-Step Learning Path'. 10단계 + Toddler Time, 레슨 850개 이상. 앱이 다음 레슨을 순서대로 열어 줘요.",
+        "steps": [
+          {
+            "name": "Toddler Time",
+            "age": "18~36개월",
+            "desc": "노래·읽어 주는 책·간단한 퍼즐. 혼자 하기 전 단계라 어른과 함께",
+            "items": []
+          },
+          {
+            "name": "Preschool — Level 1~2",
+            "age": "",
+            "desc": "",
+            "items": [
+              "abcmouse"
+            ]
+          },
+          {
+            "name": "Pre-K — Level 3~4",
+            "age": "",
+            "desc": "",
+            "items": [
+              "abcmouse"
+            ]
+          },
+          {
+            "name": "Kindergarten — Level 5~6",
+            "age": "",
+            "desc": "",
+            "items": []
+          },
+          {
+            "name": "1st Grade — Level 7~8",
+            "age": "",
+            "desc": "",
+            "items": []
+          },
+          {
+            "name": "2nd Grade — Level 9~10",
+            "age": "",
+            "desc": "",
+            "items": []
+          }
+        ]
+      }
     },
     "cocomelon": {
       "name": "Cocomelon",
@@ -88,21 +209,181 @@
       "kind": "영국 옥스퍼드대출판부(OUP) 단계별 리더스",
       "about": "Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더스. Stage 1(글 없는 책)부터 단계가 올라가며, 한 단계는 여러 '팩'(각 6권)으로 구성된다. 국내에서 '옥스포드 리딩 트리'로 많이 팔린다.",
       "official": "https://home.oxfordowl.co.uk/",
-      "cost": "책 구입 또는 도서관 대출"
+      "cost": "책 구입 또는 도서관 대출",
+      "path": {
+        "source": "https://home.oxfordowl.co.uk/reading/reading-schemes-oxford-levels/oxford-reading-tree-levels/",
+        "note": "Oxford Level 1~20(영국 Reception~Year 6). 아래는 미취학~초기 단계인 Level 1~9예요.",
+        "steps": [
+          {
+            "name": "Level 1 (Lilac)",
+            "age": "3~4세",
+            "desc": "책과 친해지기, 글 없는 그림책, 아주 쉬운 단어",
+            "items": [
+              "ort-stage1"
+            ]
+          },
+          {
+            "name": "Level 1+ (Pink)",
+            "age": "4~5세",
+            "desc": "sat·pin 같은 단어를 파닉스로",
+            "items": [
+              "ort-stage1"
+            ]
+          },
+          {
+            "name": "Level 2 (Red)",
+            "age": "4~5세",
+            "desc": "소리 지식으로 새 단어, 짧은 문장",
+            "items": [
+              "ort-stage2"
+            ]
+          },
+          {
+            "name": "Level 3 (Yellow)",
+            "age": "4~5세",
+            "desc": "ee·oa·ch·th 같은 이중 글자",
+            "items": [
+              "ort-stage3"
+            ]
+          },
+          {
+            "name": "Level 4 (Light Blue)",
+            "age": "4~6세",
+            "desc": "빠른 해독, said·some 같은 tricky word",
+            "items": [
+              "ort-stage4"
+            ]
+          },
+          {
+            "name": "Level 5 (Green)",
+            "age": "5~6세",
+            "desc": "다른 철자 패턴, didn't 같은 축약",
+            "items": [
+              "ort-stage5"
+            ]
+          },
+          {
+            "name": "Level 6 (Orange)",
+            "age": "5~6세",
+            "desc": "더 길고 복잡한 이야기",
+            "items": []
+          },
+          {
+            "name": "Level 7 (Turquoise)",
+            "age": "5~6세",
+            "desc": "소리 내어 꽤 유창하게",
+            "items": []
+          },
+          {
+            "name": "Level 8 (Purple)",
+            "age": "6~7세",
+            "desc": "장(chapter)이 있는 이야기",
+            "items": []
+          },
+          {
+            "name": "Level 9 (Gold)",
+            "age": "6~8세",
+            "desc": "대부분 단어를 자동으로, 논픽션 목차·색인",
+            "items": []
+          }
+        ]
+      }
     },
     "bobbooks": {
       "name": "Bob Books",
       "kind": "미국 파닉스 리더스 세트",
       "about": "아주 짧은 문장으로 된 미국 파닉스 소책자 세트. Set 1은 짧은 모음 단어(CVC)만으로 읽기를 시작한다.",
       "official": "https://bobbooks.com/",
-      "cost": "책 구입"
+      "cost": "책 구입",
+      "path": {
+        "source": "https://en.wikipedia.org/wiki/Bob_Books",
+        "note": "세트마다 한 단계씩, 소책자를 1권부터 순서대로 읽어요.",
+        "steps": [
+          {
+            "name": "Set 1: Beginning Readers",
+            "age": "",
+            "desc": "짧은 모음, 세 글자 단어 (12권)",
+            "items": [
+              "bobbooks-1"
+            ]
+          },
+          {
+            "name": "Set 2: Advancing Beginners",
+            "age": "",
+            "desc": "짧은 모음 계속, 단어·이야기가 조금 길어짐",
+            "items": [
+              "bobbooks-2"
+            ]
+          },
+          {
+            "name": "Set 3: Word Families",
+            "age": "",
+            "desc": "단어 가족, 자음 블렌드, 어미 (10권)",
+            "items": []
+          },
+          {
+            "name": "Set 4: Complex Words",
+            "age": "",
+            "desc": "더 긴 책, 복잡한 단어·블렌드·사이트워드 (8권)",
+            "items": []
+          },
+          {
+            "name": "Set 5: Long Vowels",
+            "age": "",
+            "desc": "긴 모음과 silent e",
+            "items": []
+          }
+        ]
+      }
     },
     "razkids": {
       "name": "Raz-Kids",
       "kind": "유료 레벨별 전자책 앱",
       "about": "미국 Learning A-Z의 레벨별 전자책 앱. aa → A → B → C … 순서로 레벨이 올라가며, 듣기·읽기·퀴즈가 붙어 있다.",
       "official": "https://www.raz-kids.com/",
-      "cost": "유료 구독"
+      "cost": "유료 구독",
+      "path": {
+        "source": "https://www.readinga-z.com/updates/raz_correlation_chart.pdf",
+        "note": "Learning A-Z 레벨(aA → A~Z → Z1·Z2) 순서로 올라가요. 최근에는 책에 학년·Lexile 표시로 바뀌는 중이에요.",
+        "steps": [
+          {
+            "name": "Level aA",
+            "age": "",
+            "desc": "",
+            "items": [
+              "razkids-aa"
+            ]
+          },
+          {
+            "name": "Level A",
+            "age": "",
+            "desc": "",
+            "items": [
+              "razkids-aa"
+            ]
+          },
+          {
+            "name": "Level B~C",
+            "age": "",
+            "desc": "",
+            "items": [
+              "razkids-bc"
+            ]
+          },
+          {
+            "name": "Level D~J",
+            "age": "",
+            "desc": "",
+            "items": []
+          },
+          {
+            "name": "Level K~Z, Z1~Z2",
+            "age": "",
+            "desc": "",
+            "items": []
+          }
+        ]
+      }
     },
     "alphablocks": {
       "name": "Alphablocks",
@@ -144,7 +425,45 @@
       "kind": "유료 읽기 학습 앱",
       "about": "호주의 읽기 학습 앱. 지도(Map) 위의 레슨을 1번부터 차례로 진행한다.",
       "official": "https://readingeggs.com/",
-      "cost": "유료 구독 (무료 체험 있음)"
+      "cost": "유료 구독 (무료 체험 있음)",
+      "path": {
+        "source": "https://kb.readingeggs.com/reading-eggs-program-overview",
+        "note": "지도(Map)를 따라 레슨이 순서대로 열려요.",
+        "steps": [
+          {
+            "name": "Reading Eggs Junior",
+            "age": "만 2~4세",
+            "desc": "소리 인식·알파벳 놀이, 읽어 주는 책",
+            "items": []
+          },
+          {
+            "name": "Reading Eggs Level 1 — Starting Out",
+            "age": "만 3~7세",
+            "desc": "레슨 1~40, 처음 시작하는 아이",
+            "items": [
+              "readingeggs"
+            ]
+          },
+          {
+            "name": "Reading Eggs Level 2 — Beginning to Read",
+            "age": "만 3~7세",
+            "desc": "레슨 41~80",
+            "items": []
+          },
+          {
+            "name": "Reading Eggs Level 3 — Building Confidence",
+            "age": "만 3~7세",
+            "desc": "레슨 81~120",
+            "items": []
+          },
+          {
+            "name": "Reading Eggspress",
+            "age": "만 7~13세",
+            "desc": "이해·유창성",
+            "items": []
+          }
+        ]
+      }
     },
     "elephantpiggie": {
       "name": "Elephant & Piggie (Mo Willems)",
@@ -165,7 +484,39 @@
       "kind": "논픽션 리더스",
       "about": "실제 동물 사진으로 된 논픽션 리더스. Pre-reader → Level 1 → Level 2 순서이며, 관심사가 동물인 아이에게 잘 맞는다.",
       "official": "https://kids.nationalgeographic.com/",
-      "cost": "책 구입 또는 도서관 대출"
+      "cost": "책 구입 또는 도서관 대출",
+      "path": {
+        "source": "https://www.rif.org/literacy-central/collections/national-geographic-kids-leveled-readers-collection",
+        "note": "표지에 Pre-reader부터 Level 3까지 단계가 표시돼요. 'Co-reader'는 단계가 아니라 어른·아이가 번갈아 읽는 형식이에요.",
+        "steps": [
+          {
+            "name": "Pre-reader",
+            "age": "",
+            "desc": "처음 읽는 아이. 기본 어휘·개념, 동물 주제가 많음",
+            "items": [
+              "natgeo-prereader"
+            ]
+          },
+          {
+            "name": "Level 1 (Co-reader 포함)",
+            "age": "",
+            "desc": "초보 독자용 쉬운 정보 글",
+            "items": []
+          },
+          {
+            "name": "Level 2",
+            "age": "",
+            "desc": "조금 더 긴 글과 새 어휘",
+            "items": []
+          },
+          {
+            "name": "Level 3",
+            "age": "",
+            "desc": "능숙한 독자용, 정보가 여러 겹",
+            "items": []
+          }
+        ]
+      }
     },
     "magicschoolbus": {
       "name": "The Magic School Bus",
@@ -179,7 +530,12 @@
       "kind": "어린이 디지털 도서관 앱",
       "about": "만 12세 이하용 영어 전자책·오디오북·영상 구독 앱. 책이 수만 권이라 '무엇을 읽을지'를 정해 주지 않으면 지금 카드처럼 막연해진다. 책 제목으로 검색해 쓰는 것이 좋다.",
       "official": "https://www.getepic.com/",
-      "cost": "유료 구독"
+      "cost": "유료 구독",
+      "path": {
+        "source": "https://kids.getepic.com/",
+        "note": "Epic은 정해진 단계 순서가 없는 디지털 도서관이에요. 책마다 대상 나이·AR·Lexile이 표시돼요. 4~6세는 나이 필터로 고르고, 읽어 주는(Read-to-Me) 책부터 시작해요.",
+        "steps": []
+      }
     },
     "magictreehouse": {
       "name": "Magic Tree House",
@@ -207,7 +563,51 @@
       "kind": "초기 리더스 (I Can Read)",
       "about": "개구리와 두꺼비의 우정을 다룬 짧은 이야기 모음. 첫 권은 'Frog and Toad Are Friends'.",
       "official": "https://www.icanread.com/",
-      "cost": "책 구입 또는 도서관 대출"
+      "cost": "책 구입 또는 도서관 대출",
+      "path": {
+        "source": "https://icanread.com/levels",
+        "note": "HarperCollins 'I Can Read!' 단계: My Very First → My First → Level 1~4. Frog and Toad는 Level 2예요.",
+        "steps": [
+          {
+            "name": "My Very First",
+            "age": "",
+            "desc": "인쇄물 기초, 아주 짧은 문장",
+            "items": []
+          },
+          {
+            "name": "My First",
+            "age": "",
+            "desc": "쉬운 말·반복, 함께 읽기",
+            "items": []
+          },
+          {
+            "name": "Level 1",
+            "age": "",
+            "desc": "소리와 문장을 소리 내어 읽기 시작",
+            "items": []
+          },
+          {
+            "name": "Level 2",
+            "age": "",
+            "desc": "자신 있게 읽지만 도움이 조금 필요",
+            "items": [
+              "frog-and-toad"
+            ]
+          },
+          {
+            "name": "Level 3",
+            "age": "",
+            "desc": "",
+            "items": []
+          },
+          {
+            "name": "Level 4",
+            "age": "",
+            "desc": "",
+            "items": []
+          }
+        ]
+      }
     },
     "amelia": {
       "name": "Amelia Bedelia",
@@ -221,7 +621,61 @@
       "kind": "OUP 파닉스 리더스 (Oxford Reading Tree 계열)",
       "about": "『The Gruffalo』 작가 Julia Donaldson이 쓴 Oxford Reading Tree 계열 파닉스 리더스 60권. Stage 1+부터 Stage 6까지 단계마다 새로 배우는 소리가 정해져 있어, 배운 소리만으로 읽을 수 있다. ORT 이야기책(Biff·Chip·Kipper)과 함께 많이 쓴다.",
       "official": "https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/",
-      "cost": "책 구입 또는 도서관 대출"
+      "cost": "책 구입 또는 도서관 대출",
+      "path": {
+        "source": "https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/",
+        "note": "Oxford Reading Tree의 파닉스 시리즈, 전 60권. 단계마다 기본 6권 + More 6권.",
+        "steps": [
+          {
+            "name": "Stage 1+",
+            "age": "",
+            "desc": "처음 파닉스를 시작하는 아이",
+            "items": [
+              "songbirds-1"
+            ]
+          },
+          {
+            "name": "Stage 2",
+            "age": "",
+            "desc": "",
+            "items": [
+              "songbirds-2"
+            ]
+          },
+          {
+            "name": "Stage 3",
+            "age": "",
+            "desc": "",
+            "items": [
+              "songbirds-2"
+            ]
+          },
+          {
+            "name": "Stage 4",
+            "age": "",
+            "desc": "1+~3단계 소리 복습",
+            "items": [
+              "songbirds-3"
+            ]
+          },
+          {
+            "name": "Stage 5",
+            "age": "",
+            "desc": "",
+            "items": [
+              "songbirds-3"
+            ]
+          },
+          {
+            "name": "Stage 6",
+            "age": "",
+            "desc": "",
+            "items": [
+              "songbirds-3"
+            ]
+          }
+        ]
+      }
     }
   },
   "unit_templates": {

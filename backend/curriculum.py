@@ -387,7 +387,22 @@ def overview(child: Mapping[str, object], content_id: str, today: str) -> dict[s
         unit_rows.append({"n": n, "title": u["title"], "pack": u["pack"], "status": st,
                           "dates": [h["date"] for h in hits]})
 
+    # 출판사·서비스의 공식 단계 전체 (content_guide series.path). 꽃피다 추천 자료가 어느 단계인지 표시
+    path = None
+    raw_path = cast("dict[str, object] | None", series.get("path"))
+    if raw_path:
+        titles = {str(s_["id"]): str(s_["title"]) for s_ in steps}
+        path = {
+            "source": raw_path.get("source"), "note": raw_path.get("note"),
+            "steps": [{
+                "name": st["name"], "age": st.get("age") or "", "desc": st.get("desc") or "",
+                "current": content_id in (st.get("items") or []),
+                "items": [{"id": i, "title": titles.get(i, i)} for i in (st.get("items") or [])],
+            } for st in cast("list[dict[str, object]]", raw_path.get("steps") or [])],
+        }
+
     return {
+        "path": path,
         "item": {"id": item["id"], "title": item["title"], "level": item["level"],
                  "level_label": _level_label(item["level"]),
                  "age": f"{item['age_min']}~{item['age_max']}세", "skill": SKILL_KO.get(str(item["skill"]), ""),
