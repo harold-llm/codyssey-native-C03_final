@@ -138,6 +138,65 @@ def today_title(child: dict[str, object], rec: dict[str, object], item: catalog.
     return name if name.startswith("『") else f"'{name}'"
 
 
+# ---------------------------------------------------------------------------
+# 칭찬 가이드 — 기록 후 부모에게 "이렇게 칭찬해 주세요" (앱 안 점수·보상 대신 부모가 주는 칭찬)
+# ---------------------------------------------------------------------------
+
+PRAISE_GOOD = ("Great job!", "You did it!", "Well done!", "I'm so proud of you!", "High five!",
+               "Wow, you remembered!", "Awesome listening!")
+PRAISE_TRY = ("Good try!", "Nice try!", "You're doing great!", "Keep going!", "Let's try again tomorrow!")
+
+_TIPS_GOOD = (
+    ("무엇을 잘했는지 구체적으로", "\"잘했어\"보다 \"{title} 끝까지 봤네!\"처럼 해낸 일을 콕 집어 말해 주세요."),
+    ("끝난 직후에 바로", "활동이 끝나자마자 눈을 맞추고 하이파이브. 시간이 지나면 칭찬과 행동이 이어지지 않아요."),
+    ("결과보다 과정", "몇 개 맞혔는지보다 \"소리를 크게 따라 했네\", \"모르는 단어도 들어 봤네\"처럼 노력과 태도를 칭찬해 주세요."),
+    ("작은 보상은 스티커 한 장", "칭찬 스티커판에 스티커 1장. 다섯 장이 모이면 좋아하는 책 함께 읽기처럼 '함께하는 시간'으로 바꿔 주세요. 간식·장난감은 피하는 게 좋아요."),
+    ("가족에게 자랑할 기회", "\"아빠한테도 들려줄까?\" 아이가 오늘 배운 걸 다른 가족에게 보여 주게 해 주세요."),
+    ("내일을 기대하게", "\"내일은 또 어떤 노래가 나올까?\"처럼 다음 시간을 예고하면 다음 날 시작이 쉬워져요."),
+    ("비교하지 않기", "형제나 친구와 비교하지 말고, 어제의 아이와 비교해 \"어제보다 더 잘 들리네\"라고 해 주세요."),
+)
+_TIPS_TRY = (
+    ("시작한 것부터 칭찬", "끝까지 못 했어도 \"오늘도 영어 시간 했네!\" 하고 앉아서 시작한 것을 먼저 칭찬해 주세요."),
+    ("잘한 한 가지만", "어려웠던 부분은 짚지 말고, 잘한 장면 하나를 찾아 말해 주세요."),
+    ("내일은 조금만", "\"내일은 한 곡만 더 들어 볼까?\"처럼 작고 구체적인 약속으로 마무리해 주세요."),
+    ("부담 없이 끝내기", "아이가 지쳐 보이면 바로 멈추고 안아 주세요. 즐겁게 끝나야 내일 다시 앉아요."),
+)
+
+
+def praise_guide(child: dict[str, object], record: dict[str, object] | None,
+                 card: dict[str, object] | None = None, streak: int = 0) -> dict[str, object] | None:
+    """기록에 맞춘 칭찬 방법. 잘 해낸 날은 성취 칭찬, 일부만 한 날은 노력 칭찬, 못 한 날·휴식일은 없음."""
+    if not record or record.get("rest_day") or record.get("completion") not in ("full", "partial"):
+        return None
+    good = record.get("completion") == "full"
+    try:
+        day = dt.date.fromisoformat(str(record.get("date"))).toordinal()
+    except ValueError:
+        day = 0
+    title = learned_name({"card_task": (card or {}).get("task") or "",
+                          "content_id": (card or {}).get("content_id") or record.get("content_id")}) or "오늘 영어"
+    if not title.startswith("『") and title != "오늘 영어":
+        title = f"'{title}'"
+    phrases = PRAISE_GOOD if good else PRAISE_TRY
+    tips = _TIPS_GOOD if good else _TIPS_TRY
+    picked_phrases = [phrases[(day + i) % len(phrases)] for i in range(3)]
+    rest = tips[1:]  # 첫 팁(구체적으로·시작 칭찬)은 매일, 나머지는 날마다 두 개씩 돌아가며
+    picked_tips = [tips[0]] + [rest[(day * 2 + i) % len(rest)] for i in range(2)]
+    out_tips = [{"title": t, "text": x.replace("{title}", title)} for t, x in picked_tips]
+    streak_note = None
+    if good and streak >= 3:
+        streak_note = (f"{streak}일 연속 기록이에요. 스티커판이나 달력에 연속으로 한 날을 표시해 "
+                       "아이가 눈으로 확인하게 해 주세요. 꾸준함 자체를 칭찬해 주면 습관이 돼요.")
+    return {
+        "kind": "good" if good else "try",
+        "headline": "오늘 잘 해냈어요. 이렇게 칭찬해 주세요" if good
+                    else "끝까지 못 해도 괜찮아요. 이렇게 격려해 주세요",
+        "phrases": picked_phrases,
+        "tips": out_tips,
+        "streak_note": streak_note,
+    }
+
+
 MIN_TREND_DAYS = 3  # 추세·확신 문구를 말하려면 필요한 최소 기록 일수
 
 

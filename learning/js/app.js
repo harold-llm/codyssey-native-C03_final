@@ -772,7 +772,7 @@ function todayHtml() {
           <p class="small muted mt8">오늘 자료에 나오는 글자예요. 자료를 본 뒤 그림을 눌러 소리를 같이 들어 보세요.</p>
           <div class="word-grid mt16">${card.letters.map(letterCardHtml).join('')}</div>
         </div>` : ''}
-        ${t.song ? songHtml(t.song) : ''}
+        ${t.song ? `<div class="only-narrow">${songHtml(t.song)}</div>` : ''}
         <div class="section">
           <div class="section-head">
             <h2 class="section-title">함께 써 볼 단어</h2>
@@ -799,7 +799,9 @@ function todayHtml() {
         </div>
       </div>
       <div>
+        ${t.song ? `<div class="only-wide">${songHtml(t.song, true)}</div>` : ''}
         ${record ? coachMessageHtml(record, message) : feedbackFormHtml()}
+        ${t.praise ? praiseHtml(t.praise) : ''}
       </div>
     </div>
   </section>`;
@@ -819,10 +821,25 @@ function cardHeroHtml(card) {
   </div>`;
 }
 
-/* 오늘의 동요: 단계에 맞춘 공식 채널 영상 1곡 — 앱 안에서 재생하지 않고 YouTube로 안내 */
-function songHtml(song) {
+/* 칭찬 가이드: 앱 안 점수·보상 대신, 부모가 어떤 말로 어떻게 칭찬할지 안내 (표현은 눌러서 발음 듣기) */
+function praiseHtml(p) {
   return `
-  <div class="section">
+  <div class="card praise mt16">
+    <h2 class="card-title">${esc(p.headline)}</h2>
+    <div class="praise-phrases mt8">
+      ${p.phrases.map((x) => `<button type="button" class="praise-chip" data-say="${esc(x)}" aria-label="${esc(x)} 소리 듣기">${esc(x)} <span class="word-tap" aria-hidden="true">🔊</span></button>`).join('')}
+    </div>
+    <ul class="praise-tips">
+      ${p.tips.map((t) => `<li><strong>${esc(t.title)}</strong><br><span class="muted">${esc(t.text)}</span></li>`).join('')}
+    </ul>
+    ${p.streak_note ? `<p class="praise-streak">🌱 ${esc(p.streak_note)}</p>` : ''}
+  </div>`;
+}
+
+/* 오늘의 동요: 단계에 맞춘 공식 채널 영상 1곡 — 앱 안에서 재생하지 않고 YouTube로 안내 */
+function songHtml(song, side) {
+  return `
+  <div class="${side ? 'side-block' : 'section'}">
     <h2 class="section-title">오늘의 동요</h2>
     <div class="song-card mt16">
       <div class="song-head">

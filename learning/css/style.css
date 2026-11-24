@@ -757,3 +757,20 @@ button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px 
 .song-icon { font-size: 28px; line-height: 1; }
 .song-title { font-weight: 700; font-size: 17px; }
 .song-card .btn { justify-self: start; }
+
+/* 오늘의 동요 위치: 넓은 화면은 오른쪽(기록 위), 좁은 화면은 카드 아래 */
+.side-block { margin-bottom: 20px; }
+.side-block > .section-title { margin-bottom: 0; }
+.only-wide { display: block; }
+.only-narrow { display: none; }
+@media (max-width: 820px) {
+  .only-wide { display: none; }
+  .only-narrow { display: block; }
+}
+
+/* 칭찬 가이드 */
+.praise-phrases { display: flex; flex-wrap: wrap; gap: 8px; }
+.praise-chip { border: 1px solid var(--border); background: var(--surface-2); color: var(--text); border-radius: 999px; padding: 8px 14px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.praise-chip:hover { border-color: var(--accent); }
+.praise-tips { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; font-size: 14px; line-height: 1.5; }
+.praise-streak { margin-top: 12px; font-size: 14px; line-height: 1.5; }

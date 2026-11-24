@@ -31,6 +31,7 @@ if os.path.exists(TEST_DB):
 import auth
 import catalog
 import clock
+import coach
 import curriculum
 import scheduler
 import songs
@@ -991,6 +992,32 @@ def section_songs() -> None:
     check("계획 단계(base_level)를 아이 기본값보다 우선", plan_level["level"] in (4, 5), str(plan_level["level"]))
 
 
+def section_praise(child_id: int, dates: list[dt.date]) -> None:
+    """칭찬 가이드 — 기록 후 '이렇게 칭찬해 주세요' (앱 안 점수·보상 없음)."""
+    print("\n[praise] 칭찬 가이드")
+    card = {"task": "『The Big Egg』 첫 읽기", "content_id": "ort-stage2"}
+    good = coach.praise_guide({"id": 1}, {"date": "2026-12-01", "completion": "full"}, card, streak=4)
+    check("끝까지 한 날 → 성취 칭찬 + 영어 칭찬 표현 3개",
+          bool(good) and good["kind"] == "good" and len(good["phrases"]) == 3)
+    check("첫 팁은 그날 권 제목으로 구체적 칭찬", bool(good) and "『The Big Egg』" in good["tips"][0]["text"])
+    check("3일 이상 연속이면 연속 기록 칭찬 안내", bool(good) and bool(good["streak_note"]))
+    tried = coach.praise_guide({"id": 1}, {"date": "2026-12-01", "completion": "partial"}, card)
+    check("일부만 한 날 → 노력 격려", bool(tried) and tried["kind"] == "try" and not tried["streak_note"])
+    check("못 한 날·휴식일은 칭찬 가이드 없음",
+          coach.praise_guide({"id": 1}, {"date": "2026-12-01", "completion": "none"}) is None
+          and coach.praise_guide({"id": 1}, {"date": "2026-12-01", "rest_day": 1}) is None)
+    other = coach.praise_guide({"id": 1}, {"date": "2026-12-02", "completion": "full"}, card)
+    check("날마다 다른 칭찬 표현", bool(other) and bool(good) and other["phrases"] != good["phrases"])
+    seen = []
+    for d in dates:
+        st, body, _ = bloomy_main.ep_today({"id": child_id}, {"date": [d.isoformat()]})
+        body = cast("dict[str, object]", body)
+        rec = cast("dict[str, object] | None", body.get("record"))
+        expect = bool(rec) and not rec.get("rest_day") and rec.get("completion") in ("full", "partial")
+        seen.append(st == 200 and bool(body.get("praise")) == expect)
+    check("today 응답: 기록에 맞춰 praise 포함/생략", all(seen), str(seen))
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -1010,6 +1037,7 @@ def main() -> int:
     section_reports(token1, child2, d0, d2, d3, d4, item0, orig)
     section_other_accounts(token1, child1, child2, d5, suffix)
     section_scheduler_cron(token1, m, d5)
+    section_praise(child2, [d0, d1, d2, d3, d4])
     section_learning(token1)
     section_delete_account(token1, (child1, child2))
     section_curriculum()

@@ -238,9 +238,11 @@
  "next_card": card(다음 학습일) | null,
  "record": feedback(그날) | null,
  "message": coach_message(최근 1건) | null,
- "song": song | null}             // 오늘의 동요
+ "song": song | null,             // 오늘의 동요
+ "praise": praise | null}         // 칭찬 가이드 (기록이 있을 때)
 ```
 - `song`: `{id, level, level_label, title, channel, url, video_id, minutes, focus, do, why, review}` — 계획 단계에 맞춘 공식 채널 YouTube 영상 1곡. 같은 아이·같은 날짜면 같은 곡, `review=true`면 한 단계 아래 복습 곡. 앱 안 재생 없이 `url`로 안내.
+- `praise`: `{kind: "good"|"try", headline, phrases: [영어 칭찬 3개], tips: [{title, text}] ×3, streak_note | null}` — 그날 기록이 끝까지(full)면 성취 칭찬, 일부(partial)면 노력 격려. 못 함·휴식일·기록 없음은 `null`. `streak_note`는 오늘 기록이고 3일 이상 연속일 때.
 - `card`·`next_card`에는 다음 필드가 붙는다:
   - `guide`: `{title, kind, about, find, link, cost, why, help, specific}` — 자료가 무엇인지, 찾는 법, 공식 링크, 비용, 추천 이유, 부모 역할, 권·회차 지정 여부
   - `basis`: 지난 기록에 근거한 추천 이유 문장 | null (기록이 없으면 null)

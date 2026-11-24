@@ -502,6 +502,10 @@ def ep_today(child: dict[str, object], q: Q | None = None) -> Resp:
         lp = store.latest_plan(cid)
         if lp and lp["status"] == "draft":
             draft = lp
+    record = store.get_feedback(cid, date)
+    praise = coach.praise_guide(
+        child, record, day,
+        streak=coach.memory_summary(cid)["streak"] if record and date == today else 0)
     return 200, {
         "date": date,
         "today": today,
@@ -511,9 +515,10 @@ def ep_today(child: dict[str, object], q: Q | None = None) -> Resp:
         "draft_plan": draft,
         "card": _with_guide(child, day),
         "next_card": _with_guide(child, upcoming),
-        "record": store.get_feedback(cid, date),
+        "record": record,
         "message": store.latest_message(cid),
         "song": songs.song_for(child, date, plan),
+        "praise": praise,
     }, JSON
 
 
