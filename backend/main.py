@@ -464,23 +464,46 @@ def ep_plan(child: dict[str, object]) -> Resp:
     return 200, {"plan": plan, "cards": store.cards_for_plan(cast("int", plan["id"]))}, JSON
 
 
-def ep_today(child: dict[str, object]) -> Resp:
+def _with_guide(child: dict[str, object], card: dict[str, object] | None) -> dict[str, object] | None:
+    """카드에 자료 안내(무엇·어디서·비용·왜·부모 역할)와 기록 근거를 붙인다."""
+    if not card:
+        return card
+    item = catalog.find_item(card.get("content_id"))
+    owned = bool(item) and catalog._owned_matcher(child)(item)  # pyright: ignore[reportPrivateUsage]
+    out = dict(card)
+    out["guide"] = curriculum.card_info(cast("dict[str, object] | None", item), child, owned=owned)
+    out["basis"] = curriculum.basis(child, card)
+    return out
+
+
+def ep_today(child: dict[str, object], q: Q | None = None) -> Resp:
+    """오늘(또는 ?date= 로 고른 지난 학습일)의 카드·기록. 미래 날짜는 볼 수 없다."""
     today = clock.today().isoformat()
+    date = ((q or {}).get("date", [None])[0] or "").strip() or today
+    if not DATE_RE.fullmatch(date):
+        return 400, {"error": "date 형식이 올바르지 않습니다 (YYYY-MM-DD)"}, JSON
+    if date > today:
+        return 400, {"error": "미래 날짜는 고를 수 없습니다"}, JSON
     cid = cast("int", child["id"])
     plan = store.approved_plan(cid)
     cards = store.cards_for_plan(cast("int", plan["id"])) if plan else []
-    day = next((c for c in cards if c["date"] == today), None)
+    day = next((c for c in cards if c["date"] == date), None)
+    upcoming = None if day else next((c for c in cards if c["date"] >= today), None)
     draft = None
     if not plan:
         lp = store.latest_plan(cid)
         if lp and lp["status"] == "draft":
             draft = lp
     return 200, {
-        "date": today,
+        "date": date,
+        "today": today,
+        # 날짜 선택용: 계획 안의 오늘까지 학습일 (밀린 기록을 남길 수 있다)
+        "plan_dates": [str(c["date"]) for c in cards if str(c["date"]) <= today],
         "plan": plan,
         "draft_plan": draft,
-        "card": day,
-        "record": store.get_feedback(cid, today),
+        "card": _with_guide(child, day),
+        "next_card": _with_guide(child, upcoming),
+        "record": store.get_feedback(cid, date),
         "message": store.latest_message(cid),
     }, JSON
 
@@ -748,7 +771,7 @@ def dispatch(
                 if child is None:
                     return 500, {"error": "서버 오류가 발생했습니다"}, JSON
                 if what == "today":
-                    return ep_today(child)
+                    return ep_today(child, q)
                 if what == "plan":
                     return ep_plan(child)
                 if what == "messages":

@@ -16,8 +16,11 @@ class InsufficientCatalogError(ValueError):
 
 
 class RecommendationEngine:
-    def __init__(self, catalog, retriever=None, memory=None, llm=None, *, reviewed_only=False):
+    def __init__(self, catalog, retriever=None, memory=None, llm=None, *, reviewed_only=False,
+                 deprioritized=None):
         entries = validate_catalog(catalog)
+        # '앱 전체·시리즈 전체' 같은 묶음 항목: 구체적인 후보가 충분하면 빼서 막연한 카드를 줄인다
+        self.deprioritized = set(deprioritized or ())
         self.catalog = [item for item in entries if item.get("review_status") == "reviewed"] if reviewed_only else entries
         chunks = make_chunks(self.catalog)
         self._items = {item["id"]: item for item in self.catalog}
@@ -27,8 +30,9 @@ class RecommendationEngine:
         self.llm = llm
 
     @classmethod
-    def from_file(cls, path, *, memory=None, llm=None, reviewed_only=False):
-        return cls(load_catalog(path), memory=memory, llm=llm, reviewed_only=reviewed_only)
+    def from_file(cls, path, *, memory=None, llm=None, reviewed_only=False, deprioritized=None):
+        return cls(load_catalog(path), memory=memory, llm=llm, reviewed_only=reviewed_only,
+                   deprioritized=deprioritized)
 
     def search(self, request):
         hits = []
@@ -41,6 +45,10 @@ class RecommendationEngine:
             if (item["age_min"] <= request.age <= item["age_max"] and item["level"] == request.base_level
                     and (hit["owned"] or item["session_minutes"] <= request.session_minutes)):
                 hits.append({**hit, "item": item, "excerpt": chunk["text"], "source": chunk["source"]})
+        if self.deprioritized:
+            specific = [h for h in hits if h["owned"] or h["item"]["id"] not in self.deprioritized]
+            if len({h["item"]["id"] for h in specific}) >= 3:
+                hits = specific
         return hits
 
     def recommend(self, request, *, child_id=None):

@@ -452,7 +452,7 @@ def feedback_between(
     child_id: int, start: str, end: str, include_rest: bool = False,
 ) -> list[dict[str, object]]:
     sql = (
-        "SELECT f.*, c.content_id AS content_id FROM feedbacks f "
+        "SELECT f.*, c.content_id AS content_id, c.task AS card_task FROM feedbacks f "
         "LEFT JOIN cards c ON c.id=f.card_id "
         "WHERE f.child_id=? AND f.date>=? AND f.date<=?"
     )

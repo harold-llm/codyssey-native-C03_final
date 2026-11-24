@@ -920,6 +920,21 @@ def section_curriculum() -> None:
     ort = [c for c in draft["cards"] if str(c["content_id"]).startswith("ort-")]
     check("ORT 보유 아이 계획에 권 제목 카드", bool(ort) and all("『" in c["task"] for c in ort),
           str([c["task"][:30] for c in ort[:2]]))
+    # 피드백 반영: 목표 통일·카드 안내·묶음 축소·날짜 선택
+    bad = [it["id"] for it in catalog.search()
+           if catalog.card_text(it)[1] != curriculum.goal_text(it["title"], it["skill"], it["type"])[1]]
+    check("활동·확인 포인트가 주 목표(skill) 하나로 통일", not bad, str(bad[:5]))
+    info = curriculum.card_info(cast("dict[str, object]", catalog.find_item("ort-stage2")), owned=True)
+    check("카드 안내: 비용·찾는 법·부모 역할·보유 이유",
+          bool(info and info["cost"] and info["find"] and info["help"] and "집에 있다고" in str(info["why"])), str(info))
+    check("Peppa Pig 에피소드 단위", "『Muddy Puddles』" in str(curriculum.unit_text("peppa", 0)))
+    loose = curriculum.collection_ids()
+    draft2 = catalog.generate_plan({"age": 4, "level": 3, "materials": "", "session_length": 15}, clock.today())
+    used_loose = [c["content_id"] for c in draft2["cards"] if c["content_id"] in loose]
+    check("규칙 계획: 구체적 후보가 있으면 묶음 항목 제외", not used_loose, str(used_loose[:5]))
+    fut = (clock.today() + dt.timedelta(days=1)).isoformat()
+    check("today?date=미래 → 400", bloomy_main.ep_today({"id": 0}, {"date": [fut]})[0] == 400)
+    check("today?date=형식오류 → 400", bloomy_main.ep_today({"id": 0}, {"date": ["2026/1/1"]})[0] == 400)
     import subprocess
     r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "gen_catalog_doc.py"), "--check"],
                        capture_output=True, text=True)

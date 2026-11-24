@@ -311,6 +311,10 @@ def next_weekdays(start: dt.date, n: int) -> list[dt.date]:
 
 
 def card_text(item: Item) -> tuple[str, str]:
+    # 주 목표(skill) 하나에 활동·확인 포인트를 맞춘다 (curriculum.goal_text와 같은 규칙)
+    if item.get("skill"):
+        import curriculum
+        return curriculum.goal_text(item["title"], item["skill"], item.get("type", ""))
     t, c = CARD_TEMPLATES.get(
         item.get("type", ""), _DEFAULT_CARD
     )
@@ -399,6 +403,12 @@ def generate_plan(child: dict[str, object], start: dt.date) -> PlanDraft:
             or items_by_level(level)
             or list(_ITEMS)
         )
+        # 묶음(앱·시리즈 전체) 항목은 구체적인 후보가 2개 이상이면 뺀다 (보고서 1: 막연한 카드)
+        import curriculum
+        loose = curriculum.collection_ids()
+        specific = [it for it in pool if owned(it) or it["id"] not in loose]
+        if len(specific) >= 2:
+            pool = specific
         pool = sorted(pool, key=lambda it: not owned(it))  # 안정 정렬: 보유 교재를 앞으로
         item = pool[used.get(level, 0) % len(pool)] if pool else None
         used[level] = used.get(level, 0) + 1

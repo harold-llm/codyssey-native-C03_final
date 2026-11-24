@@ -21,6 +21,7 @@ import datetime as dt
 import io
 import json
 import os
+import re
 import urllib.request
 from collections.abc import Callable
 from itertools import pairwise
@@ -118,6 +119,28 @@ def classify_memo_intent(memo: str) -> tuple[str, str]:
 # 확신 문구 데이터 조건 (6.6 — 고정 삽입 금지)
 # ---------------------------------------------------------------------------
 
+def learned_name(row: dict[str, object]) -> str | None:
+    """기록한 날 실제로 한 것: 카드의 권·회차 제목(『…』)이 있으면 그것, 없으면 자료 이름."""
+    m = re.search(r"『([^』]+)』", str(row.get("card_task") or ""))
+    if m:
+        return f"『{m.group(1)}』"
+    it = catalog.find_item(row.get("content_id"))
+    return it["title"] if it else None
+
+
+def today_title(child: dict[str, object], rec: dict[str, object], item: catalog.Item | None) -> str:
+    """코칭 메시지에 쓸 '오늘 한 것' — 서비스 이름이 아니라 그날 카드의 권·회차."""
+    card = store.get_card_for_child(int(cast("int", child["id"])), str(rec.get("date") or "")) if rec.get("date") else None
+    name = learned_name({"card_task": card.get("task") if card else "",
+                         "content_id": item["id"] if item else None})
+    if not name:
+        return "오늘 학습"
+    return name if name.startswith("『") else f"'{name}'"
+
+
+MIN_TREND_DAYS = 3  # 추세·확신 문구를 말하려면 필요한 최소 기록 일수
+
+
 def confidence_ok(
     child_id: int, as_of: dt.date | None = None,
 ) -> tuple[bool, list[str]]:
@@ -134,6 +157,9 @@ def confidence_ok(
         child_id, (as_of - dt.timedelta(days=6)).isoformat(), as_of.isoformat())
     if not cur:
         return False, ["최근 7일 기록 없음 — 데이터가 조건을 뒷받침하지 못함"]
+    if len(cur) < MIN_TREND_DAYS:
+        # 기록 1~2일로는 추세를 말할 수 없다 (피드백 보고서 3)
+        return False, [f"최근 7일 기록 {len(cur)}일 — {MIN_TREND_DAYS}일 이상이어야 추세 판단"]
 
     def avg(rows: list[dict[str, object]], k: str) -> float | None:
         vs = [cast("int", r[k]) for r in rows]
@@ -394,11 +420,13 @@ def build_message_v2(
     """룰베이스 코치 — LLM 없이도 결정적·동등하게 동작."""
     case = decision["case"]
     name = child.get("name") or "우리 아이"
-    title = item["title"] if item else "오늘 학습"
+    title = today_title(child, _rec, item)
     lines: list[str] = []
     if case == "A":
+        # 기록 1~2일에 '좋은 흐름'이라 단정하지 않는다 (피드백 보고서 3)
         lines.append(
-            f"{name}이(가) 오늘 '{title}'을(를) 끝까지 함께 해냈어요. 좋은 흐름이에요.")
+            f"{name}이(가) 오늘 {title}을(를) 끝까지 함께 해냈어요. "
+            + ("좋은 흐름이에요." if conf[0] else "오늘 한 걸음을 쌓았어요."))
         if tomorrow:
             lines.append(f"내일은 '{tomorrow['task']}'({tomorrow['minutes']}분) — 오늘 모멘텀 그대로 이어가요.")
         else:
@@ -408,7 +436,7 @@ def build_message_v2(
         else:
             lines.append(ACCUMULATION)
     elif case == "B":
-        lines.append(f"오늘은 '{title}'에서 여기까지 닿았어요. 그 자체로 하루치의 쌓임이에요.")
+        lines.append(f"오늘은 {title}에서 여기까지 닿았어요. 그 자체로 하루치의 쌓임이에요.")
         lines.append("조금 쉽게: 오늘의 활동을 절반으로 나눠서, 먼저 소리만 따라 해보세요.")
         if tomorrow:
             lines.append(f"내일 연습할 것 하나: '{tomorrow['task']}' — {tomorrow['minutes']}분으로 줄여서 부담 없이 시작해요.")
@@ -482,7 +510,7 @@ def _llm_user_context(
         f"만족도={rec['satisfaction']} 흥미={rec['interest']} 이해도={rec['comprehension']}\n"
         f"메모: {rec.get('memo') or '(없음)'}\n"
         f"메모 의도(1단계 분류기 출력): {decision['intent']} — {intent_reason}\n"
-        f"오늘 콘텐츠: {item['title'] if item else '학습'} "
+        f"오늘 콘텐츠: {item['title'] if item else '학습'} — 오늘 한 것: {today_title(child, rec, item)} "
         f"(L{item['level'] if item else 1}, "
         f"{item.get('type', '') if item else ''}, "
         f"해설: {(item.get('expert_note') or '')[:200] if item else ''})\n"
@@ -612,10 +640,10 @@ def weekly_report(child: dict[str, object], week_start: str | None = None) -> di
     for r in crows:
         if (r["completion"] == "full"
                 and cast("int", r["comprehension"]) >= 4 and r["content_id"]):
-            it = catalog.find_item(r["content_id"])
-            if it and it["title"] not in seen:
-                seen.add(it["title"])
-                learned.append(it["title"])
+            name = learned_name(r)
+            if name and name not in seen:
+                seen.add(name)
+                learned.append(f"{name} (끝까지, 이해도 {r['comprehension']}점)")
     learned = learned[:3]
 
     bd = store.branch_dates(child_id, ws.isoformat(), we.isoformat())
@@ -646,6 +674,10 @@ def weekly_report(child: dict[str, object], week_start: str | None = None) -> di
     honest_note: str | None = None
     if conf[0]:
         confidence_sentence = "데이터로 보면, 이번 주도 옳은 길로 가고 있어요."
+    elif crows and len(crows) < MIN_TREND_DAYS:
+        # 기록이 적으면 좋다·흔들린다 어느 쪽도 말하지 않는다 (보고서 3)
+        honest_note = (f"기록 {len(crows)}일 — 아직 추세를 말하기엔 이르러요. "
+                       f"{MIN_TREND_DAYS}일 이상 쌓이면 흐름을 알려 드릴게요.")
     elif crows:
         if counts["C"] >= 1:
             honest_note = ("이번 주에는 흥미가 흔들려 소재를 바꾸거나 조정했어요. 그게 방향을 세우는 일입니다.")
@@ -654,8 +686,11 @@ def weekly_report(child: dict[str, object], week_start: str | None = None) -> di
         else:
             honest_note = ("이번 주 추이는 살짝 흔들렸어요. 억지로 밀어붙이기보다 아이가 따라 올 수 있는 속도로 진행해요.")
 
-    if learned:
-        one_step = f"이번 주의 한 걸음: '{learned[0]}'을(를) 한층 더 잘하게 됐어요!"
+    if record_days and record_days < MIN_TREND_DAYS:
+        one_step = (f"첫 기록을 남겼어요 ({record_days}일). 추세는 기록이 {MIN_TREND_DAYS}일 이상 "
+                    "쌓이면 알려 드릴게요.")
+    elif learned:
+        one_step = f"이번 주의 한 걸음: {learned[0]} — 부모님이 관찰해 기록해 주신 결과예요."
     elif record_days:
         one_step = (f"이번 주의 한 걸음: {record_days}일 동안 매일 한 걸음씩 걸었어요. "
                     "그 자체가 큰 걸음입니다.")
@@ -677,6 +712,12 @@ def weekly_report(child: dict[str, object], week_start: str | None = None) -> di
         "prev_avg_comprehension": prev_comp,
         "trend": trend,
         "learned": learned,
+        # 부모가 기록한 날별 요약 — 일하느라 함께 못 본 날도 무엇을 했고 어땠는지 확인 (시트 의견)
+        "days": [{
+            "date": r["date"], "what": learned_name(r),
+            "completion": r["completion"], "interest": r["interest"],
+            "comprehension": r["comprehension"], "memo": r.get("memo") or "",
+        } for r in sorted(crows, key=lambda x: str(x["date"]))],
         "branch_counts": counts,
         "choices": choices[:3],
         "next_cards": next_cards,
@@ -727,10 +768,10 @@ def monthly_achievement(
     for r in rows:
         if (r["completion"] == "full"
                 and cast("int", r["comprehension"]) >= 4 and r["content_id"]):
-            it = catalog.find_item(r["content_id"])
-            if it and it["title"] not in seen:
-                seen.add(it["title"])
-                learned.append(it["title"])
+            name = learned_name(r)
+            if name and name not in seen:
+                seen.add(name)
+                learned.append(name)
 
     def avg(k: str) -> float | None:
         vs = [cast("int", r[k]) for r in rows]

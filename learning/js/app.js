@@ -286,12 +286,13 @@ function bindAccount() {
 }
 
 /* ---------------- data loaders ---------------- */
-async function loadToday() {
+async function loadToday(date) {
   if (!state.child) return;
   try {
-    state.today = await api('GET', '/api/children/' + state.child.id + '/today');
-    state.nextCard = null;
-    if (!state.today.card) {
+    const q = date ? '?date=' + encodeURIComponent(date) : '';
+    state.today = await api('GET', '/api/children/' + state.child.id + '/today' + q);
+    state.nextCard = state.today.next_card || null;
+    if (!state.today.card && !state.nextCard) {
       try {
         const plan = await api('GET', '/api/children/' + state.child.id + '/plan');
         const today = state.today.date;
@@ -758,17 +759,19 @@ function todayHtml() {
   <section class="screen">
     <div class="hero" style="padding:40px 0 20px; text-align:left">
       <span class="eyebrow">오늘의 학습</span>
-      <h1 class="hero-title">${esc(name)}의 오늘</h1>
-      <p class="hero-sub">${esc(t.date || '')}</p>
+      <h1 class="hero-title">${esc(name)}의 ${t.today && t.date !== t.today ? esc(t.date) : '오늘'}</h1>
+      ${dayPickerHtml(t)}
     </div>
     <div class="today-grid">
       <div>
         ${card ? cardHeroHtml(card) : emptyCardHtml(t)}
         <div class="section">
           <div class="section-head">
-            <h2 class="section-title">오늘의 단어</h2>
+            <h2 class="section-title">함께 써 볼 단어</h2>
             <button class="btn btn-ghost btn-sm" id="aiBtn">AI 추천 받기</button>
           </div>
+          <p class="small muted mt8">아이 관심사로 고른 단어예요. 오늘 자료를 보면서 나오면 같이 말해 보세요. 🔊는 부모님이 발음을 확인하는 용도예요.</p>
+          <div class="check-question mt8"><strong>부모 확인 질문</strong><br>자료를 보며 단어 2개를 골라 "Where is the ___?" / "Show me ___!"로 물어보세요. 못 찾은 단어는 아래 메모에 적어 주시면 리포트에 남아요.</div>
           <div id="aiResult"></div>
           <div class="word-grid mt16">
             ${words.map(wordCardHtml).join('')}
@@ -779,7 +782,7 @@ function todayHtml() {
           <div class="phrase-list mt16">
             ${phrases.map((p) => `
               <div class="phrase-item">
-                <div class="phrase-en">${esc(p.english)}</div>
+                <div class="phrase-en">${esc(p.english)} <button type="button" class="speak-btn" data-say="${esc(p.english)}" aria-label="발음 듣기">🔊</button></div>
                 <div class="phrase-ko">${esc(p.korean)}</div>
                 <div class="phrase-pron">[${esc(p.pronunciation)}]</div>
               </div>`).join('')}
@@ -800,10 +803,53 @@ function cardHeroHtml(card) {
     <h2 class="card-title mt8">${esc(card.task || '오늘의 학습')}</h2>
     <div class="card-meta">
       <span class="chip">⏱ ${card.minutes}분</span>
-      ${card.content_id ? `<span class="chip">${esc(card.content_id)}</span>` : ''}
+      ${card.guide && card.guide.cost ? `<span class="chip">${esc(card.guide.cost)}</span>` : ''}
     </div>
     ${card.check_point ? `<div class="check-point"><strong>확인 포인트</strong><br>${esc(card.check_point)}</div>` : ''}
+    ${guideHtml(card)}
   </div>`;
+}
+
+/* 카드 자료 안내: 무엇인지·어디서·왜·부모 역할·기록 근거 (콘텐츠는 외부 공식 경로로만 안내) */
+function guideHtml(card) {
+  const g = card && card.guide;
+  if (!g) return '';
+  const link = g.link ? `<a class="btn btn-ghost btn-sm" href="${esc(g.link)}" target="_blank" rel="noopener noreferrer">공식 사이트 열기 ↗</a>` : '';
+  return `
+    <div class="guide mt16">
+      <div class="guide-row"><span class="guide-k">자료</span><span>${esc(g.title)}${g.kind ? ` <span class="muted small">· ${esc(g.kind)}</span>` : ''}</span></div>
+      ${g.about ? `<details class="guide-about"><summary>이 자료가 뭔가요?</summary><p class="small muted">${esc(g.about)}</p></details>` : ''}
+      ${g.find ? `<div class="guide-row"><span class="guide-k">찾는 법</span><span>${esc(g.find)}</span></div>` : ''}
+      <div class="guide-row"><span class="guide-k">왜 이 자료</span><span>${esc(g.why || '')}</span></div>
+      <div class="guide-row"><span class="guide-k">부모 역할</span><span>${esc(g.help || '')}</span></div>
+      ${card.basis ? `<div class="guide-row"><span class="guide-k">기록 근거</span><span>${esc(card.basis)}</span></div>` : ''}
+      ${g.specific ? '' : `<p class="small muted mt8">이 자료는 아직 권·회차가 정해지지 않은 묶음이에요. 위 찾는 법에서 아이가 좋아하는 것 하나를 골라 주세요.</p>`}
+      <div class="mt8">${link}</div>
+    </div>`;
+}
+
+function dayPickerHtml(t) {
+  const dates = (t.plan_dates || []).slice().reverse();
+  if (dates.length < 2) return `<p class="hero-sub">${esc(t.date || '')}</p>`;
+  return `
+    <label class="day-picker mt8">
+      <span class="small muted">날짜 선택 (지난 학습일 보기·밀린 기록 남기기)</span>
+      <select class="input" id="dayPick">
+        ${dates.map((d) => `<option value="${esc(d)}" ${d === t.date ? 'selected' : ''}>${esc(d)}${d === t.today ? ' (오늘)' : ''}</option>`).join('')}
+      </select>
+    </label>`;
+}
+
+/* 부모 발음 확인용: 브라우저 내장 음성 (앱이 콘텐츠를 재생하는 게 아니라 부모가 읽어 줄 발음을 확인) */
+function speak(text) {
+  try {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  } catch (e) { /* 음성 미지원 기기 */ }
 }
 
 function emptyCardHtml(t) {
@@ -818,6 +864,7 @@ function emptyCardHtml(t) {
       <h2 class="card-title mt8">${esc(c.task || '다음 학습')}</h2>
       <div class="card-meta"><span class="chip">⏱ ${c.minutes}분</span></div>
       ${c.check_point ? `<div class="check-point"><strong>확인 포인트</strong><br>${esc(c.check_point)}</div>` : ''}
+      ${guideHtml(c)}
       <p class="small muted mt16">오늘은 학습일이 아니에요. 미리 살펴보세요. 🌱</p>
     </div>`;
   }
@@ -828,7 +875,7 @@ function wordCardHtml(w) {
   return `
   <div class="word-card">
     <span class="word-emoji">${esc(w.emoji || '📘')}</span>
-    <div class="word-text">${esc(w.word)}</div>
+    <div class="word-text">${esc(w.word)} <button type="button" class="speak-btn" data-say="${esc(w.word)}" aria-label="발음 듣기">🔊</button></div>
     <div class="word-meaning">${esc(w.meaning)}</div>
     <div class="word-pron">[${esc(w.pronunciation)}]</div>
   </div>`;
@@ -838,7 +885,7 @@ function feedbackFormHtml() {
   return `
   <div class="card">
     <div class="row">
-      <h2 class="card-title">오늘 학습은 어땠나요?</h2>
+      <h2 class="card-title">${state.today && state.today.today && state.today.date !== state.today.today ? esc(state.today.date) + ' 학습은' : '오늘 학습은'} 어땠나요?</h2>
       <span class="spacer"></span>
       <span class="ai-badge">부모 1분 기록</span>
     </div>
@@ -857,7 +904,7 @@ function feedbackFormHtml() {
       ${scaleHtml('comprehension', '이해도')}
       <label class="field">
         <span class="field-label">한 줄 메모 (선택)</span>
-        <textarea class="input" name="memo" maxlength="500" placeholder="예: 오늘은 소리 내어 읽기를 좋아했어요"></textarea>
+        <textarea class="input" name="memo" maxlength="500" placeholder="예: 소리 내어 읽기를 좋아했어요. bus는 못 찾았어요"></textarea>
       </label>
       <label class="checkbox-row">
         <input type="checkbox" name="rest_day" />
@@ -920,6 +967,14 @@ function bindToday() {
   }
   const aiBtn = document.getElementById('aiBtn');
   if (aiBtn) aiBtn.addEventListener('click', runAiRecommendation);
+  const dayPick = document.getElementById('dayPick');
+  if (dayPick) dayPick.addEventListener('change', async () => {
+    await loadToday(dayPick.value === state.today.today ? undefined : dayPick.value);
+    render();
+  });
+  document.querySelectorAll('.speak-btn').forEach((b) => {
+    b.addEventListener('click', () => speak(b.getAttribute('data-say')));
+  });
 
   const form = document.getElementById('feedbackForm');
   if (form) bindFeedback(form);
@@ -957,6 +1012,7 @@ function bindFeedback(form) {
       comprehension: Number(fb.comprehension) || 3,
       memo: form.memo.value.trim(),
       rest_day: restDay,
+      date: state.today && state.today.date,
     };
     const btn = form.querySelector('button[type="submit"]');
     const original = btn.textContent;
@@ -965,7 +1021,7 @@ function bindFeedback(form) {
     try {
       const data = await api('POST', '/api/children/' + state.child.id + '/feedback', body);
       state.lastFeedback = data;
-      await loadToday();
+      await loadToday(state.today && state.today.date !== state.today.today ? state.today.date : undefined);
       render();
     } catch (err) {
       msg.className = 'form-message is-error';
@@ -1050,9 +1106,16 @@ function reportHtml() {
       ${r.confidence_sentence ? `<div class="confidence-note mt16">${esc(r.confidence_sentence)}</div>` : ''}
       ${r.honest_note ? `<div class="honest-note mt16">${esc(r.honest_note)}</div>` : ''}
     </div>
+    ${(r.days && r.days.length) ? `
+      <div class="report-block">
+        <h3>이번 주 기록 한눈에</h3>
+        <div class="trend-list">
+          ${r.days.map((d) => `<div class="trend-item"><strong>${esc(d.date)}</strong> ${esc(d.what || '')} · ${esc(COMPLETION_KO[d.completion] || '')} · 흥미 ${esc(d.interest)} · 이해도 ${esc(d.comprehension)}${d.memo ? `<br><span class="small muted">메모: ${esc(d.memo)}</span>` : ''}</div>`).join('')}
+        </div>
+      </div>` : ''}
     ${(r.learned && r.learned.length) ? `
       <div class="report-block">
-        <h3>새로 익힌 것</h3>
+        <h3>잘 해낸 것 (부모 관찰 기록)</h3>
         <div class="learned-list">
           ${r.learned.map((x) => `<div class="learned-item">✓ ${esc(x)}</div>`).join('')}
         </div>
@@ -1084,6 +1147,8 @@ function reportHtml() {
       </div>` : ''}
   </section>`;
 }
+
+const COMPLETION_KO = { full: '끝까지', partial: '일부', none: '못 함' };
 
 function fmtAvg(v) {
   return v == null ? '–' : Number(v).toFixed(1);

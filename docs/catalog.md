@@ -10,13 +10,13 @@
   **무엇을, 어느 부분을, 어떻게** 할지 매일 카드로 알려 줍니다. 아래 목록이 그 추천 후보 전체입니다.
 - 온보딩 4주 계획은 이 카탈로그에서 RAG 검색(나이·레벨·하루 시간·보유 교재 필터 + TF-IDF)으로 후보를 찾고,
   Claude가 후보 ID 안에서만 20일 순서를 정합니다. 후보 밖의 자료는 추천할 수 없습니다.
-- 항목 **67개**, 시리즈·서비스 **31종**, 출처를 확인한 학습 단위 **177개** (책 한 권 또는 소리 묶음 하나)
+- 항목 **67개**, 시리즈·서비스 **31종**, 출처를 확인한 학습 단위 **229개** (책 한 권 또는 소리 묶음 하나)
 
 | 구체성 | 항목 수 | 뜻 |
 |---|---|---|
-| 학습 단위 | 13 | 학습 단위 — 권·에피소드 순서가 지정됨 |
+| 학습 단위 | 14 | 학습 단위 — 권·에피소드 순서가 지정됨 |
 | 단일 작품 | 17 | 단일 작품 — 노래·책·영상 한 편이 지정됨 |
-| 묶음 | 37 | 묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상) |
+| 묶음 | 36 | 묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상) |
 
 레벨: L1 노출·듣기 → L2 소리 인지 → L3 파닉스 → L4 사이트워드·초기 해독 → L5 리더스 독해
 
@@ -26,7 +26,7 @@
 
 ### ABCmouse
 
-*유료 학습 앱* · [공식 사이트](https://www.abcmouse.com/)
+*유료 학습 앱* · 비용: 유료 구독 · [공식 사이트](https://www.abcmouse.com/)
 
 미국 Age of Learning의 2~8세 유료 학습 앱. 단계별 '학습 경로(Step-by-Step Learning Path)'로 진행한다.
 
@@ -37,7 +37,7 @@
 
 ### Cocomelon
 
-*유튜브 동요 채널* · [공식 사이트](https://cocomelon.com/)
+*유튜브 동요 채널* · 비용: 무료 (공식 유튜브) · [공식 사이트](https://cocomelon.com/)
 
 3D 애니메이션 동요 채널. 일상 루틴(목욕·잠자기 등)을 노래로 다룬다.
 
@@ -47,7 +47,7 @@
 
 ### Eric Carle 그림책
 
-*종이 그림책 (단권)* · [공식 사이트](https://eric-carle.com/)
+*종이 그림책 (단권)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://eric-carle.com/)
 
 에릭 칼의 대표 그림책. 반복 문장과 큰 그림 덕분에 영어 그림책 첫 권으로 자주 추천된다.
 
@@ -58,7 +58,7 @@
 
 ### Jolly Phonics
 
-*영국 파닉스 프로그램* · [공식 사이트](https://www.jollylearning.co.uk/)
+*영국 파닉스 프로그램* · 비용: 교재·음원 구입 · [공식 사이트](https://www.jollylearning.co.uk/)
 
 영국 학교에서 널리 쓰는 합성 파닉스 프로그램. 42개 소리를 7개 그룹으로 가르치며, 소리마다 노래와 동작이 있다. 첫 그룹은 s, a, t, i, p, n.
 
@@ -148,7 +148,7 @@
 
 ### Khan Academy Kids
 
-*무료 학습 앱* · [공식 사이트](https://learn.khanacademy.org/khan-academy-kids/)
+*무료 학습 앱* · 비용: 무료 앱 · [공식 사이트](https://learn.khanacademy.org/khan-academy-kids/)
 
 비영리 칸아카데미의 2~8세용 무료 앱. 앱 안의 '학습 경로(Learning Path)'가 아이 수준에 맞춰 활동을 차례로 제시한다.
 
@@ -159,17 +159,75 @@
 
 ### Peppa Pig (페파 피그)
 
-*영국 애니메이션* · [공식 사이트](https://www.peppapig.com/)
+*영국 애니메이션* · 비용: 무료 (공식 유튜브) · [공식 사이트](https://www.peppapig.com/)
 
-꼬마 돼지 페파의 일상을 다룬 5분 내외 에피소드. 영국식 일상 표현이 많다.
+꼬마 돼지 페파의 일상을 다룬 영국 애니메이션. 한 편이 약 5분이라 하루 한 편씩 보기 좋고, 가족·놀이 같은 일상 표현이 반복된다.
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
-| `peppa` | Peppa Pig - Official Episodes | 4~5세 | L1 | 영상·듣기 | 10분 | 묶음 | Peppa Pig 공식 유튜브 에피소드 한 편 (예: 'Muddy Puddles') |
+| `peppa` | Peppa Pig - Official Episodes | 4~5세 | L1 | 영상·듣기 | 10분 | 학습 단위 | 유튜브에서 'Peppa Pig + 에피소드 제목' 검색 → 공식 채널 영상인지 확인 — Series 1을 방송 순서대로 |
+
+<details><summary><code>peppa</code> 학습 단위 52개 (진행 순서)</summary>
+
+- **Series 1**
+  1. Muddy Puddles
+  2. Mr Dinosaur Is Lost
+  3. Best Friend
+  4. Polly Parrot
+  5. Hide and Seek
+  6. The Playgroup
+  7. Mummy Pig at Work
+  8. Piggy in the Middle
+  9. Daddy Loses His Glasses
+  10. Gardening
+  11. Hiccups
+  12. Bicycles
+  13. Secrets
+  14. Flying a Kite
+  15. Picnic
+  16. Musical Instruments
+  17. Frogs and Worms and Butterflies
+  18. Dressing Up
+  19. New Shoes
+  20. The School Fete
+  21. Mummy Pig's Birthday
+  22. The Tooth Fairy
+  23. The New Car
+  24. Treasure Hunt
+  25. Not Very Well
+  26. Snow
+  27. Windy Castle
+  28. My Cousin Chloé
+  29. Pancakes
+  30. Babysitting
+  31. Ballet Lesson
+  32. Thunderstorm
+  33. Cleaning the Car
+  34. Lunch
+  35. Camping
+  36. The Sleepy Princess
+  37. The Tree House
+  38. Fancy Dress Party
+  39. The Museum
+  40. Very Hot Day
+  41. Chloé's Puppet Show
+  42. Daddy Gets Fit
+  43. Tidying Up
+  44. The Playground
+  45. Daddy Puts up a Picture
+  46. At the Beach
+  47. Mister Skinnylegs
+  48. Grandpa Pig's Boat
+  49. Shopping
+  50. My Birthday Party
+  51. Daddy's Movie Camera
+  52. School Play
+
+</details>
 
 ### Pinkfong (핑크퐁)
 
-*유튜브 동요 채널* · [공식 사이트](https://www.pinkfong.com/)
+*유튜브 동요 채널* · 비용: 무료 (공식 유튜브) · [공식 사이트](https://www.pinkfong.com/)
 
 한국 더핑크퐁컴퍼니의 영어 동요 채널. 'Baby Shark'가 대표곡이다.
 
@@ -179,7 +237,7 @@
 
 ### Starfall
 
-*파닉스·읽기 웹사이트/앱* · [공식 사이트](https://www.starfall.com/)
+*파닉스·읽기 웹사이트/앱* · 비용: 일부 무료, 나머지 유료 회원제 · [공식 사이트](https://www.starfall.com/)
 
 미국 유아·초등 저학년용 읽기 사이트. 알파벳(ABCs) → 읽기 배우기(Learn to Read) → 나는 읽는다(I'm Reading) 순서로 메뉴가 나뉜다. 일부는 무료, 나머지는 회원제.
 
@@ -192,7 +250,7 @@
 
 ### Super Simple Songs
 
-*유튜브 동요 채널* · [공식 사이트](https://supersimple.com/)
+*유튜브 동요 채널* · 비용: 무료 (공식 유튜브) · [공식 사이트](https://supersimple.com/)
 
 캐나다 Super Simple이 만든 유아 영어 동요 채널. 느린 박자와 율동이 있어 처음 영어를 듣는 4~5세에게 많이 쓰인다.
 
@@ -206,7 +264,7 @@
 
 ### Usborne (어스본)
 
-*영국 출판사의 유아 그림책·리더스* · [공식 사이트](https://usborne.com/)
+*영국 출판사의 유아 그림책·리더스* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://usborne.com/)
 
 영국 어린이책 출판사. 'That's not my...' 촉감책, 'Phonics Readers' 파닉스 리더스, 'First Reading' 단계별 리더스가 있다.
 
@@ -219,7 +277,7 @@
 
 ### 직접 만드는 카드·워크시트
 
-*가정용 교구 (출판물 아님)*
+*가정용 교구 (출판물 아님)* · 비용: 무료 (직접 만들거나 무료 출력물)
 
 특정 출판물이 아니라 부모가 출력하거나 만들어 쓰는 카드·쓰기 활동. 무료 출력물을 써도 된다.
 
@@ -232,7 +290,7 @@
 
 ### Alphablocks
 
-*영국 BBC 파닉스 애니메이션* · [공식 사이트](https://www.learningblocks.tv/)
+*영국 BBC 파닉스 애니메이션* · 비용: 무료 (공식 유튜브) · [공식 사이트](https://www.learningblocks.tv/)
 
 알파벳 블록 캐릭터가 합쳐지며 단어 소리를 만드는 BBC CBeebies 애니메이션. 에피소드마다 한두 개 소리를 다룬다.
 
@@ -242,7 +300,7 @@
 
 ### Bob Books
 
-*미국 파닉스 리더스 세트* · [공식 사이트](https://bobbooks.com/)
+*미국 파닉스 리더스 세트* · 비용: 책 구입 · [공식 사이트](https://bobbooks.com/)
 
 아주 짧은 문장으로 된 미국 파닉스 소책자 세트. Set 1은 짧은 모음 단어(CVC)만으로 읽기를 시작한다.
 
@@ -253,7 +311,7 @@
 
 ### Dr. Seuss
 
-*종이 그림책 (단권)* · [공식 사이트](https://www.seussville.com/)
+*종이 그림책 (단권)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.seussville.com/)
 
 라임(운율)으로 유명한 미국 그림책 작가. 'Hop on Pop'은 짧은 운율 단어로 된 초기 읽기 책이다.
 
@@ -263,7 +321,7 @@
 
 ### LeapFrog Letter Factory
 
-*알파벳 소리 애니메이션 (단편)* · [공식 사이트](https://www.leapfrog.com/)
+*알파벳 소리 애니메이션 (단편)* · 비용: 영상 구입 또는 대여 · [공식 사이트](https://www.leapfrog.com/)
 
 알파벳 26자의 소리를 공장 이야기로 소개하는 약 35분짜리 애니메이션. 짧게 나눠 본다.
 
@@ -273,18 +331,18 @@
 
 ### Oxford Reading Tree (ORT)
 
-*영국 옥스퍼드대출판부(OUP) 단계별 리더스* · [공식 사이트](https://home.oxfordowl.co.uk/)
+*영국 옥스퍼드대출판부(OUP) 단계별 리더스* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://home.oxfordowl.co.uk/)
 
 Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더스. Stage 1(글 없는 책)부터 단계가 올라가며, 한 단계는 여러 '팩'(각 6권)으로 구성된다. 국내에서 '옥스포드 리딩 트리'로 많이 팔린다.
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `ort-stage1` | Oxford Reading Tree - Stage 1 | 5~6세 | L2 | 리더스·그림책·읽기 | 15분 | 묶음 | ORT Stage 1(글 없는 책)·Stage 1+(첫 문장) 팩. 권별 제목은 공식 목록 확인 후 학습 단위로 추가 예정 |
-| `ort-full` | Oxford Reading Tree - Full Series | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | 집에 있는 ORT 전집을 Stage 2부터 차례로 — 아래 학습 단위 순서대로 |
-| `ort-stage2` | Oxford Reading Tree - Stage 2 | 5~6세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 2 팩 6종(36권) — 아래 학습 단위 순서대로 |
-| `ort-stage3` | Oxford Reading Tree - Stage 3 | 6~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 3 팩 5종(30권) — 아래 학습 단위 순서대로 |
-| `ort-stage4` | Oxford Reading Tree - Stage 4 | 6~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 4 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로 |
-| `ort-stage5` | Oxford Reading Tree - Stage 5 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 5 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로 |
+| `ort-full` | Oxford Reading Tree - Full Series | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | 집에 있는 ORT 전집을 Stage 2부터 차례로 — 권 순서는 카드가 매일 안내해요 |
+| `ort-stage2` | Oxford Reading Tree - Stage 2 | 5~6세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 2 팩 6종(36권) — 권 순서는 카드가 매일 안내해요 |
+| `ort-stage3` | Oxford Reading Tree - Stage 3 | 6~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 3 팩 5종(30권) — 권 순서는 카드가 매일 안내해요 |
+| `ort-stage4` | Oxford Reading Tree - Stage 4 | 6~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 4 Decode and Develop 팩(6권) — 권 순서는 카드가 매일 안내해요 |
+| `ort-stage5` | Oxford Reading Tree - Stage 5 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 5 Decode and Develop 팩(6권) — 권 순서는 카드가 매일 안내해요 |
 
 <details><summary><code>ort-stage2</code> 학습 단위 36개 (진행 순서)</summary>
 
@@ -495,7 +553,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Pete the Cat
 
-*종이 그림책 (단권)* · [공식 사이트](https://www.petethecatbooks.com/)
+*종이 그림책 (단권)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.petethecatbooks.com/)
 
 파란 고양이 피트가 노래하며 반복 문장을 들려주는 그림책 시리즈. 노래 영상과 같이 쓰기 좋다.
 
@@ -506,7 +564,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Raz-Kids
 
-*유료 레벨별 전자책 앱* · [공식 사이트](https://www.raz-kids.com/)
+*유료 레벨별 전자책 앱* · 비용: 유료 구독 · [공식 사이트](https://www.raz-kids.com/)
 
 미국 Learning A-Z의 레벨별 전자책 앱. aa → A → B → C … 순서로 레벨이 올라가며, 듣기·읽기·퀴즈가 붙어 있다.
 
@@ -518,7 +576,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Reading Eggs
 
-*유료 읽기 학습 앱* · [공식 사이트](https://readingeggs.com/)
+*유료 읽기 학습 앱* · 비용: 유료 구독 (무료 체험 있음) · [공식 사이트](https://readingeggs.com/)
 
 호주의 읽기 학습 앱. 지도(Map) 위의 레슨을 1번부터 차례로 진행한다.
 
@@ -529,7 +587,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Scholastic
 
-*미국 어린이 출판사* · [공식 사이트](https://www.scholastic.com/)
+*미국 어린이 출판사* · 비용: 책 구입 · [공식 사이트](https://www.scholastic.com/)
 
 미국 최대 어린이 출판사. 파닉스 워크북, 사이트워드 리더스 등 유아 교재가 많다.
 
@@ -541,7 +599,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Elephant & Piggie (Mo Willems)
 
-*종이 그림책 (단권)* · [공식 사이트](https://www.mowillems.com/)
+*종이 그림책 (단권)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.mowillems.com/)
 
 코끼리 Gerald와 돼지 Piggie의 말풍선 대화로만 된 Mo Willems의 초기 리더스 25권(2007~2016). 문장이 짧고 반복돼 역할을 나눠 읽기 좋고, 미국 도서관협회 Geisel상을 여러 번 받았다.
 
@@ -583,7 +641,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Epic! (에픽)
 
-*어린이 디지털 도서관 앱* · [공식 사이트](https://www.getepic.com/)
+*어린이 디지털 도서관 앱* · 비용: 유료 구독 · [공식 사이트](https://www.getepic.com/)
 
 만 12세 이하용 영어 전자책·오디오북·영상 구독 앱. 책이 수만 권이라 '무엇을 읽을지'를 정해 주지 않으면 지금 카드처럼 막연해진다. 책 제목으로 검색해 쓰는 것이 좋다.
 
@@ -594,7 +652,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Fly Guy (Tedd Arnold)
 
-*초기 리더스 시리즈* · [공식 사이트](https://www.scholastic.com/)
+*초기 리더스 시리즈* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.scholastic.com/)
 
 소년 Buzz와 파리 Fly Guy의 이야기. 짧은 장(chapter)으로 나뉜 초기 리더스이며 첫 권은 'Hi! Fly Guy'.
 
@@ -604,7 +662,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### National Geographic Kids Readers
 
-*논픽션 리더스* · [공식 사이트](https://kids.nationalgeographic.com/)
+*논픽션 리더스* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://kids.nationalgeographic.com/)
 
 실제 동물 사진으로 된 논픽션 리더스. Pre-reader → Level 1 → Level 2 순서이며, 관심사가 동물인 아이에게 잘 맞는다.
 
@@ -615,16 +673,16 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### Songbirds Phonics (Julia Donaldson)
 
-*OUP 파닉스 리더스 (Oxford Reading Tree 계열)* · [공식 사이트](https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/)
+*OUP 파닉스 리더스 (Oxford Reading Tree 계열)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/)
 
 『The Gruffalo』 작가 Julia Donaldson이 쓴 Oxford Reading Tree 계열 파닉스 리더스 60권. Stage 1+부터 Stage 6까지 단계마다 새로 배우는 소리가 정해져 있어, 배운 소리만으로 읽을 수 있다. ORT 이야기책(Biff·Chip·Kipper)과 함께 많이 쓴다.
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
-| `songbirds-1` | Songbirds Phonics (ORT) - Stage 1+ | 4~6세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 1+·More Stage 1+ (12권) — 아래 순서대로 |
+| `songbirds-1` | Songbirds Phonics (ORT) - Stage 1+ | 4~6세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 1+·More Stage 1+ (12권) — 권 순서는 카드가 매일 안내해요 |
 | `songbirds-full` | Songbirds Phonics (ORT) - Full Set | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | 집에 있는 Songbirds 전집을 Stage 1+부터 차례로 (60권) |
-| `songbirds-2` | Songbirds Phonics (ORT) - Stage 2-3 | 5~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 2~More Stage 3 (24권) — 아래 순서대로 |
-| `songbirds-3` | Songbirds Phonics (ORT) - Stage 4-6 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 4~6 (24권) — 아래 순서대로 |
+| `songbirds-2` | Songbirds Phonics (ORT) - Stage 2-3 | 5~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 2~More Stage 3 (24권) — 권 순서는 카드가 매일 안내해요 |
+| `songbirds-3` | Songbirds Phonics (ORT) - Stage 4-6 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 4~6 (24권) — 권 순서는 카드가 매일 안내해요 |
 
 <details><summary><code>songbirds-1</code> 학습 단위 12개 (진행 순서)</summary>
 
@@ -788,7 +846,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 ### The Magic School Bus
 
-*과학 애니메이션* · [공식 사이트](https://www.scholastic.com/)
+*과학 애니메이션* · 비용: 스트리밍 서비스 또는 구입 · [공식 사이트](https://www.scholastic.com/)
 
 Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐험하는 애니메이션. 첫 에피소드는 'Gets Lost in Space'.
 
@@ -798,7 +856,7 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 
 ### Amelia Bedelia
 
-*초기 리더스 시리즈* · [공식 사이트](https://www.ameliabedeliabooks.com/)
+*초기 리더스 시리즈* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.ameliabedeliabooks.com/)
 
 말을 글자 그대로 알아듣는 가정부 Amelia Bedelia의 이야기. 말장난이 많아 7세 이상에게 맞는다.
 
@@ -808,7 +866,7 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 
 ### Frog and Toad (Arnold Lobel)
 
-*초기 리더스 (I Can Read)* · [공식 사이트](https://www.icanread.com/)
+*초기 리더스 (I Can Read)* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.icanread.com/)
 
 개구리와 두꺼비의 우정을 다룬 짧은 이야기 모음. 첫 권은 'Frog and Toad Are Friends'.
 
@@ -818,7 +876,7 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 
 ### Nate the Great
 
-*초기 챕터북 시리즈* · [공식 사이트](https://www.penguinrandomhouse.com/)
+*초기 챕터북 시리즈* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.penguinrandomhouse.com/)
 
 꼬마 탐정 Nate가 사건을 푸는 짧은 챕터북. 1권 제목도 'Nate the Great'.
 
@@ -828,7 +886,7 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 
 ### Junie B. Jones
 
-*챕터북 시리즈* · [공식 사이트](https://www.penguinrandomhouse.com/)
+*챕터북 시리즈* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.penguinrandomhouse.com/)
 
 유치원생 Junie B.의 학교생활 챕터북. 1권은 'Junie B. Jones and the Stupid Smelly Bus'.
 
@@ -838,7 +896,7 @@ Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐�
 
 ### Magic Tree House
 
-*챕터북 시리즈* · [공식 사이트](https://www.magictreehouse.com/)
+*챕터북 시리즈* · 비용: 책 구입 또는 도서관 대출 · [공식 사이트](https://www.magictreehouse.com/)
 
 Jack과 Annie가 마법의 나무집으로 시간 여행을 하는 챕터북. 1권은 'Dinosaurs Before Dark'. 7세 이상 리더스 독해 단계용.
 
@@ -864,11 +922,12 @@ Jack과 Annie가 마법의 나무집으로 시간 여행을 하는 챕터북. 1�
 - 학습 단위 제목 출처 (`jd_site`): Julia Donaldson 공식 사이트 Songbird Phonics 페이지 (https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/) 의 단계별 목록
 - 학습 단위 제목 출처 (`jolly_site`): Jolly Learning 공식 사이트 Jolly Phonics 페이지 FAQ 'In what order are the letter sounds taught?' (https://jollylearning.com/en-gb/our-programmes/jolly-phonics) 의 7그룹 순서
 - 학습 단위 제목 출처 (`wiki_ep`): Wikipedia 'Elephant & Piggie' 문서의 Books 목록 (https://en.wikipedia.org/wiki/Elephant_and_Piggie) — 출판사(Disney-Hyperion) 페이지는 자동 접속이 막혀 2차 자료로 확인
+- 학습 단위 제목 출처 (`wiki_peppa`): Wikipedia 'List of Peppa Pig episodes' 문서의 Series 1 (2004) 방송 순서 (https://en.wikipedia.org/wiki/List_of_Peppa_Pig_episodes) — 에피소드당 약 5분
 - 출처(공식 목록 우선, 막힌 경우 명시한 2차 자료)에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.
 - 저작권(기획서 §7.3): 제목·팩 이름·활동 방법만 다루고 책 본문·영상은 싣거나 호스팅하지 않습니다.
 
 ## 남은 일 (묶음 → 학습 단위)
 
-아래 37개는 아직 '앱 전체·시리즈 전체' 단위라 카드가 막연합니다. 공식 목록으로 권·레슨을 확인해 단위로 쪼갤 대상입니다.
+아래 36개는 아직 '앱 전체·시리즈 전체' 단위라 카드가 막연합니다. 공식 목록으로 권·레슨을 확인해 단위로 쪼갤 대상입니다.
 
-`usborne-thatsnotmy`, `khan-kids`, `starfall-abcs`, `abcmouse`, `cocomelon`, `peppa`, `ort-stage1`, `bobbooks-1`, `starfall-read`, `razkids-aa`, `alphablocks`, `scholastic-phonics`, `readingeggs`, `bobbooks-2`, `flyguy`, `natgeo-prereader`, `razkids-bc`, `scholastic-sight`, `magicschoolbus`, `usborne-first`, `starfall-imreading`, `epic`, `sss-library`, `khan-full`, `razkids-full`, `natgeo-full`, `usborne-full`, `epic-full`, `starfall-full`, `abcmouse-full`, `readingeggs-full`, `scholastic-full`, `magic-tree-house`, `nate-the-great`, `junie-b-jones`, `frog-and-toad`, `amelia-bedelia`
+`usborne-thatsnotmy`, `khan-kids`, `starfall-abcs`, `abcmouse`, `cocomelon`, `ort-stage1`, `bobbooks-1`, `starfall-read`, `razkids-aa`, `alphablocks`, `scholastic-phonics`, `readingeggs`, `bobbooks-2`, `flyguy`, `natgeo-prereader`, `razkids-bc`, `scholastic-sight`, `magicschoolbus`, `usborne-first`, `starfall-imreading`, `epic`, `sss-library`, `khan-full`, `razkids-full`, `natgeo-full`, `usborne-full`, `epic-full`, `starfall-full`, `abcmouse-full`, `readingeggs-full`, `scholastic-full`, `magic-tree-house`, `nate-the-great`, `junie-b-jones`, `frog-and-toad`, `amelia-bedelia`

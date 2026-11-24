@@ -12,8 +12,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Super Simple Songs 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Super Simple Songs 공식",
-    "task": "Super Simple Songs - Twinkle Twinkle Little Star — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Super Simple Songs - Twinkle Twinkle Little Star — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "pinkfong-babyshark",
@@ -28,8 +28,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Pinkfong 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Pinkfong 공식",
-    "task": "Pinkfong - Baby Shark — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Pinkfong - Baby Shark — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "sss-head",
@@ -44,8 +44,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Super Simple Songs 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Super Simple Songs 공식",
-    "task": "Super Simple Songs - Head Shoulders Knees & Toes — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Super Simple Songs - Head Shoulders Knees & Toes — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "sss-abc",
@@ -60,8 +60,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Super Simple Songs 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Super Simple Songs 공식",
-    "task": "Super Simple Songs - ABC Song — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Super Simple Songs - ABC Song — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "eric-caterpillar",
@@ -76,8 +76,8 @@
     "session_minutes": 10,
     "expert_note": "L1 리더스 자료로 듣기를 기르기 좋아요. Penguin Random House 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Penguin Random House",
-    "task": "Eric Carle - The Very Hungry Caterpillar — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Eric Carle - The Very Hungry Caterpillar — 부모가 읽어 주고 아이는 그림을 가리키며 듣기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "eric-brownbear",
@@ -92,8 +92,8 @@
     "session_minutes": 10,
     "expert_note": "L1 리더스 자료로 듣기를 기르기 좋아요. Macmillan 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Macmillan",
-    "task": "Eric Carle - Brown Bear, Brown Bear, What Do You See? — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Eric Carle - Brown Bear, Brown Bear, What Do You See? — 부모가 읽어 주고 아이는 그림을 가리키며 듣기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "usborne-thatsnotmy",
@@ -108,8 +108,8 @@
     "session_minutes": 10,
     "expert_note": "L1 리더스 자료로 듣기를 기르기 좋아요. Usborne 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Usborne 공식",
-    "task": "Usborne - That's Not My... series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Usborne - That's Not My... series — 부모가 읽어 주고 아이는 그림을 가리키며 듣기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "khan-kids",
@@ -124,8 +124,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 듣기를 기르기 좋아요. Khan Academy 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Khan Academy",
-    "task": "Khan Academy Kids — 놀이로 표현 연습",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Khan Academy Kids — 소리 듣기 활동을 함께 하고 들은 단어 따라 말하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "starfall-abcs",
@@ -140,8 +140,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 읽기를 기르기 좋아요. Starfall 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Starfall 공식",
-    "task": "Starfall - ABCs — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Starfall - ABCs — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "abcmouse",
@@ -156,8 +156,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 듣기를 기르기 좋아요. ABCmouse 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "ABCmouse 공식",
-    "task": "ABCmouse - Early Learning — 놀이로 표현 연습",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "ABCmouse - Early Learning — 소리 듣기 활동을 함께 하고 들은 단어 따라 말하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "cocomelon",
@@ -172,8 +172,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Cocomelon 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Cocomelon 공식",
-    "task": "Cocomelon - Nursery Rhymes — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Cocomelon - Nursery Rhymes — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "peppa",
@@ -188,8 +188,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Peppa Pig 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Peppa Pig 공식",
-    "task": "Peppa Pig - Official Episodes — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Peppa Pig - Official Episodes — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "action-cards",
@@ -204,8 +204,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 말하기를 기르기 좋아요. 교사 커뮤니티 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "교사 커뮤니티",
-    "task": "Action Verb Cards — 놀이로 표현 연습",
-    "check_point": "말하기 목표: 표현을 소리 내어 말하는지"
+    "task": "Action Verb Cards — 카드를 보여 주며 짧게 영어로 말하고 몸으로 표현하기",
+    "check_point": "단어나 짧은 표현을 소리 내어 말했나요?"
   },
   {
     "id": "color-flashcards",
@@ -220,8 +220,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 말하기를 기르기 좋아요. Amazon 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Amazon",
-    "task": "Color & Shape Flashcards — 놀이로 표현 연습",
-    "check_point": "말하기 목표: 표현을 소리 내어 말하는지"
+    "task": "Color & Shape Flashcards — 카드를 보여 주며 짧게 영어로 말하고 몸으로 표현하기",
+    "check_point": "단어나 짧은 표현을 소리 내어 말했나요?"
   },
   {
     "id": "jolly-songs",
@@ -236,8 +236,8 @@
     "session_minutes": 10,
     "expert_note": "L1 오디오 자료로 듣기를 기르기 좋아요. Jolly Learning 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Jolly Learning",
-    "task": "Jolly Phonics - Songs — 듣고 따라 부르기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Jolly Phonics - Songs — 함께 들으며 따라 부르기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "jolly-letter",
@@ -252,8 +252,8 @@
     "session_minutes": 15,
     "expert_note": "L2 파닉스 자료로 읽기를 기르기 좋아요. Jolly Learning 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Jolly Learning",
-    "task": "Jolly Phonics - Letter Sounds — 글자-소리 연결 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Jolly Phonics - Letter Sounds — 글자 소리를 하나씩 내고 합쳐 보기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "ort-stage1",
@@ -268,8 +268,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Stage 1 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Stage 1 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "bobbooks-1",
@@ -284,8 +284,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. Bob Books 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Bob Books",
-    "task": "Bob Books - Set 1: Beginning Readers — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Bob Books - Set 1: Beginning Readers — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "starfall-read",
@@ -300,8 +300,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Starfall 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Starfall 공식",
-    "task": "Starfall - Learn to Read — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Starfall - Learn to Read — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "razkids-aa",
@@ -316,8 +316,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Raz-Kids (Learning A-Z) 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Raz-Kids (Learning A-Z)",
-    "task": "Raz-Kids - Level aa-A — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Raz-Kids - Level aa-A — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "usborne-fox",
@@ -332,8 +332,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. Usborne 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Usborne 공식",
-    "task": "Usborne Phonics Readers - Fox on a Box — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Usborne Phonics Readers - Fox on a Box — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "alphablocks",
@@ -348,8 +348,8 @@
     "session_minutes": 10,
     "expert_note": "L2 영상 자료로 읽기를 기르기 좋아요. BBC CBeebies 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "BBC CBeebies",
-    "task": "Alphablocks - Phonics Episodes — 영상을 함께 보고 따라 하기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Alphablocks - Phonics Episodes — 함께 보며 화면 속 글자와 소리를 짝지어 따라 말하기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "leapfrog-letter",
@@ -364,8 +364,8 @@
     "session_minutes": 10,
     "expert_note": "L2 영상 자료로 읽기를 기르기 좋아요. LeapFrog 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "LeapFrog",
-    "task": "LeapFrog - Letter Factory — 영상을 함께 보고 따라 하기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "LeapFrog - Letter Factory — 함께 보며 화면 속 글자와 소리를 짝지어 따라 말하기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "scholastic-phonics",
@@ -380,8 +380,8 @@
     "session_minutes": 15,
     "expert_note": "L2 워크시트 자료로 쓰기를 기르기 좋아요. Scholastic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Scholastic",
-    "task": "Scholastic - Phonics Workbook — 워크시트 풀기",
-    "check_point": "쓰기 목표: 스스로 써 보는지"
+    "task": "Scholastic - Phonics Workbook — 소리를 말하며 글자를 따라 쓰기",
+    "check_point": "소리를 말하며 글자를 써 봤나요?"
   },
   {
     "id": "drseuss-hop",
@@ -396,8 +396,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. Dr. Seuss Enterprises 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Dr. Seuss Enterprises",
-    "task": "Dr. Seuss - Hop on Pop — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Dr. Seuss - Hop on Pop — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "pete-shoes",
@@ -412,8 +412,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. HarperCollins 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "HarperCollins",
-    "task": "Pete the Cat - I Love My White Shoes — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Pete the Cat - I Love My White Shoes — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "sss-phonics",
@@ -428,8 +428,8 @@
     "session_minutes": 10,
     "expert_note": "L2 영상 자료로 읽기를 기르기 좋아요. Super Simple Songs 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Super Simple Songs 공식",
-    "task": "Super Simple Songs - Phonics Song — 영상을 함께 보고 따라 하기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Super Simple Songs - Phonics Song — 함께 보며 화면 속 글자와 소리를 짝지어 따라 말하기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "readingeggs",
@@ -444,8 +444,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Reading Eggs 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Reading Eggs",
-    "task": "Reading Eggs — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Reading Eggs — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "sight-cards",
@@ -460,8 +460,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Amazon 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Amazon",
-    "task": "Sight Word Flashcards — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Sight Word Flashcards — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "ort-stage2",
@@ -476,8 +476,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Stage 2 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Stage 2 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "ort-stage3",
@@ -492,8 +492,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Stage 3 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Stage 3 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "bobbooks-2",
@@ -508,8 +508,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Bob Books 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Bob Books",
-    "task": "Bob Books - Set 2: Advancing Beginners — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Bob Books - Set 2: Advancing Beginners — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "elephant-fly",
@@ -524,8 +524,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Disney-Hyperion 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Disney-Hyperion",
-    "task": "Elephant & Piggie - Today I Will Fly! — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Elephant & Piggie - Today I Will Fly! — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "flyguy",
@@ -540,8 +540,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Scholastic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Scholastic",
-    "task": "Fly Guy series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Fly Guy series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "natgeo-prereader",
@@ -556,8 +556,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. National Geographic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "National Geographic",
-    "task": "National Geographic Kids - Pre-reader — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "National Geographic Kids - Pre-reader — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "razkids-bc",
@@ -572,8 +572,8 @@
     "session_minutes": 10,
     "expert_note": "L3 놀이 활동 자료로 읽기를 기르기 좋아요. Raz-Kids (Learning A-Z) 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Raz-Kids (Learning A-Z)",
-    "task": "Raz-Kids - Level B-C — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Raz-Kids - Level B-C — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "scholastic-sight",
@@ -588,8 +588,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Scholastic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Scholastic",
-    "task": "Scholastic - Sight Word Readers — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Scholastic - Sight Word Readers — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "magicschoolbus",
@@ -604,8 +604,8 @@
     "session_minutes": 10,
     "expert_note": "L3 영상 자료로 듣기를 기르기 좋아요. Scholastic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Scholastic",
-    "task": "The Magic School Bus - Episodes — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "The Magic School Bus - Episodes — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "ort-stage4",
@@ -620,8 +620,8 @@
     "session_minutes": 15,
     "expert_note": "L4 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Stage 4 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Stage 4 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "pete-school",
@@ -636,8 +636,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. HarperCollins 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "HarperCollins",
-    "task": "Pete the Cat - Rocking in My School Shoes — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Pete the Cat - Rocking in My School Shoes — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "usborne-first",
@@ -652,8 +652,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Usborne 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Usborne 공식",
-    "task": "Usborne - First Reading Level 1 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Usborne - First Reading Level 1 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "starfall-imreading",
@@ -668,8 +668,8 @@
     "session_minutes": 10,
     "expert_note": "L3 놀이 활동 자료로 읽기를 기르기 좋아요. Starfall 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Starfall 공식",
-    "task": "Starfall - I'm Reading — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Starfall - I'm Reading — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "epic",
@@ -684,8 +684,8 @@
     "session_minutes": 10,
     "expert_note": "L3 놀이 활동 자료로 읽기를 기르기 좋아요. Epic! 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Epic!",
-    "task": "Epic! - Digital Library — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Epic! - Digital Library — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "cvc-writing",
@@ -700,8 +700,8 @@
     "session_minutes": 15,
     "expert_note": "L3 워크시트 자료로 쓰기를 기르기 좋아요. 교사 커뮤니티 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "교사 커뮤니티",
-    "task": "CVC Word Writing Practice — 워크시트 풀기",
-    "check_point": "쓰기 목표: 스스로 써 보는지"
+    "task": "CVC Word Writing Practice — 소리를 말하며 글자를 따라 쓰기",
+    "check_point": "소리를 말하며 글자를 써 봤나요?"
   },
   {
     "id": "ort-stage5",
@@ -716,8 +716,8 @@
     "session_minutes": 15,
     "expert_note": "L5 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Stage 5 — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Stage 5 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "sss-library",
@@ -732,8 +732,8 @@
     "session_minutes": 10,
     "expert_note": "L1 영상 자료로 듣기를 기르기 좋아요. Super Simple Songs 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Super Simple Songs 공식",
-    "task": "Super Simple Songs - Full Library — 영상을 함께 보고 따라 하기",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Super Simple Songs - Full Library — 함께 보며 노래·동작을 따라 하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "khan-full",
@@ -748,8 +748,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 듣기를 기르기 좋아요. Khan Academy 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Khan Academy",
-    "task": "Khan Academy Kids - Full Curriculum — 놀이로 표현 연습",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "Khan Academy Kids - Full Curriculum — 소리 듣기 활동을 함께 하고 들은 단어 따라 말하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "ort-full",
@@ -764,8 +764,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Oxford University Press 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Oxford University Press",
-    "task": "Oxford Reading Tree - Full Series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Oxford Reading Tree - Full Series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "jolly-full",
@@ -780,8 +780,8 @@
     "session_minutes": 15,
     "expert_note": "L2 파닉스 자료로 읽기를 기르기 좋아요. Jolly Learning 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Jolly Learning",
-    "task": "Jolly Phonics - Full Program — 글자-소리 연결 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Jolly Phonics - Full Program — 글자 소리를 하나씩 내고 합쳐 보기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "razkids-full",
@@ -796,8 +796,8 @@
     "session_minutes": 10,
     "expert_note": "L3 놀이 활동 자료로 읽기를 기르기 좋아요. Raz-Kids (Learning A-Z) 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Raz-Kids (Learning A-Z)",
-    "task": "Raz-Kids - Full Library — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Raz-Kids - Full Library — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "natgeo-full",
@@ -812,8 +812,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. National Geographic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "National Geographic",
-    "task": "National Geographic Kids - Full Collection — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "National Geographic Kids - Full Collection — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "usborne-full",
@@ -828,8 +828,8 @@
     "session_minutes": 15,
     "expert_note": "L2 리더스 자료로 읽기를 기르기 좋아요. Usborne 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Usborne 공식",
-    "task": "Usborne - Full Phonics Collection — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Usborne - Full Phonics Collection — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "epic-full",
@@ -844,8 +844,8 @@
     "session_minutes": 10,
     "expert_note": "L3 놀이 활동 자료로 읽기를 기르기 좋아요. Epic! 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Epic!",
-    "task": "Epic! - Full Library — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Epic! - Full Library — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "starfall-full",
@@ -860,8 +860,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Starfall 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Starfall 공식",
-    "task": "Starfall - Full Curriculum — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Starfall - Full Curriculum — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "abcmouse-full",
@@ -876,8 +876,8 @@
     "session_minutes": 10,
     "expert_note": "L1 놀이 활동 자료로 듣기를 기르기 좋아요. ABCmouse 공식 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "ABCmouse 공식",
-    "task": "ABCmouse - Full Curriculum — 놀이로 표현 연습",
-    "check_point": "듣기 목표: 소리와 리듬에 반응하는지"
+    "task": "ABCmouse - Full Curriculum — 소리 듣기 활동을 함께 하고 들은 단어 따라 말하기",
+    "check_point": "소리나 몸짓(따라 부르기·가리키기)으로 반응했나요?"
   },
   {
     "id": "readingeggs-full",
@@ -892,8 +892,8 @@
     "session_minutes": 10,
     "expert_note": "L2 놀이 활동 자료로 읽기를 기르기 좋아요. Reading Eggs 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Reading Eggs",
-    "task": "Reading Eggs - Full Program — 놀이로 표현 연습",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Reading Eggs - Full Program — 읽기 활동 1회를 함께 하고 나온 단어 하나 다시 읽기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "scholastic-full",
@@ -908,8 +908,8 @@
     "session_minutes": 15,
     "expert_note": "L3 리더스 자료로 읽기를 기르기 좋아요. Scholastic 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Scholastic",
-    "task": "Scholastic - Full Collection — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Scholastic - Full Collection — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "magic-tree-house",
@@ -924,8 +924,8 @@
     "session_minutes": 15,
     "expert_note": "L5 리더스 자료로 읽기를 기르기 좋아요. Random House 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Random House",
-    "task": "Magic Tree House series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Magic Tree House series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "nate-the-great",
@@ -940,8 +940,8 @@
     "session_minutes": 15,
     "expert_note": "L4 리더스 자료로 읽기를 기르기 좋아요. Penguin Random House 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Penguin Random House",
-    "task": "Nate the Great series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Nate the Great series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "junie-b-jones",
@@ -956,8 +956,8 @@
     "session_minutes": 15,
     "expert_note": "L5 리더스 자료로 읽기를 기르기 좋아요. Penguin Random House 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "Penguin Random House",
-    "task": "Junie B. Jones series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Junie B. Jones series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "frog-and-toad",
@@ -972,8 +972,8 @@
     "session_minutes": 15,
     "expert_note": "L4 리더스 자료로 읽기를 기르기 좋아요. HarperCollins 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "HarperCollins",
-    "task": "Frog and Toad series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Frog and Toad series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "amelia-bedelia",
@@ -988,8 +988,8 @@
     "session_minutes": 15,
     "expert_note": "L4 리더스 자료로 읽기를 기르기 좋아요. HarperCollins 기반. 흔한 실패: 아이가 힘들어하면 한 단계 낮춰 반복하세요. 부모 팁: 짧게 자주, 소리 내어 함께 하기.",
     "trust_source": "HarperCollins",
-    "task": "Amelia Bedelia series — 함께 읽고 그림으로 뜻 짚기",
-    "check_point": "읽기 목표: 핵심 단어를 알아보는지"
+    "task": "Amelia Bedelia series — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "songbirds-1",
@@ -1004,8 +1004,8 @@
     "session_minutes": 15,
     "expert_note": "Oxford Reading Tree 계열의 파닉스 리더스로, '그루팔로' 작가 Julia Donaldson이 썼어요. 단계마다 새로 배우는 소리가 정해져 있어 배운 소리만으로 읽을 수 있는(디코더블) 책이에요. ORT 이야기책과 같이 쓰면 소리 읽기와 이야기 읽기를 함께 잡을 수 있어요. Stage 1+는 글자 하나-소리 하나(짧은 모음, x·q 뺀 자음)로 된 3글자 단어를 읽어요.",
     "trust_source": "Oxford University Press · Julia Donaldson 공식 사이트",
-    "task": "Songbirds Phonics Stage 1+ — 배운 소리로 짧은 단어 읽기",
-    "check_point": "소리를 하나씩 내고 합쳐 단어로 읽었나요?"
+    "task": "Songbirds Phonics (ORT) - Stage 1+ — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "songbirds-2",
@@ -1020,8 +1020,8 @@
     "session_minutes": 15,
     "expert_note": "Oxford Reading Tree 계열의 파닉스 리더스로, '그루팔로' 작가 Julia Donaldson이 썼어요. 단계마다 새로 배우는 소리가 정해져 있어 배운 소리만으로 읽을 수 있는(디코더블) 책이에요. ORT 이야기책과 같이 쓰면 소리 읽기와 이야기 읽기를 함께 잡을 수 있어요. Stage 2~3은 sh·ch·th·ck 같은 두 글자 소리와 자음 겹침(st, fr 등), 긴 모음 맛보기를 다뤄요.",
     "trust_source": "Oxford University Press · Julia Donaldson 공식 사이트",
-    "task": "Songbirds Phonics Stage 2-3 — 두 글자 소리가 든 단어 읽기",
-    "check_point": "sh·ch·th 같은 소리를 알아보고 읽었나요?"
+    "task": "Songbirds Phonics (ORT) - Stage 2-3 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "songbirds-3",
@@ -1036,8 +1036,8 @@
     "session_minutes": 15,
     "expert_note": "Oxford Reading Tree 계열의 파닉스 리더스로, '그루팔로' 작가 Julia Donaldson이 썼어요. 단계마다 새로 배우는 소리가 정해져 있어 배운 소리만으로 읽을 수 있는(디코더블) 책이에요. ORT 이야기책과 같이 쓰면 소리 읽기와 이야기 읽기를 함께 잡을 수 있어요. Stage 4~6은 긴 모음(ee, ie, oa, ai)과 ar·ur·air 같은 소리를 여러 철자로 익혀요.",
     "trust_source": "Oxford University Press · Julia Donaldson 공식 사이트",
-    "task": "Songbirds Phonics Stage 4-6 — 긴 모음 철자 읽기",
-    "check_point": "같은 소리의 다른 철자를 알아봤나요?"
+    "task": "Songbirds Phonics (ORT) - Stage 4-6 — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "songbirds-full",
@@ -1052,8 +1052,8 @@
     "session_minutes": 15,
     "expert_note": "Oxford Reading Tree 계열의 파닉스 리더스로, '그루팔로' 작가 Julia Donaldson이 썼어요. 단계마다 새로 배우는 소리가 정해져 있어 배운 소리만으로 읽을 수 있는(디코더블) 책이에요. ORT 이야기책과 같이 쓰면 소리 읽기와 이야기 읽기를 함께 잡을 수 있어요. 집에 전집이 있으면 Stage 1+부터 차례로 진행해요.",
     "trust_source": "Oxford University Press · Julia Donaldson 공식 사이트",
-    "task": "Songbirds Phonics — 단계 순서대로 한 권씩 읽기",
-    "check_point": "소리를 합쳐 단어로 읽었나요?"
+    "task": "Songbirds Phonics (ORT) - Full Set — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   },
   {
     "id": "elephant-piggie",
@@ -1068,7 +1068,7 @@
     "session_minutes": 15,
     "expert_note": "Mo Willems의 초기 리더스 25권. 말풍선 대화만으로 되어 있고 문장이 짧고 반복돼, 부모와 아이가 Gerald(코끼리)·Piggie(돼지) 역할을 나눠 읽기 좋아요. 미국 도서관협회 Geisel상(초기 리더스 부문)을 여러 차례 받았어요.",
     "trust_source": "Disney-Hyperion · Mo Willems",
-    "task": "Elephant & Piggie — 역할 나눠 대화 읽기",
-    "check_point": "자기 역할의 말풍선을 따라 읽었나요?"
+    "task": "Elephant & Piggie - Full Series (25 books) — 함께 읽으며 글자를 손가락으로 짚기",
+    "check_point": "글자를 보고 소리나 단어를 말했나요?"
   }
 ]

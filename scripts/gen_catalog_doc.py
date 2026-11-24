@@ -88,7 +88,8 @@ def render() -> str:
         w(f"### {info['name']}")
         w("")
         link = f" · [공식 사이트]({info['official']})" if info.get("official") else ""
-        w(f"*{info['kind']}*{link}")
+        cost = f" · 비용: {info['cost']}" if info.get("cost") else ""
+        w(f"*{info['kind']}*{cost}{link}")
         w("")
         w(info["about"])
         w("")
