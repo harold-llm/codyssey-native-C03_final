@@ -1118,7 +1118,12 @@ function bindGlobalNav() {
       } else if (target === 'report') {
         if (!state.token) { state.view = 'auth'; }
         else if (!state.child) { state.view = 'onboarding'; }
-        else { await loadReport(); state.view = 'report'; }
+        else {
+          // 메뉴로 들어오면 항상 이번 주부터 (지난 주 선택이 다른 화면을 다녀와도 남던 문제)
+          state.reportWeek = null;
+          await loadReport();
+          state.view = 'report';
+        }
       }
       render();
     });
