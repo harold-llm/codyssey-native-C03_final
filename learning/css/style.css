@@ -750,3 +750,10 @@ button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px 
 .letter-big { font-size: 2.6rem; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; }
 .link-btn { border: 0; background: none; padding: 0; color: var(--accent); font: inherit; text-decoration: underline; cursor: pointer; }
 #speakNote[hidden] { display: none !important; }
+
+/* 오늘의 동요 */
+.song-card { border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: grid; gap: 10px; background: var(--surface-2); }
+.song-head { display: flex; gap: 12px; align-items: center; }
+.song-icon { font-size: 28px; line-height: 1; }
+.song-title { font-weight: 700; font-size: 17px; }
+.song-card .btn { justify-self: start; }

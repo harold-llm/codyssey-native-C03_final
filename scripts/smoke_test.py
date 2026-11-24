@@ -33,6 +33,7 @@ import catalog
 import clock
 import curriculum
 import scheduler
+import songs
 
 import main as bloomy_main
 import store
@@ -257,6 +258,9 @@ def section_child1(token1: str | None, today: dt.date) -> int:
     st, d = req("GET", f"/api/children/{child1}/today", token=token1)
     d = cast("dict[str, object]", d)
     draft_plan = cast("dict[str, object]", d["draft_plan"])
+    song = cast("dict[str, object]", d.get("song") or {})
+    check("today에 오늘의 동요(YouTube 링크)", str(song.get("url", "")).startswith("https://www.youtube.com/watch?v="),
+          str(song.get("id")))
     check(
         "today before approve: draft only",
         st == 200
@@ -958,6 +962,35 @@ def section_curriculum() -> None:
     check("docs/catalog.md 최신 (gen_catalog_doc.py --check)", r.returncode == 0, r.stdout.strip())
 
 
+def section_songs() -> None:
+    """오늘의 동요 — 단계별 공식 채널 YouTube 링크 1곡."""
+    print("\n[songs] 오늘의 동요")
+    import re
+    allsongs = songs.all_songs()
+    official = {"Super Simple Songs", "Super Simple ABCs", "Jack Hartmann", "Have Fun Teaching",
+                "Alphablocks", "Pinkfong"}
+    bad = [s["id"] for s in allsongs
+           if not re.fullmatch(r"https://www\.youtube\.com/watch\?v=[\w-]{11}", str(s["url"]))
+           or s["channel"] not in official or not s.get("do")]
+    check("동요 링크 형식·공식 채널·부모 안내 완비", not bad, str(bad))
+    check("동요 L1~L5 단계마다 5곡 이상",
+          all(sum(1 for s in allsongs if s["level"] == lv) >= 5 for lv in range(1, 6)))
+    check("동요 id 중복 없음", len({s["id"] for s in allsongs}) == len(allsongs))
+    kid = {"id": 5, "level": 3}
+    days = [(dt.date(2026, 12, 1) + dt.timedelta(days=i)).isoformat() for i in range(6)]
+    picks = [songs.song_for(kid, d) for d in days]
+    check("같은 날 같은 곡(결정적)", songs.song_for(kid, days[0]) == picks[0])
+    check("연속한 날은 다른 곡", all(picks[i]["id"] != picks[i + 1]["id"] for i in range(5)),
+          str([p["id"] for p in picks]))
+    lv = [p["level"] for p in picks]
+    check("단계 맞춤(L3) + 사흘에 한 번 L2 복습", set(lv) <= {2, 3} and lv.count(3) >= 3, str(lv))
+    abc = {"id": 5, "level": 4, "diagnosis": json.dumps({"answers": {"alphabet": "none"}})}
+    check("알파벳 '인지 못 함' 아이는 알파벳·글자 소리 노래(L1~L2)",
+          all(songs.song_for(abc, d)["level"] in (1, 2) for d in days))
+    plan_level = songs.song_for({"id": 5, "level": 1}, days[1], {"base_level": 5})
+    check("계획 단계(base_level)를 아이 기본값보다 우선", plan_level["level"] in (4, 5), str(plan_level["level"]))
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -980,6 +1013,7 @@ def main() -> int:
     section_learning(token1)
     section_delete_account(token1, (child1, child2))
     section_curriculum()
+    section_songs()
 
     try:
         os.remove(TEST_DB)

@@ -1,13 +1,14 @@
 """RAG 카탈로그 안내 문서 생성기 → docs/catalog.md
 
-원본: backend/data/catalog.json (RAG·규칙 계획이 실제로 쓰는 62개 항목)
+원본: backend/data/catalog.json (RAG·규칙 계획이 실제로 쓰는 항목)
      backend/data/content_guide.json (시리즈 설명·찾는 법·학습 단위)
+     backend/data/songs.json (오늘의 동요, 단계별 YouTube 공식 채널 영상)
 
 실행:
   python3 scripts/gen_catalog_doc.py          # 문서 다시 쓰기
   python3 scripts/gen_catalog_doc.py --check  # 문서가 최신인지 검사 (다르면 exit 1)
 
-자동 갱신: .githooks/pre-commit 이 위 두 JSON이 바뀐 커밋마다 실행하고,
+자동 갱신: .githooks/pre-commit 이 위 JSON이 바뀐 커밋마다 실행하고,
 smoke test가 --check로 오래된 문서를 잡는다.
 """
 from __future__ import annotations
@@ -127,12 +128,30 @@ def render() -> str:
         w(f"{n + 1}. {task}  ")
         w(f"   확인 포인트: {check}")
     w("")
+    songs = _load("songs.json")["songs"]
+    w("## 오늘의 동요 (단계별 YouTube)")
+    w("")
+    w(f"계획 카드와 별도로, 오늘의 학습 화면에 **단계(L1~L5)에 맞는 영어 동요 1곡**을 날마다 안내합니다(총 {len(songs)}곡).")
+    w("사흘에 한 번은 한 단계 아래 노래로 복습하고, 진단에서 알파벳을 모르는 아이는 L2(알파벳·글자 소리) 노래부터 듣습니다.")
+    w("앱 안에서 재생하지 않고 **공식 채널 영상 링크**만 줍니다. 링크는 `python3 scripts/check_songs.py`로 채널을 확인합니다.")
+    w("")
+    for lv, (code, name) in LEVELS.items():
+        rows = [s for s in songs if s["level"] == lv]
+        w(f"<details><summary>{code} {name} — {len(rows)}곡</summary>")
+        w("")
+        w("| 노래 | 채널 | 길이 | 초점 | 부모와 함께 할 것 |")
+        w("|---|---|---|---|---|")
+        for s in rows:
+            w(f"| [{s['title']}]({s['url']}) | {s['channel']} | 약 {s['minutes']}분 | {s['focus']} | {s['do']} |")
+        w("")
+        w("</details>")
+        w("")
     w("## 출처와 원칙")
     w("")
     for key, text in g["unit_sources"].items():
         w(f"- 학습 단위 제목 출처 (`{key}`): {text}")
     w("- 출처(공식 목록 우선, 막힌 경우 명시한 2차 자료)에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.")
-    w("- 저작권(기획서 §7.3): 제목·팩 이름·활동 방법만 다루고 책 본문·영상은 싣거나 호스팅하지 않습니다.")
+    w("- 저작권(기획서 §7.3): 제목·팩 이름·활동 방법만 다루고 책 본문·영상·가사는 싣거나 호스팅하지 않습니다.")
     w("")
     w("## 남은 일 (묶음 → 학습 단위)")
     w("")

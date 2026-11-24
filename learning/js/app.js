@@ -772,6 +772,7 @@ function todayHtml() {
           <p class="small muted mt8">오늘 자료에 나오는 글자예요. 자료를 본 뒤 그림을 눌러 소리를 같이 들어 보세요.</p>
           <div class="word-grid mt16">${card.letters.map(letterCardHtml).join('')}</div>
         </div>` : ''}
+        ${t.song ? songHtml(t.song) : ''}
         <div class="section">
           <div class="section-head">
             <h2 class="section-title">함께 써 볼 단어</h2>
@@ -815,6 +816,29 @@ function cardHeroHtml(card) {
     </div>
     ${card.check_point ? `<div class="check-point"><strong>확인 포인트</strong><br>${esc(card.check_point)}</div>` : ''}
     ${guideHtml(card)}
+  </div>`;
+}
+
+/* 오늘의 동요: 단계에 맞춘 공식 채널 영상 1곡 — 앱 안에서 재생하지 않고 YouTube로 안내 */
+function songHtml(song) {
+  return `
+  <div class="section">
+    <h2 class="section-title">오늘의 동요</h2>
+    <div class="song-card mt16">
+      <div class="song-head">
+        <span class="song-icon" aria-hidden="true">🎵</span>
+        <div>
+          <div class="song-title">${esc(song.title)}</div>
+          <div class="small muted">${esc(song.channel)} 공식 채널 · 약 ${song.minutes}분 · ${esc(song.focus)}</div>
+        </div>
+      </div>
+      <div class="guide">
+        <div class="guide-row"><span class="guide-k">왜 이 노래</span><span>${esc(song.why)}</span></div>
+        <div class="guide-row"><span class="guide-k">함께 할 것</span><span>${esc(song.do)}</span></div>
+      </div>
+      <a class="btn btn-ghost btn-sm mt8" href="${esc(song.url)}" target="_blank" rel="noopener noreferrer">YouTube에서 보기 ↗</a>
+      <p class="small muted mt8">아이 혼자 연속 재생하지 않게, 한 곡 듣고 끝내 주세요. 광고가 나올 수 있어요.</p>
+    </div>
   </div>`;
 }
 

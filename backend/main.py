@@ -39,6 +39,7 @@ import consent
 import curriculum
 import diagnosis
 import scheduler
+import songs
 
 import learning
 import store
@@ -512,6 +513,7 @@ def ep_today(child: dict[str, object], q: Q | None = None) -> Resp:
         "next_card": _with_guide(child, upcoming),
         "record": store.get_feedback(cid, date),
         "message": store.latest_message(cid),
+        "song": songs.song_for(child, date, plan),
     }, JSON
 
 
