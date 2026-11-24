@@ -134,6 +134,12 @@ def _plan_data(
         draft, source = cast("catalog.PlanDraft", cast("object", data)), "rag_onboarding"
     else:
         draft, source = catalog.generate_plan(child, clock.today()), "onboarding_rule"
+    # 알파벳을 모르는 아이는 외부 알파벳 자료부터 (보호자 피드백)
+    if curriculum.alphabet_first(child, cast("list[dict[str, object]]", draft["cards"]),
+                                 catalog.find_item, catalog.card_text):
+        draft["explanation"] = (str(draft.get("explanation") or "")
+                                + "\n\n알파벳을 아직 모르는 아이라 첫 주는 알파벳 노래·소리 자료로 시작하고, "
+                                  "이후에도 이틀에 한 번 알파벳 자료를 이어가요.")
     # 학습 단위가 있는 자료는 '어떤 책의 무엇을 할지'로 카드 문구를 바꾼다 (이전 진도에 이어서)
     prior = curriculum.prior_counts(cast("int", child["id"])) if child.get("id") else {}
     curriculum.apply(cast("list[dict[str, object]]", draft["cards"]), prior)
@@ -473,6 +479,7 @@ def _with_guide(child: dict[str, object], card: dict[str, object] | None) -> dic
     out = dict(card)
     out["guide"] = curriculum.card_info(cast("dict[str, object] | None", item), child, owned=owned)
     out["basis"] = curriculum.basis(child, card)
+    out["letters"] = curriculum.letters_for(child, card)
     return out
 
 

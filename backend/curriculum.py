@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import json
+import re
 import os
 from collections.abc import Mapping, MutableMapping, Sequence
 from typing import cast
@@ -215,3 +216,95 @@ def basis(child: Mapping[str, object], card: Mapping[str, object] | None) -> str
     else:
         parts.append("→ 계획대로 이어서 진행해요.")
     return " ".join(parts)
+
+
+# ---------------------------------------------------------------------------
+# 알파벳을 아직 모르는 아이 (보호자 피드백: "ABC부터 나왔으면")
+# 앱이 알파벳을 가르치는 게 아니라, 계획에서 외부 알파벳 자료를 먼저 배치한다.
+# ---------------------------------------------------------------------------
+
+# 외부 알파벳 자료 (순환 순서). Jolly Phonics는 학습 단위(소리 그룹)로 진도가 나간다.
+ALPHABET_ROTATION = ("sss-abc", "jolly-songs", "starfall-abcs", "jolly-full", "jolly-letter", "leapfrog-letter")
+_NAME_ALPHABET_IDS = ("sss-abc", "starfall-abcs", "leapfrog-letter")  # 글자 이름(A, B, C) 중심 자료
+
+# 글자(소리) → 그림 단어. 4~7세가 그림으로 알 수 있는 단어만.
+LETTER_WORDS: dict[str, tuple[str, str]] = {
+    "a": ("apple", "🍎"), "b": ("ball", "⚽"), "c": ("cat", "🐱"), "d": ("dog", "🐶"), "e": ("egg", "🥚"),
+    "f": ("fish", "🐟"), "g": ("goat", "🐐"), "h": ("hat", "🎩"), "i": ("insect", "🐞"), "j": ("jam", "🍓"),
+    "k": ("kite", "🪁"), "l": ("lion", "🦁"), "m": ("moon", "🌙"), "n": ("nest", "🪺"), "o": ("octopus", "🐙"),
+    "p": ("pig", "🐷"), "q": ("queen", "👑"), "r": ("rabbit", "🐰"), "s": ("sun", "☀️"), "t": ("tiger", "🐯"),
+    "u": ("umbrella", "☂️"), "v": ("van", "🚐"), "w": ("whale", "🐳"), "x": ("box", "📦"), "y": ("yo-yo", "🪀"),
+    "z": ("zebra", "🦓"),
+    "ai": ("rain", "🌧️"), "oa": ("boat", "⛵"), "ie": ("tie", "👔"), "ee": ("tree", "🌳"), "or": ("fork", "🍴"),
+    "ng": ("ring", "💍"), "ch": ("chick", "🐥"), "sh": ("ship", "🚢"), "th": ("thumb", "👍"), "qu": ("queen", "👑"),
+    "ou": ("cloud", "☁️"), "oi": ("coin", "🪙"), "ue": ("glue", "🧴"), "er": ("flower", "🌸"), "ar": ("car", "🚗"),
+    "oo": ("moon", "🌙"),
+}
+
+
+def needs_alphabet(child: Mapping[str, object]) -> bool:
+    """진단에서 알파벳 '인지 못 함'인지."""
+    raw = child.get("diagnosis")
+    try:
+        diag = json.loads(raw) if isinstance(raw, str) else (raw or {})
+    except ValueError:
+        return False
+    answers = cast("dict[str, object]", cast("dict[str, object]", diag).get("answers") or {})
+    return answers.get("alphabet") == "none"
+
+
+def alphabet_first(child: Mapping[str, object], cards: Sequence[MutableMapping[str, object]],
+                   find_item, card_text) -> bool:
+    """알파벳을 모르는 아이: 첫 주(5일)는 알파벳 자료, 이후에는 이틀에 한 번 알파벳 자료.
+
+    find_item·card_text는 catalog 모듈 함수 (순환 import 방지). 바꿨으면 True.
+    """
+    if not needs_alphabet(child) or not cards:
+        return False
+    age = int(cast("int", child.get("age") or 4))
+    session = int(cast("int", child.get("session_length") or 10))
+    pool = [it for it in (find_item(i) for i in ALPHABET_ROTATION)
+            if it and it["age_min"] <= age <= it["age_max"]]
+    if not pool:
+        return False
+    k = 0
+    for i, card in enumerate(cards):
+        if i < 5 or i % 2 == 0:
+            item = pool[k % len(pool)]
+            k += 1
+            card["content_id"] = item["id"]
+            card["task"], card["check_point"] = card_text(item)
+            card["minutes"] = min(int(item["session_minutes"]), session)
+    return True
+
+
+def letters_for(child: Mapping[str, object], card: Mapping[str, object] | None) -> list[dict[str, str]]:
+    """알파벳 자료 카드에 '오늘의 글자'를 붙인다. 그 외 카드는 빈 목록."""
+    if not card:
+        return []
+    cid = str(card.get("content_id") or "")
+    out: list[dict[str, str]] = []
+    if cid.startswith("jolly-"):
+        m = re.search(r"소리(?: 복습)? (.+?) \(Group", str(card.get("task") or ""))
+        if not m:
+            return []
+        for tok in m.group(1).split(" · "):
+            for sound in re.sub(r"\(.*?\)", "", tok).split():
+                if sound in LETTER_WORDS:
+                    word, emoji = LETTER_WORDS[sound]
+                    out.append({"letter": sound, "word": word, "emoji": emoji, "say": word})
+        return out
+    if cid in _NAME_ALPHABET_IDS:
+        rows = store.query(
+            "SELECT COUNT(*) AS n FROM cards c JOIN plans p ON p.id = c.plan_id "
+            "WHERE c.child_id = ? AND c.content_id = ? AND c.date < ? "
+            "AND p.status IN ('approved', 'done')",
+            (int(cast("int", child["id"])), cid, str(card.get("date") or "")),
+        )
+        nth = int(cast("int", rows[0]["n"])) if rows else 0
+        start = (nth * 3) % 26
+        for off in range(3):
+            ch = "abcdefghijklmnopqrstuvwxyz"[(start + off) % 26]
+            word, emoji = LETTER_WORDS[ch]
+            out.append({"letter": f"{ch.upper()} {ch}", "word": word, "emoji": emoji, "say": f"{ch.upper()}. {word}"})
+    return out

@@ -27,6 +27,7 @@ const state = {
   nextCard: null,
   lastFeedback: null,
   report: null,
+  showKo: (() => { try { return !!localStorage.getItem('bloomy_show_ko'); } catch (e) { return false; } })(),
   achievement: null,
   aiRec: null,
   privacy: null,
@@ -765,12 +766,20 @@ function todayHtml() {
     <div class="today-grid">
       <div>
         ${card ? cardHeroHtml(card) : emptyCardHtml(t)}
+        ${card && card.letters && card.letters.length ? `
+        <div class="section">
+          <h2 class="section-title">오늘의 글자</h2>
+          <p class="small muted mt8">오늘 자료에 나오는 글자예요. 자료를 본 뒤 그림을 눌러 소리를 같이 들어 보세요.</p>
+          <div class="word-grid mt16">${card.letters.map(letterCardHtml).join('')}</div>
+        </div>` : ''}
         <div class="section">
           <div class="section-head">
             <h2 class="section-title">함께 써 볼 단어</h2>
             <button class="btn btn-ghost btn-sm" id="aiBtn">AI 추천 받기</button>
           </div>
-          <p class="small muted mt8">아이 관심사로 고른 단어예요. 오늘 자료를 보면서 나오면 같이 말해 보세요. 🔊는 부모님이 발음을 확인하는 용도예요.</p>
+          <p class="small muted mt8">아이 관심사로 고른 단어예요. 오늘 자료를 보면서 나오면 같이 말해 보세요. 그림을 누르면 소리가 나요.
+            <button type="button" class="link-btn" id="koToggle">${state.showKo ? '한국어 뜻 숨기기' : '한국어 뜻 보기(부모용)'}</button></p>
+          <p class="small form-message is-error" id="speakNote" hidden></p>
           <div class="check-question mt8"><strong>부모 확인 질문</strong><br>자료를 보며 단어 2개를 골라 "Where is the ___?" / "Show me ___!"로 물어보세요. 못 찾은 단어는 아래 메모에 적어 주시면 리포트에 남아요.</div>
           <div id="aiResult"></div>
           <div class="word-grid mt16">
@@ -781,11 +790,10 @@ function todayHtml() {
           <h2 class="section-title">오늘의 표현</h2>
           <div class="phrase-list mt16">
             ${phrases.map((p) => `
-              <div class="phrase-item">
-                <div class="phrase-en">${esc(p.english)} <button type="button" class="speak-btn" data-say="${esc(p.english)}" aria-label="발음 듣기">🔊</button></div>
-                <div class="phrase-ko">${esc(p.korean)}</div>
-                <div class="phrase-pron">[${esc(p.pronunciation)}]</div>
-              </div>`).join('')}
+              <button type="button" class="phrase-item" data-say="${esc(p.english)}" aria-label="${esc(p.english)} 소리 듣기">
+                <span class="phrase-en">${esc(p.english)} <span class="word-tap" aria-hidden="true">🔊</span></span>
+                ${state.showKo ? `<span class="phrase-ko">${esc(p.korean)}</span>` : ''}
+              </button>`).join('')}
           </div>
         </div>
       </div>
@@ -841,7 +849,20 @@ function dayPickerHtml(t) {
 }
 
 /* 부모 발음 확인용: 브라우저 내장 음성 (앱이 콘텐츠를 재생하는 게 아니라 부모가 읽어 줄 발음을 확인) */
+function speakUnavailable() {
+  const ua = navigator.userAgent || '';
+  if (/KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\//i.test(ua)) return '앱 안 브라우저에서는 소리가 나지 않을 수 있어요. 오른쪽 위 메뉴에서 Safari·Chrome으로 열어 주세요.';
+  if (!('speechSynthesis' in window)) return '이 브라우저는 소리 재생을 지원하지 않아요. Safari·Chrome으로 열어 주세요.';
+  return '';
+}
+
 function speak(text) {
+  const note = document.getElementById('speakNote');
+  const problem = speakUnavailable();
+  if (note) {
+    note.textContent = problem || '소리가 안 들리면 휴대폰 무음 모드와 음량을 확인해 주세요.';
+    note.hidden = !problem;
+  }
   try {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -871,14 +892,26 @@ function emptyCardHtml(t) {
   return `<div class="card"><p class="muted">오늘은 계획된 학습일이 아니에요. 다음 학습일에 카드가 도착해요. 🌱</p></div>`;
 }
 
+/* 아이와 같이 보는 화면: 그림 + 영어만 크게. 누르면 소리. 한국어 뜻은 부모가 켤 때만 (보호자 피드백) */
 function wordCardHtml(w) {
   return `
-  <div class="word-card">
+  <button type="button" class="word-card" data-say="${esc(w.word)}" aria-label="${esc(w.word)} 소리 듣기">
     <span class="word-emoji">${esc(w.emoji || '📘')}</span>
-    <div class="word-text">${esc(w.word)} <button type="button" class="speak-btn" data-say="${esc(w.word)}" aria-label="발음 듣기">🔊</button></div>
-    <div class="word-meaning">${esc(w.meaning)}</div>
-    <div class="word-pron">[${esc(w.pronunciation)}]</div>
-  </div>`;
+    <span class="word-text">${esc(w.word)}</span>
+    ${state.showKo ? `<span class="word-meaning">${esc(w.meaning)}</span>` : ''}
+    <span class="word-tap" aria-hidden="true">🔊</span>
+  </button>`;
+}
+
+/* 알파벳을 아직 모르는 아이: 그날 자료의 글자 (예: A a — apple). 누르면 소리 */
+function letterCardHtml(l) {
+  return `
+  <button type="button" class="word-card letter-card" data-say="${esc(l.say)}" aria-label="${esc(l.letter)} 소리 듣기">
+    <span class="letter-big">${esc(l.letter)}</span>
+    <span class="word-emoji">${esc(l.emoji || '')}</span>
+    <span class="word-text">${esc(l.word)}</span>
+    <span class="word-tap" aria-hidden="true">🔊</span>
+  </button>`;
 }
 
 function feedbackFormHtml() {
@@ -972,8 +1005,14 @@ function bindToday() {
     await loadToday(dayPick.value === state.today.today ? undefined : dayPick.value);
     render();
   });
-  document.querySelectorAll('.speak-btn').forEach((b) => {
+  document.querySelectorAll('[data-say]').forEach((b) => {
     b.addEventListener('click', () => speak(b.getAttribute('data-say')));
+  });
+  const koToggle = document.getElementById('koToggle');
+  if (koToggle) koToggle.addEventListener('click', () => {
+    state.showKo = !state.showKo;
+    try { localStorage.setItem('bloomy_show_ko', state.showKo ? '1' : ''); } catch (e) { /* 저장 불가 */ }
+    render();
   });
 
   const form = document.getElementById('feedbackForm');

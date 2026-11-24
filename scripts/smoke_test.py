@@ -935,6 +935,23 @@ def section_curriculum() -> None:
     fut = (clock.today() + dt.timedelta(days=1)).isoformat()
     check("today?date=미래 → 400", bloomy_main.ep_today({"id": 0}, {"date": [fut]})[0] == 400)
     check("today?date=형식오류 → 400", bloomy_main.ep_today({"id": 0}, {"date": ["2026/1/1"]})[0] == 400)
+    # 보호자 피드백: 알파벳을 모르는 아이는 알파벳 자료부터, 그날 글자 표시
+    import json as _json
+    nochild = {"id": 0, "age": 4, "level": 1, "materials": "", "session_length": 10,
+               "diagnosis": _json.dumps({"answers": {"alphabet": "none"}})}
+    d3 = catalog.generate_plan(nochild, clock.today())
+    changed = curriculum.alphabet_first(nochild, cast("list[dict[str, object]]", d3["cards"]),
+                                        catalog.find_item, catalog.card_text)
+    curriculum.apply(cast("list[dict[str, object]]", d3["cards"]))
+    first5 = [c["content_id"] for c in d3["cards"][:5]]
+    check("알파벳 '인지 못 함' → 첫 주 알파벳 자료",
+          changed and all(c in curriculum.ALPHABET_ROTATION for c in first5), str(first5))
+    jolly = next((c for c in d3["cards"] if str(c["content_id"]).startswith("jolly-")), None)
+    lets = curriculum.letters_for(nochild, jolly)
+    check("Jolly 카드에 오늘의 소리 글자(s·a·t)", [x["letter"] for x in lets] == ["s", "a", "t"], str(lets))
+    check("알파벳 아는 아이는 계획 그대로",
+          not curriculum.alphabet_first({**nochild, "diagnosis": "{}"}, [{"content_id": "x"}],
+                                        catalog.find_item, catalog.card_text))
     import subprocess
     r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "gen_catalog_doc.py"), "--check"],
                        capture_output=True, text=True)

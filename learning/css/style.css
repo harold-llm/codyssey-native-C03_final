@@ -738,3 +738,15 @@ textarea.input { resize: vertical; min-height: 84px; }
 .speak-btn { border: 0; background: none; cursor: pointer; font-size: 14px; padding: 0 2px; }
 .check-question { font-size: 13px; line-height: 1.5; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); }
 @media (max-width: 480px) { .guide-row { grid-template-columns: 1fr; gap: 2px; } }
+
+/* 누르면 소리 나는 단어·표현·글자 카드 (보호자 피드백) */
+button.word-card, button.phrase-item { font: inherit; color: inherit; cursor: pointer; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+button.phrase-item { align-items: flex-start; text-align: left; }
+button.word-card:active, button.phrase-item:active { transform: scale(0.97); }
+button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.word-card .word-text { font-size: 1.4rem; }
+.word-tap { font-size: 0.8rem; opacity: 0.55; margin-top: 4px; }
+.phrase-en .word-tap { margin-left: 4px; }
+.letter-big { font-size: 2.6rem; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; }
+.link-btn { border: 0; background: none; padding: 0; color: var(--accent); font: inherit; text-decoration: underline; cursor: pointer; }
+#speakNote[hidden] { display: none !important; }
