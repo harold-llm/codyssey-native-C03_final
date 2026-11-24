@@ -951,6 +951,12 @@ def section_curriculum() -> None:
     first5 = [c["content_id"] for c in d3["cards"][:5]]
     check("알파벳 '인지 못 함' → 첫 주 알파벳 자료",
           changed and all(c in curriculum.ALPHABET_ROTATION for c in first5), str(first5))
+    wed_cards = [{"date": (dt.date(2026, 12, 2) + dt.timedelta(days=7 * i)).isoformat(), "content_id": "x"}
+                 for i in range(5)]  # 모두 수요일
+    curriculum.alphabet_first(nochild, cast("list[dict[str, object]]", wed_cards),
+                              catalog.find_item, catalog.card_text)
+    check("알파벳 우선이어도 수요일은 L1 워밍업 유지",
+          all(_item_level(c["content_id"]) == 1 for c in wed_cards), str([c["content_id"] for c in wed_cards]))
     jolly = next((c for c in d3["cards"] if str(c["content_id"]).startswith("jolly-")), None)
     lets = curriculum.letters_for(nochild, jolly)
     check("Jolly 카드에 오늘의 소리 글자(s·a·t)", [x["letter"] for x in lets] == ["s", "a", "t"], str(lets))
@@ -1018,6 +1024,30 @@ def section_praise(child_id: int, dates: list[dt.date]) -> None:
     check("today 응답: 기록에 맞춰 praise 포함/생략", all(seen), str(seen))
 
 
+def section_curriculum_page(token: str | None, child_id: int) -> None:
+    """자료별 전체 커리큘럼 페이지 API."""
+    print("\n[curriculum page] 전체 커리큘럼")
+    ov = curriculum.overview({"id": child_id}, "ort-stage2", clock.today().isoformat())
+    ov = cast("dict[str, object]", ov)
+    steps = cast("list[dict[str, object]]", ov["steps"])
+    check("ORT: 같은 시리즈 단계 전체(Stage 1~5) + 지금 단계 표시",
+          len(steps) >= 5 and sum(1 for s_ in steps if s_["current"]) == 1
+          and [s_["level"] for s_ in steps] == sorted(s_["level"] for s_ in steps), str([s_["id"] for s_ in steps]))
+    us = cast("list[dict[str, object]]", ov["units"])
+    check("ORT Stage 2: 권 36개 순서와 진도 상태", len(us) == 36 and us[0]["title"] == "The Big Egg"
+          and all(u["status"] in ("done", "today", "planned", "missed", "later") for u in us))
+    col = cast("dict[str, object]", curriculum.overview({"id": child_id}, "epic-full", clock.today().isoformat()))
+    check("묶음 자료(Epic): 시리즈 안내·공식 링크, 권 목록은 비어 있음",
+          bool(cast("dict[str, object]", col["series"]).get("official")) and col["units"] == [])
+    check("없는 자료 → None", curriculum.overview({"id": child_id}, "no-such-item", "2026-01-01") is None)
+    st, d = req("GET", f"/api/children/{child_id}/curriculum/ort-stage2", token=token)
+    check("GET /curriculum/<자료> 200", st == 200 and bool(cast("dict[str, object]", d).get("units")))
+    st, _ = req("GET", f"/api/children/{child_id}/curriculum/no-such-item", token=token)
+    check("없는 자료 → 404", st == 404)
+    st, _ = req("GET", "/api/children/99999/curriculum/ort-stage2", token=token)
+    check("다른 계정 아이 → 404", st == 404)
+
+
 def main() -> int:
     store.init()
     _ = catalog.load()
@@ -1038,6 +1068,7 @@ def main() -> int:
     section_other_accounts(token1, child1, child2, d5, suffix)
     section_scheduler_cron(token1, m, d5)
     section_praise(child2, [d0, d1, d2, d3, d4])
+    section_curriculum_page(token1, child2)
     section_learning(token1)
     section_delete_account(token1, (child1, child2))
     section_curriculum()

@@ -11,6 +11,7 @@
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import re
 import os
@@ -267,11 +268,21 @@ def alphabet_first(child: Mapping[str, object], cards: Sequence[MutableMapping[s
             if it and it["age_min"] <= age <= it["age_max"]]
     if not pool:
         return False
-    k = 0
+    # 수요일은 계획 규칙상 L1 워밍업 → 알파벳 자료 중에서도 L1만
+    warm = [it for it in pool if int(it["level"]) == 1] or pool
+    k = w = 0
     for i, card in enumerate(cards):
         if i < 5 or i % 2 == 0:
-            item = pool[k % len(pool)]
-            k += 1
+            try:
+                wednesday = dt.date.fromisoformat(str(card.get("date"))).weekday() == 2
+            except ValueError:
+                wednesday = False
+            if wednesday:
+                item = warm[w % len(warm)]
+                w += 1
+            else:
+                item = pool[k % len(pool)]
+                k += 1
             card["content_id"] = item["id"]
             card["task"], card["check_point"] = card_text(item)
             card["minutes"] = min(int(item["session_minutes"]), session)
@@ -308,3 +319,84 @@ def letters_for(child: Mapping[str, object], card: Mapping[str, object] | None) 
             word, emoji = LETTER_WORDS[ch]
             out.append({"letter": f"{ch.upper()} {ch}", "word": word, "emoji": emoji, "say": f"{ch.upper()}. {word}"})
     return out
+
+
+# ---------------------------------------------------------------------------
+# 자료별 전체 커리큘럼 — 카드의 "전체 커리큘럼 보기" 새 페이지
+# 같은 시리즈의 단계 전체, 권·회차 순서와 아이의 진도, 이번 계획에서 이 자료를 하는 날
+# ---------------------------------------------------------------------------
+
+LEVEL_NAMES = {1: "노출·듣기", 2: "소리 인지", 3: "파닉스", 4: "사이트워드·초기 해독", 5: "리더스 독해"}
+
+def _level_label(level: object) -> str:
+    n = int(cast("int", level or 1))
+    return f"L{n} {LEVEL_NAMES.get(n, '')}"
+
+
+def overview(child: Mapping[str, object], content_id: str, today: str) -> dict[str, object] | None:
+    """한 자료의 전체 학습 경로. 없는 자료면 None."""
+    import catalog  # catalog → curriculum 순환 import 방지
+
+    item = catalog.find_item(content_id)
+    if not item:
+        return None
+    entry = _section("items").get(content_id) or {}
+    series_key = str(entry.get("series") or "")
+    series = _section("series").get(series_key) or {}
+    items = _section("items")
+
+    # 같은 시리즈의 단계 (낮은 단계 → 높은 단계)
+    steps = []
+    for it in catalog.search():
+        if (items.get(it["id"]) or {}).get("series") != series_key:
+            continue
+        steps.append({"id": it["id"], "title": it["title"], "level": it["level"],
+                      "level_label": _level_label(it["level"]),
+                      "granularity": granularity(it["id"]), "current": it["id"] == content_id,
+                      "units": len(units(it["id"]))})
+    steps.sort(key=lambda s: (cast("int", s["level"]), s["granularity"] == "collection", str(s["title"])))
+
+    # 이 아이의 계획에서 이 자료를 하는 날 (승인·완료된 계획)
+    rows = store.query(
+        "SELECT c.date AS date, c.task AS task, f.completion AS completion, f.rest_day AS rest_day "
+        "FROM cards c JOIN plans p ON p.id = c.plan_id "
+        "LEFT JOIN feedbacks f ON f.child_id = c.child_id AND f.date = c.date "
+        "WHERE c.child_id = ? AND c.content_id = ? AND p.status IN ('approved', 'done') "
+        "ORDER BY c.date",
+        (cast("int", child["id"]), content_id),
+    )
+
+    def status(date: str, completion: object) -> str:
+        if date == today:
+            return "today"
+        if date > today:
+            return "planned"
+        return "done" if completion in ("full", "partial") else "missed"
+
+    days = [{"date": str(r["date"]), "task": str(r["task"] or ""),
+             "status": status(str(r["date"]), r["completion"])} for r in rows]
+
+    # 권·회차 순서와 진도 (단위가 있는 자료만)
+    unit_rows = []
+    rank = {"today": 0, "done": 1, "planned": 2, "missed": 3}
+    for n, u in enumerate(units(content_id), start=1):
+        # 카드 문구: 책·회차는 『제목』, Jolly 소리 묶음은 "s · a · t (Group 1)"
+        marks = (f"『{u['title']}』", f"{u['title']} ({u['pack']})")
+        hits = [d for d in days if any(mk in str(d["task"]) for mk in marks)]
+        st = min((str(h["status"]) for h in hits), key=lambda s: rank[s]) if hits else "later"
+        unit_rows.append({"n": n, "title": u["title"], "pack": u["pack"], "status": st,
+                          "dates": [h["date"] for h in hits]})
+
+    return {
+        "item": {"id": item["id"], "title": item["title"], "level": item["level"],
+                 "level_label": _level_label(item["level"]),
+                 "age": f"{item['age_min']}~{item['age_max']}세", "skill": SKILL_KO.get(str(item["skill"]), ""),
+                 "granularity": granularity(content_id), "link": item.get("link")},
+        "series": {"key": series_key, "name": series.get("name") or item["title"],
+                   "kind": series.get("kind"), "about": series.get("about"),
+                   "official": series.get("official") or item.get("link"), "cost": series.get("cost")},
+        "find": entry.get("find"),
+        "steps": steps,
+        "units": unit_rows,
+        "days": days,
+    }

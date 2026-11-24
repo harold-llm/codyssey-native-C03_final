@@ -760,7 +760,7 @@ button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px 
 
 /* 오늘의 동요 위치: 넓은 화면은 오른쪽(기록 위), 좁은 화면은 카드 아래 */
 .side-block { margin-bottom: 20px; }
-.side-block > .section-title { margin-bottom: 0; }
+.song-chip { justify-self: start; }
 .only-wide { display: block; }
 .only-narrow { display: none; }
 @media (max-width: 820px) {
@@ -774,3 +774,31 @@ button.word-card:focus-visible, button.phrase-item:focus-visible { outline: 2px 
 .praise-chip:hover { border-color: var(--accent); }
 .praise-tips { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 10px; font-size: 14px; line-height: 1.5; }
 .praise-streak { margin-top: 12px; font-size: 14px; line-height: 1.5; }
+
+/* 카드 아래 링크 버튼 줄 */
+.guide-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* 전체 커리큘럼 페이지 */
+.cur-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; align-items: start; }
+@media (max-width: 820px) { .cur-grid { grid-template-columns: 1fr; } }
+.cur-steps, .cur-units, .cur-days { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.cur-steps li { display: grid; grid-template-columns: 130px 1fr; gap: 8px; padding: 8px 10px; border-radius: 10px; font-size: 14px; }
+.cur-level { color: var(--text-secondary); font-size: 13px; }
+.cur-units li { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: baseline; padding: 6px 10px; border-radius: 10px; font-size: 14px; }
+.cur-steps li.is-current, .cur-units li.is-current { background: var(--surface-2); outline: 1px solid var(--accent); }
+.cur-n { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.cur-st { text-align: right; white-space: nowrap; }
+.cur-days li { display: grid; grid-template-columns: 48px auto 1fr; gap: 8px; align-items: baseline; font-size: 14px; padding: 6px 0; border-bottom: 1px dashed var(--border); }
+.cur-date { font-variant-numeric: tabular-nums; color: var(--text-secondary); }
+.st { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap; }
+.st-done { border-color: var(--accent); color: var(--accent); }
+.st-today { background: var(--accent); color: #fff; border-color: var(--accent); }
+.st-planned { color: var(--text); }
+.st-missed, .st-later { color: var(--text-secondary); }
+@media (max-width: 480px) {
+  .cur-steps li { grid-template-columns: 1fr; gap: 2px; }
+  .cur-units li { grid-template-columns: 24px 1fr; }
+  .cur-units .cur-st { grid-column: 2; text-align: left; }
+  .cur-days li { grid-template-columns: 44px 1fr; }
+  .cur-days li .small { grid-column: 1 / -1; }
+}

@@ -796,6 +796,17 @@ def dispatch(
                     return ep_achievement(child, q)
                 if what == "stats":
                     return ep_stats(child)
+            m = re.fullmatch(r"/api/children/(\d+)/curriculum/([a-z0-9][a-z0-9-]{0,60})", p)
+            if m:
+                _acc, child, err_code, err = _own_child(headers, int(m.group(1)))
+                if err_code is not None:
+                    return err_code, {"error": err}, JSON
+                if child is None:
+                    return 500, {"error": "서버 오류가 발생했습니다"}, JSON
+                data = curriculum.overview(child, m.group(2), clock.today().isoformat())
+                if data is None:
+                    return 404, {"error": "자료를 찾을 수 없습니다"}, JSON
+                return 200, data, JSON
             if p == "/api/notifications":
                 return ep_notifications(headers)
             if p.startswith("/api/"):

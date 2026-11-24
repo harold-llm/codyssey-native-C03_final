@@ -147,11 +147,120 @@ async function routeAfterAccount() {
     await loadPrivacy();
     state.view = 'consent';
   } else if (state.child) {
+    if (curriculumIdFromHash()) {
+      await loadCurriculum(curriculumIdFromHash());
+      return;
+    }
     await loadToday();
     state.view = 'today';
   } else {
     state.view = 'onboarding';
   }
+}
+
+/* 자료별 전체 커리큘럼 (카드의 "전체 커리큘럼 보기" → 새 탭 #curriculum/<자료 id>) */
+function curriculumIdFromHash() {
+  const m = /^#curriculum\/([a-z0-9-]+)$/.exec(location.hash || '');
+  return m ? m[1] : null;
+}
+
+async function loadCurriculum(id) {
+  state.view = 'curriculum';
+  try {
+    state.curriculum = await api('GET', '/api/children/' + state.child.id + '/curriculum/' + id);
+    state.curriculumError = null;
+  } catch (e) {
+    state.curriculum = null;
+    state.curriculumError = e.message || '불러오지 못했어요';
+  }
+}
+
+const UNIT_STATUS = {
+  done: ['완료', 'st-done'], today: ['오늘', 'st-today'], planned: ['예정', 'st-planned'],
+  missed: ['지난 날(기록 없음)', 'st-missed'], later: ['다음 계획 이후', 'st-later'],
+};
+
+function fmtDate(d) { return d ? d.slice(5).replace('-', '/') : ''; }
+
+function curriculumHtml() {
+  const c = state.curriculum;
+  const back = '<button type="button" class="btn btn-ghost btn-sm" id="curBack">← 오늘의 학습</button>';
+  if (!c) {
+    return `<section class="screen"><div class="hero" style="padding:40px 0 20px;text-align:left">${back}
+      <p class="muted mt16">${esc(state.curriculumError || '불러오는 중…')}</p></div></section>`;
+  }
+  const s = c.series || {}, it = c.item || {};
+  const status = (k) => { const [t, cls] = UNIT_STATUS[k] || [k, '']; return `<span class="st ${cls}">${esc(t)}</span>`; };
+  const doneN = (c.units || []).filter((u) => u.status === 'done').length;
+  return `
+  <section class="screen">
+    <div class="hero" style="padding:32px 0 12px; text-align:left">
+      ${back}
+      <span class="eyebrow mt16" style="display:block">전체 커리큘럼</span>
+      <h1 class="hero-title">${esc(s.name || it.title)}</h1>
+      <p class="muted mt8">${s.kind ? esc(s.kind) + ' · ' : ''}${s.cost ? esc(s.cost) : ''}</p>
+    </div>
+    <div class="cur-grid">
+      <div>
+        <div class="card">
+          <h2 class="card-title">이 자료는</h2>
+          ${s.about ? `<p class="mt8">${esc(s.about)}</p>` : ''}
+          <div class="guide mt16">
+            <div class="guide-row"><span class="guide-k">지금 자료</span><span>${esc(it.title)} <span class="muted small">· ${esc(it.level_label)} · ${esc(it.age)} · ${esc(it.skill)}</span></span></div>
+            ${c.find ? `<div class="guide-row"><span class="guide-k">찾는 법</span><span>${esc(c.find)}</span></div>` : ''}
+          </div>
+          ${s.official ? `<a class="btn btn-ghost btn-sm mt16" href="${esc(s.official)}" target="_blank" rel="noopener noreferrer">공식 사이트에서 전체 구성 보기 ↗</a>` : ''}
+        </div>
+
+        <div class="card mt16">
+          <h2 class="card-title">단계별 경로</h2>
+          <p class="small muted mt8">꽃피다가 이 시리즈에서 추천하는 단계예요. 아이 단계가 오르면 다음 단계 자료로 넘어가요.</p>
+          <ol class="cur-steps mt16">
+            ${(c.steps || []).map((x) => `<li class="${x.current ? 'is-current' : ''}">
+              <span class="cur-level">${esc(x.level_label)}</span>
+              <span>${esc(x.title)}${x.units ? ` <span class="muted small">· ${x.units}개 단위</span>` : ''}${x.current ? ' <span class="chip chip-accent">지금</span>' : ''}</span>
+            </li>`).join('')}
+          </ol>
+        </div>
+      </div>
+
+      <div>
+        ${(c.units || []).length ? `
+        <div class="card">
+          <h2 class="card-title">학습 단위 순서</h2>
+          <p class="small muted mt8">한 단위(책 한 권·회차·소리 묶음)를 처음 → 다시 하기로 두 번 하고 다음으로 넘어가요. 지금까지 ${doneN}/${c.units.length}개 완료.</p>
+          <ol class="cur-units mt16">
+            ${c.units.map((u) => `<li class="${u.status === 'today' ? 'is-current' : ''}">
+              <span class="cur-n">${u.n}</span>
+              <span class="cur-title">${esc(u.title)} <span class="muted small">${esc(u.pack)}</span></span>
+              <span class="cur-st">${status(u.status)}${u.dates.length ? `<span class="muted small"> ${u.dates.map(fmtDate).join('·')}</span>` : ''}</span>
+            </li>`).join('')}
+          </ol>
+        </div>` : `
+        <div class="card">
+          <h2 class="card-title">학습 단위 순서</h2>
+          <p class="mt8 muted">이 자료는 아직 권·회차가 정해지지 않은 묶음이에요. 위 '찾는 법'과 공식 사이트에서 아이가 좋아하는 것을 하나 골라 주세요. 출처를 확인하면 권 단위로 나눠 드릴게요.</p>
+        </div>`}
+
+        <div class="card mt16">
+          <h2 class="card-title">우리 계획에서 이 자료를 하는 날</h2>
+          ${(c.days || []).length ? `<ul class="cur-days mt16">
+            ${c.days.map((d) => `<li><span class="cur-date">${fmtDate(d.date)}</span>${status(d.status)}<span class="small">${esc(d.task)}</span></li>`).join('')}
+          </ul>` : '<p class="muted mt8">승인한 계획에는 아직 이 자료가 없어요.</p>'}
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function bindCurriculum() {
+  const b = document.getElementById('curBack');
+  if (b) b.addEventListener('click', async () => {
+    history.replaceState(null, '', location.pathname);
+    await loadToday();
+    state.view = 'today';
+    render();
+  });
 }
 
 async function loadPrivacy() {
@@ -363,6 +472,7 @@ function render() {
     case 'plan': app.innerHTML = planHtml(); bindPlan(); break;
     case 'today': app.innerHTML = todayHtml(); bindToday(); break;
     case 'report': app.innerHTML = reportHtml(); bindReport(); break;
+    case 'curriculum': app.innerHTML = curriculumHtml(); bindCurriculum(); window.scrollTo(0, 0); break;
     default: app.innerHTML = loadingHtml();
   }
   updateNav();
@@ -838,10 +948,12 @@ function praiseHtml(p) {
 
 /* 오늘의 동요: 단계에 맞춘 공식 채널 영상 1곡 — 앱 안에서 재생하지 않고 YouTube로 안내 */
 function songHtml(song, side) {
+  // 넓은 화면(side): 제목을 박스 안 칩으로 넣어 박스 윗변을 '오늘의 카드' 박스와 맞춘다
   return `
   <div class="${side ? 'side-block' : 'section'}">
-    <h2 class="section-title">오늘의 동요</h2>
-    <div class="song-card mt16">
+    ${side ? '' : '<h2 class="section-title">오늘의 동요</h2>'}
+    <div class="song-card${side ? '' : ' mt16'}">
+      ${side ? '<span class="chip chip-accent song-chip">오늘의 동요</span>' : ''}
       <div class="song-head">
         <span class="song-icon" aria-hidden="true">🎵</span>
         <div>
@@ -873,7 +985,7 @@ function guideHtml(card) {
       <div class="guide-row"><span class="guide-k">부모 역할</span><span>${esc(g.help || '')}</span></div>
       ${card.basis ? `<div class="guide-row"><span class="guide-k">기록 근거</span><span>${esc(card.basis)}</span></div>` : ''}
       ${g.specific ? '' : `<p class="small muted mt8">이 자료는 아직 권·회차가 정해지지 않은 묶음이에요. 위 찾는 법에서 아이가 좋아하는 것 하나를 골라 주세요.</p>`}
-      <div class="mt8">${link}</div>
+      <div class="mt8 guide-links">${link}${card.content_id ? `<a class="btn btn-ghost btn-sm" href="#curriculum/${esc(card.content_id)}" target="_blank" rel="noopener">전체 커리큘럼 보기 ↗</a>` : ''}</div>
     </div>`;
 }
 
@@ -1250,6 +1362,7 @@ function bindGlobalNav() {
     b.addEventListener('click', async (e) => {
       e.preventDefault();
       const target = b.getAttribute('data-nav');
+      if (location.hash) history.replaceState(null, '', location.pathname);  // 커리큘럼 페이지에서 나갈 때
       if (state.token && state.account && !hasConsent()) {
         state.view = 'consent';  // 동의 전에는 다른 화면으로 이동하지 않는다
       } else if (target === 'home') {
@@ -1291,6 +1404,10 @@ async function init() {
     }
   });
   bindGlobalNav();
+  window.addEventListener('hashchange', async () => {
+    const id = curriculumIdFromHash();
+    if (id && state.token && state.child && hasConsent()) { await loadCurriculum(id); render(); }
+  });
 
   if (state.token) {
     try {

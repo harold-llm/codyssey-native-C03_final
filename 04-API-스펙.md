@@ -298,6 +298,24 @@
 
 - `200` `coach_message[]` — 날짜 **내림차순**(최근 1건이 첫 요소).
 
+#### `GET /api/children/{id}/curriculum/{content_id}`
+
+자료별 전체 커리큘럼 (카드의 "전체 커리큘럼 보기" 페이지). 없는 자료 `404`, 다른 계정 아이 `404`.
+- `200`:
+```json
+{"item": {"id": "ort-stage2", "title": "...", "level": 3, "level_label": "L3 파닉스",
+          "age": "4~6세", "skill": "읽기", "granularity": "units", "link": "..."},
+ "series": {"key": "ort", "name": "Oxford Reading Tree (ORT)", "kind": "...", "about": "...",
+            "official": "https://...", "cost": "..."},
+ "find": "ORT Stage 2 팩 6종(36권) — ...",
+ "steps": [{"id": "ort-stage1", "title": "...", "level": 2, "level_label": "L2 소리 인지",
+            "granularity": "units", "current": false, "units": 30}],
+ "units": [{"n": 1, "title": "The Big Egg", "pack": "Stage 2 ...",
+            "status": "done|today|planned|missed|later", "dates": ["2026-11-25"]}],
+ "days": [{"date": "2026-11-25", "task": "...", "status": "today"}]}
+```
+- `steps`: 같은 시리즈의 카탈로그 항목을 단계 순으로. `units`: 학습 단위가 있는 자료만(묶음은 `[]`). `days`: 승인·완료된 계획에서 이 자료를 하는 날.
+
 ### 2.5 리포트·대시보드
 
 #### `GET /api/children/{id}/report?week_start=YYYY-MM-DD`
