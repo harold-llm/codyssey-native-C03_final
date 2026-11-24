@@ -38,6 +38,8 @@ ALIASES = {
     "주니비존스": "junie b. jones",
     "개구리와두꺼비": "frog and toad", "프로그앤토드": "frog and toad",
     "아멜리아베델리아": "amelia bedelia",
+    "송버드": "songbirds", "송버즈": "songbirds", "송버드파닉스": "songbirds", "줄리아도널드슨": "songbirds",
+    "코끼리와돼지": "elephant & piggie", "엘리펀트피기": "elephant & piggie",
 }
 
 

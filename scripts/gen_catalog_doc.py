@@ -67,7 +67,7 @@ def render() -> str:
     w("  **무엇을, 어느 부분을, 어떻게** 할지 매일 카드로 알려 줍니다. 아래 목록이 그 추천 후보 전체입니다.")
     w("- 온보딩 4주 계획은 이 카탈로그에서 RAG 검색(나이·레벨·하루 시간·보유 교재 필터 + TF-IDF)으로 후보를 찾고,")
     w("  Claude가 후보 ID 안에서만 20일 순서를 정합니다. 후보 밖의 자료는 추천할 수 없습니다.")
-    w(f"- 항목 **{len(catalog)}개**, 시리즈·서비스 **{len(by_series)}종**, 공식 목록으로 확인한 학습 단위 **{n_units}권**")
+    w(f"- 항목 **{len(catalog)}개**, 시리즈·서비스 **{len(by_series)}종**, 출처를 확인한 학습 단위 **{n_units}개** (책 한 권 또는 소리 묶음 하나)")
     w("")
     w("| 구체성 | 항목 수 | 뜻 |")
     w("|---|---|---|")
@@ -104,7 +104,7 @@ def render() -> str:
             us = curriculum.units(it["id"])
             if not us:
                 continue
-            w(f"<details><summary><code>{it['id']}</code> 학습 단위 {len(us)}권 (진행 순서)</summary>")
+            w(f"<details><summary><code>{it['id']}</code> 학습 단위 {len(us)}개 (진행 순서)</summary>")
             w("")
             pack = None
             for i, u in enumerate(us, 1):
@@ -130,7 +130,7 @@ def render() -> str:
     w("")
     for key, text in g["unit_sources"].items():
         w(f"- 학습 단위 제목 출처 (`{key}`): {text}")
-    w("- 공식 목록에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.")
+    w("- 출처(공식 목록 우선, 막힌 경우 명시한 2차 자료)에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.")
     w("- 저작권(기획서 §7.3): 제목·팩 이름·활동 방법만 다루고 책 본문·영상은 싣거나 호스팅하지 않습니다.")
     w("")
     w("## 남은 일 (묶음 → 학습 단위)")

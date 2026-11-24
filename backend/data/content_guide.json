@@ -6,36 +6,192 @@
     "collection": "묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상)"
   },
   "series": {
-    "sss": {"name": "Super Simple Songs", "kind": "유튜브 동요 채널", "about": "캐나다 Super Simple이 만든 유아 영어 동요 채널. 느린 박자와 율동이 있어 처음 영어를 듣는 4~5세에게 많이 쓰인다.", "official": "https://supersimple.com/"},
-    "pinkfong": {"name": "Pinkfong (핑크퐁)", "kind": "유튜브 동요 채널", "about": "한국 더핑크퐁컴퍼니의 영어 동요 채널. 'Baby Shark'가 대표곡이다.", "official": "https://www.pinkfong.com/"},
-    "ericcarle": {"name": "Eric Carle 그림책", "kind": "종이 그림책 (단권)", "about": "에릭 칼의 대표 그림책. 반복 문장과 큰 그림 덕분에 영어 그림책 첫 권으로 자주 추천된다.", "official": "https://eric-carle.com/"},
-    "usborne": {"name": "Usborne (어스본)", "kind": "영국 출판사의 유아 그림책·리더스", "about": "영국 어린이책 출판사. 'That's not my...' 촉감책, 'Phonics Readers' 파닉스 리더스, 'First Reading' 단계별 리더스가 있다.", "official": "https://usborne.com/"},
-    "khan": {"name": "Khan Academy Kids", "kind": "무료 학습 앱", "about": "비영리 칸아카데미의 2~8세용 무료 앱. 앱 안의 '학습 경로(Learning Path)'가 아이 수준에 맞춰 활동을 차례로 제시한다.", "official": "https://learn.khanacademy.org/khan-academy-kids/"},
-    "starfall": {"name": "Starfall", "kind": "파닉스·읽기 웹사이트/앱", "about": "미국 유아·초등 저학년용 읽기 사이트. 알파벳(ABCs) → 읽기 배우기(Learn to Read) → 나는 읽는다(I'm Reading) 순서로 메뉴가 나뉜다. 일부는 무료, 나머지는 회원제.", "official": "https://www.starfall.com/"},
-    "abcmouse": {"name": "ABCmouse", "kind": "유료 학습 앱", "about": "미국 Age of Learning의 2~8세 유료 학습 앱. 단계별 '학습 경로(Step-by-Step Learning Path)'로 진행한다.", "official": "https://www.abcmouse.com/"},
-    "cocomelon": {"name": "Cocomelon", "kind": "유튜브 동요 채널", "about": "3D 애니메이션 동요 채널. 일상 루틴(목욕·잠자기 등)을 노래로 다룬다.", "official": "https://cocomelon.com/"},
-    "peppa": {"name": "Peppa Pig (페파 피그)", "kind": "영국 애니메이션", "about": "꼬마 돼지 페파의 일상을 다룬 5분 내외 에피소드. 영국식 일상 표현이 많다.", "official": "https://www.peppapig.com/"},
-    "diy": {"name": "직접 만드는 카드·워크시트", "kind": "가정용 교구 (출판물 아님)", "about": "특정 출판물이 아니라 부모가 출력하거나 만들어 쓰는 카드·쓰기 활동. 무료 출력물을 써도 된다.", "official": ""},
-    "jolly": {"name": "Jolly Phonics", "kind": "영국 파닉스 프로그램", "about": "영국 학교에서 널리 쓰는 합성 파닉스 프로그램. 42개 소리를 7개 그룹으로 가르치며, 소리마다 노래와 동작이 있다. 첫 그룹은 s, a, t, i, p, n.", "official": "https://www.jollylearning.co.uk/"},
-    "ort": {"name": "Oxford Reading Tree (ORT)", "kind": "영국 옥스퍼드대출판부(OUP) 단계별 리더스", "about": "Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더스. Stage 1(글 없는 책)부터 단계가 올라가며, 한 단계는 여러 '팩'(각 6권)으로 구성된다. 국내에서 '옥스포드 리딩 트리'로 많이 팔린다.", "official": "https://home.oxfordowl.co.uk/"},
-    "bobbooks": {"name": "Bob Books", "kind": "미국 파닉스 리더스 세트", "about": "아주 짧은 문장으로 된 미국 파닉스 소책자 세트. Set 1은 짧은 모음 단어(CVC)만으로 읽기를 시작한다.", "official": "https://bobbooks.com/"},
-    "razkids": {"name": "Raz-Kids", "kind": "유료 레벨별 전자책 앱", "about": "미국 Learning A-Z의 레벨별 전자책 앱. aa → A → B → C … 순서로 레벨이 올라가며, 듣기·읽기·퀴즈가 붙어 있다.", "official": "https://www.raz-kids.com/"},
-    "alphablocks": {"name": "Alphablocks", "kind": "영국 BBC 파닉스 애니메이션", "about": "알파벳 블록 캐릭터가 합쳐지며 단어 소리를 만드는 BBC CBeebies 애니메이션. 에피소드마다 한두 개 소리를 다룬다.", "official": "https://www.learningblocks.tv/"},
-    "leapfrog": {"name": "LeapFrog Letter Factory", "kind": "알파벳 소리 애니메이션 (단편)", "about": "알파벳 26자의 소리를 공장 이야기로 소개하는 약 35분짜리 애니메이션. 짧게 나눠 본다.", "official": "https://www.leapfrog.com/"},
-    "scholastic": {"name": "Scholastic", "kind": "미국 어린이 출판사", "about": "미국 최대 어린이 출판사. 파닉스 워크북, 사이트워드 리더스 등 유아 교재가 많다.", "official": "https://www.scholastic.com/"},
-    "drseuss": {"name": "Dr. Seuss", "kind": "종이 그림책 (단권)", "about": "라임(운율)으로 유명한 미국 그림책 작가. 'Hop on Pop'은 짧은 운율 단어로 된 초기 읽기 책이다.", "official": "https://www.seussville.com/"},
-    "pete": {"name": "Pete the Cat", "kind": "종이 그림책 (단권)", "about": "파란 고양이 피트가 노래하며 반복 문장을 들려주는 그림책 시리즈. 노래 영상과 같이 쓰기 좋다.", "official": "https://www.petethecatbooks.com/"},
-    "readingeggs": {"name": "Reading Eggs", "kind": "유료 읽기 학습 앱", "about": "호주의 읽기 학습 앱. 지도(Map) 위의 레슨을 1번부터 차례로 진행한다.", "official": "https://readingeggs.com/"},
-    "elephantpiggie": {"name": "Elephant & Piggie (Mo Willems)", "kind": "종이 그림책 (단권)", "about": "코끼리 Gerald와 돼지 Piggie의 말풍선 대화로만 된 초기 리더스. 대화를 역할 나눠 읽기 좋다.", "official": "https://www.mowillems.com/"},
-    "flyguy": {"name": "Fly Guy (Tedd Arnold)", "kind": "초기 리더스 시리즈", "about": "소년 Buzz와 파리 Fly Guy의 이야기. 짧은 장(chapter)으로 나뉜 초기 리더스이며 첫 권은 'Hi! Fly Guy'.", "official": "https://www.scholastic.com/"},
-    "natgeo": {"name": "National Geographic Kids Readers", "kind": "논픽션 리더스", "about": "실제 동물 사진으로 된 논픽션 리더스. Pre-reader → Level 1 → Level 2 순서이며, 관심사가 동물인 아이에게 잘 맞는다.", "official": "https://kids.nationalgeographic.com/"},
-    "magicschoolbus": {"name": "The Magic School Bus", "kind": "과학 애니메이션", "about": "Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐험하는 애니메이션. 첫 에피소드는 'Gets Lost in Space'.", "official": "https://www.scholastic.com/"},
-    "epic": {"name": "Epic! (에픽)", "kind": "어린이 디지털 도서관 앱", "about": "만 12세 이하용 영어 전자책·오디오북·영상 구독 앱. 책이 수만 권이라 '무엇을 읽을지'를 정해 주지 않으면 지금 카드처럼 막연해진다. 책 제목으로 검색해 쓰는 것이 좋다.", "official": "https://www.getepic.com/"},
-    "magictreehouse": {"name": "Magic Tree House", "kind": "챕터북 시리즈", "about": "Jack과 Annie가 마법의 나무집으로 시간 여행을 하는 챕터북. 1권은 'Dinosaurs Before Dark'. 7세 이상 리더스 독해 단계용.", "official": "https://www.magictreehouse.com/"},
-    "nate": {"name": "Nate the Great", "kind": "초기 챕터북 시리즈", "about": "꼬마 탐정 Nate가 사건을 푸는 짧은 챕터북. 1권 제목도 'Nate the Great'.", "official": "https://www.penguinrandomhouse.com/"},
-    "junieb": {"name": "Junie B. Jones", "kind": "챕터북 시리즈", "about": "유치원생 Junie B.의 학교생활 챕터북. 1권은 'Junie B. Jones and the Stupid Smelly Bus'.", "official": "https://www.penguinrandomhouse.com/"},
-    "frogtoad": {"name": "Frog and Toad (Arnold Lobel)", "kind": "초기 리더스 (I Can Read)", "about": "개구리와 두꺼비의 우정을 다룬 짧은 이야기 모음. 첫 권은 'Frog and Toad Are Friends'.", "official": "https://www.icanread.com/"},
-    "amelia": {"name": "Amelia Bedelia", "kind": "초기 리더스 시리즈", "about": "말을 글자 그대로 알아듣는 가정부 Amelia Bedelia의 이야기. 말장난이 많아 7세 이상에게 맞는다.", "official": "https://www.ameliabedeliabooks.com/"}
+    "sss": {
+      "name": "Super Simple Songs",
+      "kind": "유튜브 동요 채널",
+      "about": "캐나다 Super Simple이 만든 유아 영어 동요 채널. 느린 박자와 율동이 있어 처음 영어를 듣는 4~5세에게 많이 쓰인다.",
+      "official": "https://supersimple.com/"
+    },
+    "pinkfong": {
+      "name": "Pinkfong (핑크퐁)",
+      "kind": "유튜브 동요 채널",
+      "about": "한국 더핑크퐁컴퍼니의 영어 동요 채널. 'Baby Shark'가 대표곡이다.",
+      "official": "https://www.pinkfong.com/"
+    },
+    "ericcarle": {
+      "name": "Eric Carle 그림책",
+      "kind": "종이 그림책 (단권)",
+      "about": "에릭 칼의 대표 그림책. 반복 문장과 큰 그림 덕분에 영어 그림책 첫 권으로 자주 추천된다.",
+      "official": "https://eric-carle.com/"
+    },
+    "usborne": {
+      "name": "Usborne (어스본)",
+      "kind": "영국 출판사의 유아 그림책·리더스",
+      "about": "영국 어린이책 출판사. 'That's not my...' 촉감책, 'Phonics Readers' 파닉스 리더스, 'First Reading' 단계별 리더스가 있다.",
+      "official": "https://usborne.com/"
+    },
+    "khan": {
+      "name": "Khan Academy Kids",
+      "kind": "무료 학습 앱",
+      "about": "비영리 칸아카데미의 2~8세용 무료 앱. 앱 안의 '학습 경로(Learning Path)'가 아이 수준에 맞춰 활동을 차례로 제시한다.",
+      "official": "https://learn.khanacademy.org/khan-academy-kids/"
+    },
+    "starfall": {
+      "name": "Starfall",
+      "kind": "파닉스·읽기 웹사이트/앱",
+      "about": "미국 유아·초등 저학년용 읽기 사이트. 알파벳(ABCs) → 읽기 배우기(Learn to Read) → 나는 읽는다(I'm Reading) 순서로 메뉴가 나뉜다. 일부는 무료, 나머지는 회원제.",
+      "official": "https://www.starfall.com/"
+    },
+    "abcmouse": {
+      "name": "ABCmouse",
+      "kind": "유료 학습 앱",
+      "about": "미국 Age of Learning의 2~8세 유료 학습 앱. 단계별 '학습 경로(Step-by-Step Learning Path)'로 진행한다.",
+      "official": "https://www.abcmouse.com/"
+    },
+    "cocomelon": {
+      "name": "Cocomelon",
+      "kind": "유튜브 동요 채널",
+      "about": "3D 애니메이션 동요 채널. 일상 루틴(목욕·잠자기 등)을 노래로 다룬다.",
+      "official": "https://cocomelon.com/"
+    },
+    "peppa": {
+      "name": "Peppa Pig (페파 피그)",
+      "kind": "영국 애니메이션",
+      "about": "꼬마 돼지 페파의 일상을 다룬 5분 내외 에피소드. 영국식 일상 표현이 많다.",
+      "official": "https://www.peppapig.com/"
+    },
+    "diy": {
+      "name": "직접 만드는 카드·워크시트",
+      "kind": "가정용 교구 (출판물 아님)",
+      "about": "특정 출판물이 아니라 부모가 출력하거나 만들어 쓰는 카드·쓰기 활동. 무료 출력물을 써도 된다.",
+      "official": ""
+    },
+    "jolly": {
+      "name": "Jolly Phonics",
+      "kind": "영국 파닉스 프로그램",
+      "about": "영국 학교에서 널리 쓰는 합성 파닉스 프로그램. 42개 소리를 7개 그룹으로 가르치며, 소리마다 노래와 동작이 있다. 첫 그룹은 s, a, t, i, p, n.",
+      "official": "https://www.jollylearning.co.uk/"
+    },
+    "ort": {
+      "name": "Oxford Reading Tree (ORT)",
+      "kind": "영국 옥스퍼드대출판부(OUP) 단계별 리더스",
+      "about": "Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더스. Stage 1(글 없는 책)부터 단계가 올라가며, 한 단계는 여러 '팩'(각 6권)으로 구성된다. 국내에서 '옥스포드 리딩 트리'로 많이 팔린다.",
+      "official": "https://home.oxfordowl.co.uk/"
+    },
+    "bobbooks": {
+      "name": "Bob Books",
+      "kind": "미국 파닉스 리더스 세트",
+      "about": "아주 짧은 문장으로 된 미국 파닉스 소책자 세트. Set 1은 짧은 모음 단어(CVC)만으로 읽기를 시작한다.",
+      "official": "https://bobbooks.com/"
+    },
+    "razkids": {
+      "name": "Raz-Kids",
+      "kind": "유료 레벨별 전자책 앱",
+      "about": "미국 Learning A-Z의 레벨별 전자책 앱. aa → A → B → C … 순서로 레벨이 올라가며, 듣기·읽기·퀴즈가 붙어 있다.",
+      "official": "https://www.raz-kids.com/"
+    },
+    "alphablocks": {
+      "name": "Alphablocks",
+      "kind": "영국 BBC 파닉스 애니메이션",
+      "about": "알파벳 블록 캐릭터가 합쳐지며 단어 소리를 만드는 BBC CBeebies 애니메이션. 에피소드마다 한두 개 소리를 다룬다.",
+      "official": "https://www.learningblocks.tv/"
+    },
+    "leapfrog": {
+      "name": "LeapFrog Letter Factory",
+      "kind": "알파벳 소리 애니메이션 (단편)",
+      "about": "알파벳 26자의 소리를 공장 이야기로 소개하는 약 35분짜리 애니메이션. 짧게 나눠 본다.",
+      "official": "https://www.leapfrog.com/"
+    },
+    "scholastic": {
+      "name": "Scholastic",
+      "kind": "미국 어린이 출판사",
+      "about": "미국 최대 어린이 출판사. 파닉스 워크북, 사이트워드 리더스 등 유아 교재가 많다.",
+      "official": "https://www.scholastic.com/"
+    },
+    "drseuss": {
+      "name": "Dr. Seuss",
+      "kind": "종이 그림책 (단권)",
+      "about": "라임(운율)으로 유명한 미국 그림책 작가. 'Hop on Pop'은 짧은 운율 단어로 된 초기 읽기 책이다.",
+      "official": "https://www.seussville.com/"
+    },
+    "pete": {
+      "name": "Pete the Cat",
+      "kind": "종이 그림책 (단권)",
+      "about": "파란 고양이 피트가 노래하며 반복 문장을 들려주는 그림책 시리즈. 노래 영상과 같이 쓰기 좋다.",
+      "official": "https://www.petethecatbooks.com/"
+    },
+    "readingeggs": {
+      "name": "Reading Eggs",
+      "kind": "유료 읽기 학습 앱",
+      "about": "호주의 읽기 학습 앱. 지도(Map) 위의 레슨을 1번부터 차례로 진행한다.",
+      "official": "https://readingeggs.com/"
+    },
+    "elephantpiggie": {
+      "name": "Elephant & Piggie (Mo Willems)",
+      "kind": "종이 그림책 (단권)",
+      "about": "코끼리 Gerald와 돼지 Piggie의 말풍선 대화로만 된 Mo Willems의 초기 리더스 25권(2007~2016). 문장이 짧고 반복돼 역할을 나눠 읽기 좋고, 미국 도서관협회 Geisel상을 여러 번 받았다.",
+      "official": "https://www.mowillems.com/"
+    },
+    "flyguy": {
+      "name": "Fly Guy (Tedd Arnold)",
+      "kind": "초기 리더스 시리즈",
+      "about": "소년 Buzz와 파리 Fly Guy의 이야기. 짧은 장(chapter)으로 나뉜 초기 리더스이며 첫 권은 'Hi! Fly Guy'.",
+      "official": "https://www.scholastic.com/"
+    },
+    "natgeo": {
+      "name": "National Geographic Kids Readers",
+      "kind": "논픽션 리더스",
+      "about": "실제 동물 사진으로 된 논픽션 리더스. Pre-reader → Level 1 → Level 2 순서이며, 관심사가 동물인 아이에게 잘 맞는다.",
+      "official": "https://kids.nationalgeographic.com/"
+    },
+    "magicschoolbus": {
+      "name": "The Magic School Bus",
+      "kind": "과학 애니메이션",
+      "about": "Ms. Frizzle 선생님과 반 아이들이 마법 버스로 과학 현장을 탐험하는 애니메이션. 첫 에피소드는 'Gets Lost in Space'.",
+      "official": "https://www.scholastic.com/"
+    },
+    "epic": {
+      "name": "Epic! (에픽)",
+      "kind": "어린이 디지털 도서관 앱",
+      "about": "만 12세 이하용 영어 전자책·오디오북·영상 구독 앱. 책이 수만 권이라 '무엇을 읽을지'를 정해 주지 않으면 지금 카드처럼 막연해진다. 책 제목으로 검색해 쓰는 것이 좋다.",
+      "official": "https://www.getepic.com/"
+    },
+    "magictreehouse": {
+      "name": "Magic Tree House",
+      "kind": "챕터북 시리즈",
+      "about": "Jack과 Annie가 마법의 나무집으로 시간 여행을 하는 챕터북. 1권은 'Dinosaurs Before Dark'. 7세 이상 리더스 독해 단계용.",
+      "official": "https://www.magictreehouse.com/"
+    },
+    "nate": {
+      "name": "Nate the Great",
+      "kind": "초기 챕터북 시리즈",
+      "about": "꼬마 탐정 Nate가 사건을 푸는 짧은 챕터북. 1권 제목도 'Nate the Great'.",
+      "official": "https://www.penguinrandomhouse.com/"
+    },
+    "junieb": {
+      "name": "Junie B. Jones",
+      "kind": "챕터북 시리즈",
+      "about": "유치원생 Junie B.의 학교생활 챕터북. 1권은 'Junie B. Jones and the Stupid Smelly Bus'.",
+      "official": "https://www.penguinrandomhouse.com/"
+    },
+    "frogtoad": {
+      "name": "Frog and Toad (Arnold Lobel)",
+      "kind": "초기 리더스 (I Can Read)",
+      "about": "개구리와 두꺼비의 우정을 다룬 짧은 이야기 모음. 첫 권은 'Frog and Toad Are Friends'.",
+      "official": "https://www.icanread.com/"
+    },
+    "amelia": {
+      "name": "Amelia Bedelia",
+      "kind": "초기 리더스 시리즈",
+      "about": "말을 글자 그대로 알아듣는 가정부 Amelia Bedelia의 이야기. 말장난이 많아 7세 이상에게 맞는다.",
+      "official": "https://www.ameliabedeliabooks.com/"
+    },
+    "songbirds": {
+      "name": "Songbirds Phonics (Julia Donaldson)",
+      "kind": "OUP 파닉스 리더스 (Oxford Reading Tree 계열)",
+      "about": "『The Gruffalo』 작가 Julia Donaldson이 쓴 Oxford Reading Tree 계열 파닉스 리더스 60권. Stage 1+부터 Stage 6까지 단계마다 새로 배우는 소리가 정해져 있어, 배운 소리만으로 읽을 수 있다. ORT 이야기책(Biff·Chip·Kipper)과 함께 많이 쓴다.",
+      "official": "https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/"
+    }
   },
   "unit_templates": {
     "ort_early": {
@@ -49,96 +205,799 @@
       "reread": "『{title}』({pack}) 다시 읽기: ① 아이가 먼저 읽고 부모는 막힐 때만 도와요 ② 등장인물의 말을 실감 나게 읽어 봐요 ③ 무슨 일이 있었는지 처음-중간-끝 순서로 말해요",
       "check_first": "번갈아 읽기를 끝까지 했나요? 재미있던 장면을 말했나요?",
       "check_reread": "이야기 순서를 말할 수 있었나요?"
+    },
+    "phonics_book": {
+      "first": "『{title}』({pack}) 첫 읽기: ① 책에 나오는 새 소리를 부모가 먼저 소리 내 보여 줘요 ② 아이가 단어를 소리 하나씩 내고 합쳐 읽어요 (막히면 부모가 손가락으로 글자를 짚어 줘요) ③ 다 읽고 그림을 보며 무슨 일이 있었는지 이야기해요",
+      "reread": "『{title}』({pack}) 다시 읽기: ① 아이가 혼자 먼저 읽어요 ② 틀린 단어만 소리 하나씩 다시 합쳐 봐요 ③ 책에서 같은 소리가 든 단어를 2개 찾아요",
+      "check_first": "단어를 소리 하나씩 내고 합쳐 읽었나요?",
+      "check_reread": "어제보다 막힘 없이 읽은 단어가 늘었나요?"
+    },
+    "dialogue_book": {
+      "first": "『{title}』 첫 읽기: ① 표지를 보고 Gerald(코끼리)와 Piggie(돼지) 표정 이야기하기 ② 부모가 처음부터 끝까지 실감 나게 읽어 줘요 ③ 두 번째로 넘길 때 아이가 Piggie 말풍선만 따라 읽어요",
+      "reread": "『{title}』 다시 읽기: ① 역할을 바꿔 아이가 Gerald, 부모가 Piggie를 읽어요 ② 느낌표·물음표 문장은 표정과 목소리를 크게 ③ 가장 웃긴 장면을 골라 한 번 더 연기해요",
+      "check_first": "자기 역할의 말풍선을 따라 읽었나요?",
+      "check_reread": "역할을 바꿔서도 끝까지 읽었나요?"
+    },
+    "jolly": {
+      "first": "오늘의 소리 {title} ({pack}): ① Jolly Phonics 노래로 소리를 들어요 ② 소리마다 정해진 동작을 함께 따라 해요 ③ 집 안에서 그 소리로 시작하는 물건을 찾아요",
+      "reread": "소리 복습 {title} ({pack}): ① 글자 카드를 보고 소리를 말해요 (동작 힌트 가능) ② 지금까지 배운 소리로 짧은 단어를 소리 하나씩 내고 합쳐 봐요 ③ 모래나 종이에 글자를 손가락으로 써요",
+      "check_first": "소리를 듣고 동작과 함께 따라 했나요?",
+      "check_reread": "글자를 보고 소리를 말했나요?"
     }
   },
   "unit_sources": {
-    "oup_ca": "Oxford University Press Canada, Language Arts 주문서 'Oxford Reading Tree — Biff, Chip and Kipper Stories' (https://www.oupcanada.com/school/order_form/a/ORT.Biff.Chip.And.Kipper.Stories.Order.Form.pdf) 의 팩 표지 목록"
+    "oup_ca": "Oxford University Press Canada, Language Arts 주문서 'Oxford Reading Tree — Biff, Chip and Kipper Stories' (https://www.oupcanada.com/school/order_form/a/ORT.Biff.Chip.And.Kipper.Stories.Order.Form.pdf) 의 팩 표지 목록",
+    "jd_site": "Julia Donaldson 공식 사이트 Songbird Phonics 페이지 (https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/) 의 단계별 목록",
+    "jolly_site": "Jolly Learning 공식 사이트 Jolly Phonics 페이지 FAQ 'In what order are the letter sounds taught?' (https://jollylearning.com/en-gb/our-programmes/jolly-phonics) 의 7그룹 순서",
+    "wiki_ep": "Wikipedia 'Elephant & Piggie' 문서의 Books 목록 (https://en.wikipedia.org/wiki/Elephant_and_Piggie) — 출판사(Disney-Hyperion) 페이지는 자동 접속이 막혀 2차 자료로 확인"
   },
   "unit_packs": {
-    "ort-s2": {"template": "ort_early", "source": "oup_ca", "packs": [
-      ["Stage 2 First Sentences", ["The Big Egg", "Poor Floppy", "Put It Back", "In a Bit", "A Present for Mum", "The Hole in the Sand"]],
-      ["Stage 2 Stories", ["The Toys' Party", "New Trainers", "A New Dog", "What a Bad Dog!", "The Go-kart", "The Dream"]],
-      ["Stage 2 Patterned Stories", ["Monkey Tricks", "Hey Presto!", "It's the Weather", "Naughty Children", "A Sinking Feeling", "Creepy-crawly!"]],
-      ["Stage 2 More Patterned Stories A", ["What Is It?", "The Lost Puppy", "New Trees", "Up and Down", "The Little Dragon", "The Band"]],
-      ["Stage 2 More Stories A", ["Floppy's Bath", "The Baby-sitter", "The Water Fight", "Kipper's Balloon", "Spots!", "Kipper's Birthday"]],
-      ["Stage 2 More Stories B", ["Kipper's Laces", "The Wobbly Tooth", "The Foggy Day", "Biff's Aeroplane", "Floppy the Hero", "The Chase"]]
-    ]},
-    "ort-s3": {"template": "ort_early", "source": "oup_ca", "packs": [
-      ["Stage 3 First Sentences", ["The Duck Race", "Sniff", "Pond Dipping", "The Ice Rink", "The Mud Bath", "The Steel Band"]],
-      ["Stage 3 Stories", ["On the Sand", "The Egg Hunt", "Nobody Wanted to Play", "A Cat in the Tree", "The Rope Swing", "By the Stream"]],
-      ["Stage 3 More Stories A", ["Kipper the Clown", "Strawberry Jam", "The Jumble Sale", "At the Seaside", "Kipper's Idea", "The Snowman"]],
-      ["Stage 3 More Stories B", ["The Barbecue", "The Carnival", "At the Pool", "Bull's-eye!", "Book Week", "The Cold Day"]],
-      ["Stage 3 Decode and Develop", ["Floppy and the Puppets", "Monkeys on the Car", "Dragons!", "The Enormous Picture", "Gran and the Go-karts", "Helicopter Rescue"]]
-    ]},
-    "ort-s4": {"template": "ort_later", "source": "oup_ca", "packs": [
-      ["Stage 4 Decode and Develop", ["The Stars", "Long Legs", "Floppy and the Skateboard", "Gran's New Glasses", "The Birthday Candle", "The Seal Pup"]]
-    ]},
-    "ort-s5": {"template": "ort_later", "source": "oup_ca", "packs": [
-      ["Stage 5 Decode and Develop", ["Highland Games", "The Orchid Thief", "Rats!", "A Pet Called Cucumber", "Bush Fire!", "Bessie's Flying Circus"]]
-    ]}
+    "ort-s2": {
+      "template": "ort_early",
+      "source": "oup_ca",
+      "packs": [
+        [
+          "Stage 2 First Sentences",
+          [
+            "The Big Egg",
+            "Poor Floppy",
+            "Put It Back",
+            "In a Bit",
+            "A Present for Mum",
+            "The Hole in the Sand"
+          ]
+        ],
+        [
+          "Stage 2 Stories",
+          [
+            "The Toys' Party",
+            "New Trainers",
+            "A New Dog",
+            "What a Bad Dog!",
+            "The Go-kart",
+            "The Dream"
+          ]
+        ],
+        [
+          "Stage 2 Patterned Stories",
+          [
+            "Monkey Tricks",
+            "Hey Presto!",
+            "It's the Weather",
+            "Naughty Children",
+            "A Sinking Feeling",
+            "Creepy-crawly!"
+          ]
+        ],
+        [
+          "Stage 2 More Patterned Stories A",
+          [
+            "What Is It?",
+            "The Lost Puppy",
+            "New Trees",
+            "Up and Down",
+            "The Little Dragon",
+            "The Band"
+          ]
+        ],
+        [
+          "Stage 2 More Stories A",
+          [
+            "Floppy's Bath",
+            "The Baby-sitter",
+            "The Water Fight",
+            "Kipper's Balloon",
+            "Spots!",
+            "Kipper's Birthday"
+          ]
+        ],
+        [
+          "Stage 2 More Stories B",
+          [
+            "Kipper's Laces",
+            "The Wobbly Tooth",
+            "The Foggy Day",
+            "Biff's Aeroplane",
+            "Floppy the Hero",
+            "The Chase"
+          ]
+        ]
+      ]
+    },
+    "ort-s3": {
+      "template": "ort_early",
+      "source": "oup_ca",
+      "packs": [
+        [
+          "Stage 3 First Sentences",
+          [
+            "The Duck Race",
+            "Sniff",
+            "Pond Dipping",
+            "The Ice Rink",
+            "The Mud Bath",
+            "The Steel Band"
+          ]
+        ],
+        [
+          "Stage 3 Stories",
+          [
+            "On the Sand",
+            "The Egg Hunt",
+            "Nobody Wanted to Play",
+            "A Cat in the Tree",
+            "The Rope Swing",
+            "By the Stream"
+          ]
+        ],
+        [
+          "Stage 3 More Stories A",
+          [
+            "Kipper the Clown",
+            "Strawberry Jam",
+            "The Jumble Sale",
+            "At the Seaside",
+            "Kipper's Idea",
+            "The Snowman"
+          ]
+        ],
+        [
+          "Stage 3 More Stories B",
+          [
+            "The Barbecue",
+            "The Carnival",
+            "At the Pool",
+            "Bull's-eye!",
+            "Book Week",
+            "The Cold Day"
+          ]
+        ],
+        [
+          "Stage 3 Decode and Develop",
+          [
+            "Floppy and the Puppets",
+            "Monkeys on the Car",
+            "Dragons!",
+            "The Enormous Picture",
+            "Gran and the Go-karts",
+            "Helicopter Rescue"
+          ]
+        ]
+      ]
+    },
+    "ort-s4": {
+      "template": "ort_later",
+      "source": "oup_ca",
+      "packs": [
+        [
+          "Stage 4 Decode and Develop",
+          [
+            "The Stars",
+            "Long Legs",
+            "Floppy and the Skateboard",
+            "Gran's New Glasses",
+            "The Birthday Candle",
+            "The Seal Pup"
+          ]
+        ]
+      ]
+    },
+    "ort-s5": {
+      "template": "ort_later",
+      "source": "oup_ca",
+      "packs": [
+        [
+          "Stage 5 Decode and Develop",
+          [
+            "Highland Games",
+            "The Orchid Thief",
+            "Rats!",
+            "A Pet Called Cucumber",
+            "Bush Fire!",
+            "Bessie's Flying Circus"
+          ]
+        ]
+      ]
+    },
+    "sb-1": {
+      "template": "phonics_book",
+      "source": "jd_site",
+      "packs": [
+        [
+          "Stage 1+",
+          [
+            "Top Cat",
+            "Sam's Pot",
+            "Bob Bug",
+            "Dig, Dig, Dig!",
+            "Zak and the Vet",
+            "Mum Bug's Bag"
+          ]
+        ],
+        [
+          "More Stage 1+",
+          [
+            "Cat Naps",
+            "Pen Fun",
+            "The Big Cod",
+            "The Pins and the Pegs",
+            "Is It?",
+            "Mix, Mix, Mix"
+          ]
+        ]
+      ]
+    },
+    "sb-2": {
+      "template": "phonics_book",
+      "source": "jd_site",
+      "packs": [
+        [
+          "Stage 2",
+          [
+            "The Odd Pet",
+            "Miss! Miss!",
+            "This and That",
+            "Fish and Chips",
+            "Singing Dad",
+            "Doctor Duck"
+          ]
+        ],
+        [
+          "More Stage 2",
+          [
+            "Mr Zed",
+            "The Ox and the Yak",
+            "The Doll in the Bin",
+            "Animal Quiz",
+            "The Seven Kids",
+            "Ron Rabbit's Egg"
+          ]
+        ],
+        [
+          "Stage 3",
+          [
+            "The Big Match",
+            "The Shopping List",
+            "Gran Is Cross",
+            "The Trunk and the Skunk",
+            "The Scrap Rocket",
+            "Splash and Squelch"
+          ]
+        ],
+        [
+          "More Stage 3",
+          [
+            "Ron Rabbit's Big Day",
+            "The Wishing Elf",
+            "Bob Bug and the Insect Club",
+            "Where Is Snail?",
+            "Stop Chatting, Bill",
+            "Back to Bed"
+          ]
+        ]
+      ]
+    },
+    "sb-3": {
+      "template": "phonics_book",
+      "source": "jd_site",
+      "packs": [
+        [
+          "Stage 4",
+          [
+            "Queen Aneena's Feast",
+            "Spike Says",
+            "The Wrong Kind of Knight",
+            "Moan, Moan, Moan!",
+            "The Snake and the Drake",
+            "Tadpoles"
+          ]
+        ],
+        [
+          "More Stage 4",
+          [
+            "The Red Man and the Green Man",
+            "Pirates",
+            "Tails",
+            "Pen Pals",
+            "My Cat",
+            "Tim's Bad Mood"
+          ]
+        ],
+        [
+          "Stage 5",
+          [
+            "Sue Kangaroo",
+            "The Cinderella Play",
+            "Usman's Books",
+            "The Upside-Down Browns",
+            "Leroy",
+            "No Milk Today"
+          ]
+        ],
+        [
+          "Stage 6",
+          [
+            "Tara's Party",
+            "Paula the Vet",
+            "Where Were You, Bert?",
+            "Clare and the Fair",
+            "The Deer and the Earwig",
+            "Jack and the Giants"
+          ]
+        ]
+      ]
+    },
+    "ep": {
+      "template": "dialogue_book",
+      "source": "wiki_ep",
+      "packs": [
+        [
+          "Elephant & Piggie (출간 순)",
+          [
+            "Today I Will Fly!",
+            "My Friend Is Sad",
+            "I Am Invited to a Party!",
+            "There Is a Bird on Your Head!",
+            "I Love My New Toy!",
+            "I Will Surprise My Friend!",
+            "Are You Ready to Play Outside?",
+            "Watch Me Throw the Ball!",
+            "Elephants Cannot Dance!",
+            "Pigs Make Me Sneeze!",
+            "I Am Going!",
+            "Can I Play Too?",
+            "We Are in a Book!",
+            "I Broke My Trunk!",
+            "Should I Share My Ice Cream?",
+            "Happy Pig Day!",
+            "Listen to My Trumpet!",
+            "Let's Go for a Drive!",
+            "A Big Guy Took My Ball!",
+            "I'm a Frog!",
+            "My New Friend Is So Fun!",
+            "Waiting Is Not Easy!",
+            "I Will Take a Nap!",
+            "I Really Like Slop!",
+            "The Thank You Book"
+          ]
+        ]
+      ]
+    },
+    "jolly": {
+      "template": "jolly",
+      "source": "jolly_site",
+      "packs": [
+        [
+          "Group 1",
+          [
+            "s · a · t",
+            "i · p · n"
+          ]
+        ],
+        [
+          "Group 2",
+          [
+            "c k · e · h",
+            "r · m · d"
+          ]
+        ],
+        [
+          "Group 3",
+          [
+            "g · o · u",
+            "l · f · b"
+          ]
+        ],
+        [
+          "Group 4",
+          [
+            "ai · j · oa",
+            "ie · ee · or"
+          ]
+        ],
+        [
+          "Group 5",
+          [
+            "z · w · ng",
+            "v · oo (짧게) · oo (길게)"
+          ]
+        ],
+        [
+          "Group 6",
+          [
+            "y · x · ch",
+            "sh · th (약하게) · th (강하게)"
+          ]
+        ],
+        [
+          "Group 7",
+          [
+            "qu · ou · oi",
+            "ue · er · ar"
+          ]
+        ]
+      ]
+    }
   },
   "items": {
-    "sss-twinkle": {"series": "sss", "granularity": "title", "find": "Super Simple Songs 유튜브에서 'Twinkle Twinkle Little Star' 검색"},
-    "pinkfong-babyshark": {"series": "pinkfong", "granularity": "title", "find": "핑크퐁 유튜브에서 'Baby Shark Dance' 검색"},
-    "sss-head": {"series": "sss", "granularity": "title", "find": "Super Simple Songs 유튜브에서 'Head Shoulders Knees & Toes' 검색"},
-    "sss-abc": {"series": "sss", "granularity": "title", "find": "Super Simple Songs 유튜브에서 'ABC Song' 검색"},
-    "eric-caterpillar": {"series": "ericcarle", "granularity": "title", "find": "그림책 『The Very Hungry Caterpillar』 (서점·도서관)"},
-    "eric-brownbear": {"series": "ericcarle", "granularity": "title", "find": "그림책 『Brown Bear, Brown Bear, What Do You See?』 (Bill Martin Jr. 글, Eric Carle 그림)"},
-    "usborne-thatsnotmy": {"series": "usborne", "granularity": "collection", "find": "'That's not my...' 촉감책 중 아무 권 (예: 『That's not my puppy...』)"},
-    "khan-kids": {"series": "khan", "granularity": "collection", "find": "Khan Academy Kids 앱 → 아이 프로필 → 학습 경로(Learning Path)의 다음 활동"},
-    "starfall-abcs": {"series": "starfall", "granularity": "collection", "find": "starfall.com → ABCs 메뉴 → 알파벳 한 글자씩 (A부터)"},
-    "abcmouse": {"series": "abcmouse", "granularity": "collection", "find": "ABCmouse 앱 → 학습 경로의 다음 레슨"},
-    "cocomelon": {"series": "cocomelon", "granularity": "collection", "find": "Cocomelon 유튜브에서 동요 한 곡 (예: 'Wheels on the Bus')"},
-    "peppa": {"series": "peppa", "granularity": "collection", "find": "Peppa Pig 공식 유튜브 에피소드 한 편 (예: 'Muddy Puddles')"},
-    "action-cards": {"series": "diy", "granularity": "title", "find": "동작 단어(jump, run, clap, sit 등) 카드를 직접 만들거나 무료 출력물 사용"},
-    "color-flashcards": {"series": "diy", "granularity": "title", "find": "색깔·모양 카드를 직접 만들거나 무료 출력물 사용"},
-    "jolly-songs": {"series": "jolly", "granularity": "collection", "find": "Jolly Phonics 노래 음원 — 1그룹(s, a, t, i, p, n)부터"},
-    "jolly-letter": {"series": "jolly", "granularity": "collection", "find": "Jolly Phonics 교재 — 1그룹(s, a, t, i, p, n)부터 하루 한 소리"},
-    "ort-stage1": {"series": "ort", "granularity": "collection", "find": "ORT Stage 1(글 없는 책)·Stage 1+(첫 문장) 팩. 권별 제목은 공식 목록 확인 후 학습 단위로 추가 예정"},
-    "bobbooks-1": {"series": "bobbooks", "granularity": "collection", "find": "Bob Books Set 1 소책자 1권부터 차례로"},
-    "starfall-read": {"series": "starfall", "granularity": "collection", "find": "starfall.com → Learn to Read 메뉴의 Zac the Rat부터 차례로"},
-    "razkids-aa": {"series": "razkids", "granularity": "collection", "find": "Raz-Kids 앱 → Level aa 책부터 차례로, 그다음 Level A"},
-    "usborne-fox": {"series": "usborne", "granularity": "title", "find": "Usborne Phonics Readers 『Fox on a Box』"},
-    "alphablocks": {"series": "alphablocks", "granularity": "collection", "find": "Alphablocks 공식 유튜브 → Series 1 에피소드부터"},
-    "leapfrog-letter": {"series": "leapfrog", "granularity": "title", "find": "『LeapFrog: Letter Factory』 영상을 5~10분씩 나눠 보기"},
-    "scholastic-phonics": {"series": "scholastic", "granularity": "collection", "find": "Scholastic 파닉스 워크북 — 첫 장부터 하루 2~3쪽"},
-    "drseuss-hop": {"series": "drseuss", "granularity": "title", "find": "그림책 『Hop on Pop』 (Dr. Seuss, Bright and Early Books)"},
-    "pete-shoes": {"series": "pete", "granularity": "title", "find": "그림책 『Pete the Cat: I Love My White Shoes』"},
-    "sss-phonics": {"series": "sss", "granularity": "title", "find": "Super Simple Songs 유튜브에서 'Phonics Song' 검색"},
-    "readingeggs": {"series": "readingeggs", "granularity": "collection", "find": "Reading Eggs 앱 → 지도(Map)의 다음 레슨"},
-    "sight-cards": {"series": "diy", "granularity": "title", "find": "사이트워드(the, a, I, is, see, can 등) 카드를 직접 만들거나 무료 출력물 사용"},
-    "ort-stage2": {"series": "ort", "granularity": "units", "find": "ORT Stage 2 팩 6종(36권) — 아래 학습 단위 순서대로", "units": ["ort-s2"]},
-    "ort-stage3": {"series": "ort", "granularity": "units", "find": "ORT Stage 3 팩 5종(30권) — 아래 학습 단위 순서대로", "units": ["ort-s3"]},
-    "bobbooks-2": {"series": "bobbooks", "granularity": "collection", "find": "Bob Books Set 2 소책자 1권부터 차례로"},
-    "elephant-fly": {"series": "elephantpiggie", "granularity": "title", "find": "그림책 『Today I Will Fly!』 (An Elephant & Piggie Book)"},
-    "flyguy": {"series": "flyguy", "granularity": "collection", "find": "Fly Guy 시리즈 1권 『Hi! Fly Guy』부터"},
-    "natgeo-prereader": {"series": "natgeo", "granularity": "collection", "find": "National Geographic Kids Readers 'Pre-reader' 표시 책 중 아이 관심 동물로 1권"},
-    "razkids-bc": {"series": "razkids", "granularity": "collection", "find": "Raz-Kids 앱 → Level B 책부터 차례로, 그다음 Level C"},
-    "scholastic-sight": {"series": "scholastic", "granularity": "collection", "find": "Scholastic Sight Word Readers 세트 1권부터"},
-    "magicschoolbus": {"series": "magicschoolbus", "granularity": "collection", "find": "The Magic School Bus 에피소드 한 편 (1화 'Gets Lost in Space'부터)"},
-    "ort-stage4": {"series": "ort", "granularity": "units", "find": "ORT Stage 4 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로", "units": ["ort-s4"]},
-    "pete-school": {"series": "pete", "granularity": "title", "find": "그림책 『Pete the Cat: Rocking in My School Shoes』"},
-    "usborne-first": {"series": "usborne", "granularity": "collection", "find": "Usborne First Reading Level 1 책 중 1권"},
-    "starfall-imreading": {"series": "starfall", "granularity": "collection", "find": "starfall.com → I'm Reading 메뉴의 이야기 한 편"},
-    "epic": {"series": "epic", "granularity": "collection", "find": "Epic! 앱/웹 → 검색창에 책 제목 입력. 어떤 책을 읽을지는 아직 지정되지 않음"},
-    "cvc-writing": {"series": "diy", "granularity": "title", "find": "CVC 단어(cat, dog, sun 등) 따라 쓰기 — 직접 만들거나 무료 출력물 사용"},
-    "ort-stage5": {"series": "ort", "granularity": "units", "find": "ORT Stage 5 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로", "units": ["ort-s5"]},
-    "sss-library": {"series": "sss", "granularity": "collection", "find": "Super Simple Songs 유튜브 전체 — 곡이 지정되지 않음"},
-    "khan-full": {"series": "khan", "granularity": "collection", "find": "Khan Academy Kids 앱 전체 — 학습 경로의 다음 활동"},
-    "ort-full": {"series": "ort", "granularity": "units", "find": "집에 있는 ORT 전집을 Stage 2부터 차례로 — 아래 학습 단위 순서대로", "units": ["ort-s2", "ort-s3", "ort-s4", "ort-s5"]},
-    "jolly-full": {"series": "jolly", "granularity": "collection", "find": "Jolly Phonics 전 과정 — 1그룹(s, a, t, i, p, n)부터"},
-    "razkids-full": {"series": "razkids", "granularity": "collection", "find": "Raz-Kids 앱 전체 — 레벨이 지정되지 않음"},
-    "natgeo-full": {"series": "natgeo", "granularity": "collection", "find": "National Geographic Kids Readers 전체 — 권이 지정되지 않음"},
-    "usborne-full": {"series": "usborne", "granularity": "collection", "find": "Usborne 파닉스 리더스 전체 — 권이 지정되지 않음"},
-    "epic-full": {"series": "epic", "granularity": "collection", "find": "Epic! 앱 전체 — 책이 지정되지 않음"},
-    "starfall-full": {"series": "starfall", "granularity": "collection", "find": "starfall.com 전체 — 메뉴가 지정되지 않음"},
-    "abcmouse-full": {"series": "abcmouse", "granularity": "collection", "find": "ABCmouse 앱 전체 — 학습 경로의 다음 레슨"},
-    "readingeggs-full": {"series": "readingeggs", "granularity": "collection", "find": "Reading Eggs 앱 전체 — 지도의 다음 레슨"},
-    "scholastic-full": {"series": "scholastic", "granularity": "collection", "find": "Scholastic 유아 교재 전체 — 권이 지정되지 않음"},
-    "magic-tree-house": {"series": "magictreehouse", "granularity": "collection", "find": "Magic Tree House 1권 『Dinosaurs Before Dark』부터"},
-    "nate-the-great": {"series": "nate", "granularity": "collection", "find": "Nate the Great 1권 『Nate the Great』부터"},
-    "junie-b-jones": {"series": "junieb", "granularity": "collection", "find": "Junie B. Jones 1권 『Junie B. Jones and the Stupid Smelly Bus』부터"},
-    "frog-and-toad": {"series": "frogtoad", "granularity": "collection", "find": "『Frog and Toad Are Friends』부터"},
-    "amelia-bedelia": {"series": "amelia", "granularity": "collection", "find": "『Amelia Bedelia』(1963) 첫 권부터"}
+    "sss-twinkle": {
+      "series": "sss",
+      "granularity": "title",
+      "find": "Super Simple Songs 유튜브에서 'Twinkle Twinkle Little Star' 검색"
+    },
+    "pinkfong-babyshark": {
+      "series": "pinkfong",
+      "granularity": "title",
+      "find": "핑크퐁 유튜브에서 'Baby Shark Dance' 검색"
+    },
+    "sss-head": {
+      "series": "sss",
+      "granularity": "title",
+      "find": "Super Simple Songs 유튜브에서 'Head Shoulders Knees & Toes' 검색"
+    },
+    "sss-abc": {
+      "series": "sss",
+      "granularity": "title",
+      "find": "Super Simple Songs 유튜브에서 'ABC Song' 검색"
+    },
+    "eric-caterpillar": {
+      "series": "ericcarle",
+      "granularity": "title",
+      "find": "그림책 『The Very Hungry Caterpillar』 (서점·도서관)"
+    },
+    "eric-brownbear": {
+      "series": "ericcarle",
+      "granularity": "title",
+      "find": "그림책 『Brown Bear, Brown Bear, What Do You See?』 (Bill Martin Jr. 글, Eric Carle 그림)"
+    },
+    "usborne-thatsnotmy": {
+      "series": "usborne",
+      "granularity": "collection",
+      "find": "'That's not my...' 촉감책 중 아무 권 (예: 『That's not my puppy...』)"
+    },
+    "khan-kids": {
+      "series": "khan",
+      "granularity": "collection",
+      "find": "Khan Academy Kids 앱 → 아이 프로필 → 학습 경로(Learning Path)의 다음 활동"
+    },
+    "starfall-abcs": {
+      "series": "starfall",
+      "granularity": "collection",
+      "find": "starfall.com → ABCs 메뉴 → 알파벳 한 글자씩 (A부터)"
+    },
+    "abcmouse": {
+      "series": "abcmouse",
+      "granularity": "collection",
+      "find": "ABCmouse 앱 → 학습 경로의 다음 레슨"
+    },
+    "cocomelon": {
+      "series": "cocomelon",
+      "granularity": "collection",
+      "find": "Cocomelon 유튜브에서 동요 한 곡 (예: 'Wheels on the Bus')"
+    },
+    "peppa": {
+      "series": "peppa",
+      "granularity": "collection",
+      "find": "Peppa Pig 공식 유튜브 에피소드 한 편 (예: 'Muddy Puddles')"
+    },
+    "action-cards": {
+      "series": "diy",
+      "granularity": "title",
+      "find": "동작 단어(jump, run, clap, sit 등) 카드를 직접 만들거나 무료 출력물 사용"
+    },
+    "color-flashcards": {
+      "series": "diy",
+      "granularity": "title",
+      "find": "색깔·모양 카드를 직접 만들거나 무료 출력물 사용"
+    },
+    "jolly-songs": {
+      "series": "jolly",
+      "granularity": "units",
+      "find": "Jolly Phonics 노래 음원 — 7그룹 순서대로, 하루 소리 3개",
+      "units": [
+        "jolly"
+      ]
+    },
+    "jolly-letter": {
+      "series": "jolly",
+      "granularity": "units",
+      "find": "Jolly Phonics 교재 — 7그룹 42개 소리를 순서대로, 하루 소리 3개",
+      "units": [
+        "jolly"
+      ]
+    },
+    "ort-stage1": {
+      "series": "ort",
+      "granularity": "collection",
+      "find": "ORT Stage 1(글 없는 책)·Stage 1+(첫 문장) 팩. 권별 제목은 공식 목록 확인 후 학습 단위로 추가 예정"
+    },
+    "bobbooks-1": {
+      "series": "bobbooks",
+      "granularity": "collection",
+      "find": "Bob Books Set 1 소책자 1권부터 차례로"
+    },
+    "starfall-read": {
+      "series": "starfall",
+      "granularity": "collection",
+      "find": "starfall.com → Learn to Read 메뉴의 Zac the Rat부터 차례로"
+    },
+    "razkids-aa": {
+      "series": "razkids",
+      "granularity": "collection",
+      "find": "Raz-Kids 앱 → Level aa 책부터 차례로, 그다음 Level A"
+    },
+    "usborne-fox": {
+      "series": "usborne",
+      "granularity": "title",
+      "find": "Usborne Phonics Readers 『Fox on a Box』"
+    },
+    "alphablocks": {
+      "series": "alphablocks",
+      "granularity": "collection",
+      "find": "Alphablocks 공식 유튜브 → Series 1 에피소드부터"
+    },
+    "leapfrog-letter": {
+      "series": "leapfrog",
+      "granularity": "title",
+      "find": "『LeapFrog: Letter Factory』 영상을 5~10분씩 나눠 보기"
+    },
+    "scholastic-phonics": {
+      "series": "scholastic",
+      "granularity": "collection",
+      "find": "Scholastic 파닉스 워크북 — 첫 장부터 하루 2~3쪽"
+    },
+    "drseuss-hop": {
+      "series": "drseuss",
+      "granularity": "title",
+      "find": "그림책 『Hop on Pop』 (Dr. Seuss, Bright and Early Books)"
+    },
+    "pete-shoes": {
+      "series": "pete",
+      "granularity": "title",
+      "find": "그림책 『Pete the Cat: I Love My White Shoes』"
+    },
+    "sss-phonics": {
+      "series": "sss",
+      "granularity": "title",
+      "find": "Super Simple Songs 유튜브에서 'Phonics Song' 검색"
+    },
+    "readingeggs": {
+      "series": "readingeggs",
+      "granularity": "collection",
+      "find": "Reading Eggs 앱 → 지도(Map)의 다음 레슨"
+    },
+    "sight-cards": {
+      "series": "diy",
+      "granularity": "title",
+      "find": "사이트워드(the, a, I, is, see, can 등) 카드를 직접 만들거나 무료 출력물 사용"
+    },
+    "ort-stage2": {
+      "series": "ort",
+      "granularity": "units",
+      "find": "ORT Stage 2 팩 6종(36권) — 아래 학습 단위 순서대로",
+      "units": [
+        "ort-s2"
+      ]
+    },
+    "ort-stage3": {
+      "series": "ort",
+      "granularity": "units",
+      "find": "ORT Stage 3 팩 5종(30권) — 아래 학습 단위 순서대로",
+      "units": [
+        "ort-s3"
+      ]
+    },
+    "bobbooks-2": {
+      "series": "bobbooks",
+      "granularity": "collection",
+      "find": "Bob Books Set 2 소책자 1권부터 차례로"
+    },
+    "elephant-fly": {
+      "series": "elephantpiggie",
+      "granularity": "title",
+      "find": "그림책 『Today I Will Fly!』 (An Elephant & Piggie Book)"
+    },
+    "flyguy": {
+      "series": "flyguy",
+      "granularity": "collection",
+      "find": "Fly Guy 시리즈 1권 『Hi! Fly Guy』부터"
+    },
+    "natgeo-prereader": {
+      "series": "natgeo",
+      "granularity": "collection",
+      "find": "National Geographic Kids Readers 'Pre-reader' 표시 책 중 아이 관심 동물로 1권"
+    },
+    "razkids-bc": {
+      "series": "razkids",
+      "granularity": "collection",
+      "find": "Raz-Kids 앱 → Level B 책부터 차례로, 그다음 Level C"
+    },
+    "scholastic-sight": {
+      "series": "scholastic",
+      "granularity": "collection",
+      "find": "Scholastic Sight Word Readers 세트 1권부터"
+    },
+    "magicschoolbus": {
+      "series": "magicschoolbus",
+      "granularity": "collection",
+      "find": "The Magic School Bus 에피소드 한 편 (1화 'Gets Lost in Space'부터)"
+    },
+    "ort-stage4": {
+      "series": "ort",
+      "granularity": "units",
+      "find": "ORT Stage 4 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로",
+      "units": [
+        "ort-s4"
+      ]
+    },
+    "pete-school": {
+      "series": "pete",
+      "granularity": "title",
+      "find": "그림책 『Pete the Cat: Rocking in My School Shoes』"
+    },
+    "usborne-first": {
+      "series": "usborne",
+      "granularity": "collection",
+      "find": "Usborne First Reading Level 1 책 중 1권"
+    },
+    "starfall-imreading": {
+      "series": "starfall",
+      "granularity": "collection",
+      "find": "starfall.com → I'm Reading 메뉴의 이야기 한 편"
+    },
+    "epic": {
+      "series": "epic",
+      "granularity": "collection",
+      "find": "Epic! 앱/웹 → 검색창에 책 제목 입력. 어떤 책을 읽을지는 아직 지정되지 않음"
+    },
+    "cvc-writing": {
+      "series": "diy",
+      "granularity": "title",
+      "find": "CVC 단어(cat, dog, sun 등) 따라 쓰기 — 직접 만들거나 무료 출력물 사용"
+    },
+    "ort-stage5": {
+      "series": "ort",
+      "granularity": "units",
+      "find": "ORT Stage 5 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로",
+      "units": [
+        "ort-s5"
+      ]
+    },
+    "sss-library": {
+      "series": "sss",
+      "granularity": "collection",
+      "find": "Super Simple Songs 유튜브 전체 — 곡이 지정되지 않음"
+    },
+    "khan-full": {
+      "series": "khan",
+      "granularity": "collection",
+      "find": "Khan Academy Kids 앱 전체 — 학습 경로의 다음 활동"
+    },
+    "ort-full": {
+      "series": "ort",
+      "granularity": "units",
+      "find": "집에 있는 ORT 전집을 Stage 2부터 차례로 — 아래 학습 단위 순서대로",
+      "units": [
+        "ort-s2",
+        "ort-s3",
+        "ort-s4",
+        "ort-s5"
+      ]
+    },
+    "jolly-full": {
+      "series": "jolly",
+      "granularity": "units",
+      "find": "Jolly Phonics 전 과정 — 7그룹 42개 소리를 순서대로",
+      "units": [
+        "jolly"
+      ]
+    },
+    "razkids-full": {
+      "series": "razkids",
+      "granularity": "collection",
+      "find": "Raz-Kids 앱 전체 — 레벨이 지정되지 않음"
+    },
+    "natgeo-full": {
+      "series": "natgeo",
+      "granularity": "collection",
+      "find": "National Geographic Kids Readers 전체 — 권이 지정되지 않음"
+    },
+    "usborne-full": {
+      "series": "usborne",
+      "granularity": "collection",
+      "find": "Usborne 파닉스 리더스 전체 — 권이 지정되지 않음"
+    },
+    "epic-full": {
+      "series": "epic",
+      "granularity": "collection",
+      "find": "Epic! 앱 전체 — 책이 지정되지 않음"
+    },
+    "starfall-full": {
+      "series": "starfall",
+      "granularity": "collection",
+      "find": "starfall.com 전체 — 메뉴가 지정되지 않음"
+    },
+    "abcmouse-full": {
+      "series": "abcmouse",
+      "granularity": "collection",
+      "find": "ABCmouse 앱 전체 — 학습 경로의 다음 레슨"
+    },
+    "readingeggs-full": {
+      "series": "readingeggs",
+      "granularity": "collection",
+      "find": "Reading Eggs 앱 전체 — 지도의 다음 레슨"
+    },
+    "scholastic-full": {
+      "series": "scholastic",
+      "granularity": "collection",
+      "find": "Scholastic 유아 교재 전체 — 권이 지정되지 않음"
+    },
+    "magic-tree-house": {
+      "series": "magictreehouse",
+      "granularity": "collection",
+      "find": "Magic Tree House 1권 『Dinosaurs Before Dark』부터"
+    },
+    "nate-the-great": {
+      "series": "nate",
+      "granularity": "collection",
+      "find": "Nate the Great 1권 『Nate the Great』부터"
+    },
+    "junie-b-jones": {
+      "series": "junieb",
+      "granularity": "collection",
+      "find": "Junie B. Jones 1권 『Junie B. Jones and the Stupid Smelly Bus』부터"
+    },
+    "frog-and-toad": {
+      "series": "frogtoad",
+      "granularity": "collection",
+      "find": "『Frog and Toad Are Friends』부터"
+    },
+    "amelia-bedelia": {
+      "series": "amelia",
+      "granularity": "collection",
+      "find": "『Amelia Bedelia』(1963) 첫 권부터"
+    },
+    "songbirds-1": {
+      "series": "songbirds",
+      "granularity": "units",
+      "find": "Songbirds Stage 1+·More Stage 1+ (12권) — 아래 순서대로",
+      "units": [
+        "sb-1"
+      ]
+    },
+    "songbirds-2": {
+      "series": "songbirds",
+      "granularity": "units",
+      "find": "Songbirds Stage 2~More Stage 3 (24권) — 아래 순서대로",
+      "units": [
+        "sb-2"
+      ]
+    },
+    "songbirds-3": {
+      "series": "songbirds",
+      "granularity": "units",
+      "find": "Songbirds Stage 4~6 (24권) — 아래 순서대로",
+      "units": [
+        "sb-3"
+      ]
+    },
+    "songbirds-full": {
+      "series": "songbirds",
+      "granularity": "units",
+      "find": "집에 있는 Songbirds 전집을 Stage 1+부터 차례로 (60권)",
+      "units": [
+        "sb-1",
+        "sb-2",
+        "sb-3"
+      ]
+    },
+    "elephant-piggie": {
+      "series": "elephantpiggie",
+      "granularity": "units",
+      "find": "Elephant & Piggie 25권을 출간 순서대로 (1권 『Today I Will Fly!』)",
+      "units": [
+        "ep"
+      ]
+    }
   }
 }

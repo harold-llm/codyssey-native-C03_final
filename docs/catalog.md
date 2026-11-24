@@ -10,13 +10,13 @@
   **무엇을, 어느 부분을, 어떻게** 할지 매일 카드로 알려 줍니다. 아래 목록이 그 추천 후보 전체입니다.
 - 온보딩 4주 계획은 이 카탈로그에서 RAG 검색(나이·레벨·하루 시간·보유 교재 필터 + TF-IDF)으로 후보를 찾고,
   Claude가 후보 ID 안에서만 20일 순서를 정합니다. 후보 밖의 자료는 추천할 수 없습니다.
-- 항목 **62개**, 시리즈·서비스 **30종**, 공식 목록으로 확인한 학습 단위 **78권**
+- 항목 **67개**, 시리즈·서비스 **31종**, 출처를 확인한 학습 단위 **177개** (책 한 권 또는 소리 묶음 하나)
 
 | 구체성 | 항목 수 | 뜻 |
 |---|---|---|
-| 학습 단위 | 5 | 학습 단위 — 권·에피소드 순서가 지정됨 |
+| 학습 단위 | 13 | 학습 단위 — 권·에피소드 순서가 지정됨 |
 | 단일 작품 | 17 | 단일 작품 — 노래·책·영상 한 편이 지정됨 |
-| 묶음 | 40 | 묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상) |
+| 묶음 | 37 | 묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상) |
 
 레벨: L1 노출·듣기 → L2 소리 인지 → L3 파닉스 → L4 사이트워드·초기 해독 → L5 리더스 독해
 
@@ -64,9 +64,87 @@
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
-| `jolly-songs` | Jolly Phonics - Songs | 4~5세 | L1 | 오디오·듣기 | 10분 | 묶음 | Jolly Phonics 노래 음원 — 1그룹(s, a, t, i, p, n)부터 |
-| `jolly-full` | Jolly Phonics - Full Program | 4~7세 | L2 | 파닉스·읽기 | 15분 | 묶음 | Jolly Phonics 전 과정 — 1그룹(s, a, t, i, p, n)부터 |
-| `jolly-letter` | Jolly Phonics - Letter Sounds | 5~6세 | L2 | 파닉스·읽기 | 15분 | 묶음 | Jolly Phonics 교재 — 1그룹(s, a, t, i, p, n)부터 하루 한 소리 |
+| `jolly-songs` | Jolly Phonics - Songs | 4~5세 | L1 | 오디오·듣기 | 10분 | 학습 단위 | Jolly Phonics 노래 음원 — 7그룹 순서대로, 하루 소리 3개 |
+| `jolly-full` | Jolly Phonics - Full Program | 4~7세 | L2 | 파닉스·읽기 | 15분 | 학습 단위 | Jolly Phonics 전 과정 — 7그룹 42개 소리를 순서대로 |
+| `jolly-letter` | Jolly Phonics - Letter Sounds | 5~6세 | L2 | 파닉스·읽기 | 15분 | 학습 단위 | Jolly Phonics 교재 — 7그룹 42개 소리를 순서대로, 하루 소리 3개 |
+
+<details><summary><code>jolly-songs</code> 학습 단위 14개 (진행 순서)</summary>
+
+- **Group 1**
+  1. s · a · t
+  2. i · p · n
+- **Group 2**
+  3. c k · e · h
+  4. r · m · d
+- **Group 3**
+  5. g · o · u
+  6. l · f · b
+- **Group 4**
+  7. ai · j · oa
+  8. ie · ee · or
+- **Group 5**
+  9. z · w · ng
+  10. v · oo (짧게) · oo (길게)
+- **Group 6**
+  11. y · x · ch
+  12. sh · th (약하게) · th (강하게)
+- **Group 7**
+  13. qu · ou · oi
+  14. ue · er · ar
+
+</details>
+
+<details><summary><code>jolly-letter</code> 학습 단위 14개 (진행 순서)</summary>
+
+- **Group 1**
+  1. s · a · t
+  2. i · p · n
+- **Group 2**
+  3. c k · e · h
+  4. r · m · d
+- **Group 3**
+  5. g · o · u
+  6. l · f · b
+- **Group 4**
+  7. ai · j · oa
+  8. ie · ee · or
+- **Group 5**
+  9. z · w · ng
+  10. v · oo (짧게) · oo (길게)
+- **Group 6**
+  11. y · x · ch
+  12. sh · th (약하게) · th (강하게)
+- **Group 7**
+  13. qu · ou · oi
+  14. ue · er · ar
+
+</details>
+
+<details><summary><code>jolly-full</code> 학습 단위 14개 (진행 순서)</summary>
+
+- **Group 1**
+  1. s · a · t
+  2. i · p · n
+- **Group 2**
+  3. c k · e · h
+  4. r · m · d
+- **Group 3**
+  5. g · o · u
+  6. l · f · b
+- **Group 4**
+  7. ai · j · oa
+  8. ie · ee · or
+- **Group 5**
+  9. z · w · ng
+  10. v · oo (짧게) · oo (길게)
+- **Group 6**
+  11. y · x · ch
+  12. sh · th (약하게) · th (강하게)
+- **Group 7**
+  13. qu · ou · oi
+  14. ue · er · ar
+
+</details>
 
 ### Khan Academy Kids
 
@@ -208,7 +286,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 | `ort-stage4` | Oxford Reading Tree - Stage 4 | 6~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 4 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로 |
 | `ort-stage5` | Oxford Reading Tree - Stage 5 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | ORT Stage 5 Decode and Develop 팩(6권) — 아래 학습 단위 순서대로 |
 
-<details><summary><code>ort-stage2</code> 학습 단위 36권 (진행 순서)</summary>
+<details><summary><code>ort-stage2</code> 학습 단위 36개 (진행 순서)</summary>
 
 - **Stage 2 First Sentences**
   1. The Big Egg
@@ -255,7 +333,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 </details>
 
-<details><summary><code>ort-stage3</code> 학습 단위 30권 (진행 순서)</summary>
+<details><summary><code>ort-stage3</code> 학습 단위 30개 (진행 순서)</summary>
 
 - **Stage 3 First Sentences**
   1. The Duck Race
@@ -295,7 +373,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 </details>
 
-<details><summary><code>ort-stage4</code> 학습 단위 6권 (진행 순서)</summary>
+<details><summary><code>ort-stage4</code> 학습 단위 6개 (진행 순서)</summary>
 
 - **Stage 4 Decode and Develop**
   1. The Stars
@@ -307,7 +385,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 </details>
 
-<details><summary><code>ort-stage5</code> 학습 단위 6권 (진행 순서)</summary>
+<details><summary><code>ort-stage5</code> 학습 단위 6개 (진행 순서)</summary>
 
 - **Stage 5 Decode and Develop**
   1. Highland Games
@@ -319,7 +397,7 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 </details>
 
-<details><summary><code>ort-full</code> 학습 단위 78권 (진행 순서)</summary>
+<details><summary><code>ort-full</code> 학습 단위 78개 (진행 순서)</summary>
 
 - **Stage 2 First Sentences**
   1. The Big Egg
@@ -465,11 +543,43 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 
 *종이 그림책 (단권)* · [공식 사이트](https://www.mowillems.com/)
 
-코끼리 Gerald와 돼지 Piggie의 말풍선 대화로만 된 초기 리더스. 대화를 역할 나눠 읽기 좋다.
+코끼리 Gerald와 돼지 Piggie의 말풍선 대화로만 된 Mo Willems의 초기 리더스 25권(2007~2016). 문장이 짧고 반복돼 역할을 나눠 읽기 좋고, 미국 도서관협회 Geisel상을 여러 번 받았다.
 
 | 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
 |---|---|---|---|---|---|---|---|
 | `elephant-fly` | Elephant & Piggie - Today I Will Fly! | 6~7세 | L3 | 리더스·그림책·읽기 | 15분 | 단일 작품 | 그림책 『Today I Will Fly!』 (An Elephant & Piggie Book) |
+| `elephant-piggie` | Elephant & Piggie - Full Series (25 books) | 5~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Elephant & Piggie 25권을 출간 순서대로 (1권 『Today I Will Fly!』) |
+
+<details><summary><code>elephant-piggie</code> 학습 단위 25개 (진행 순서)</summary>
+
+- **Elephant & Piggie (출간 순)**
+  1. Today I Will Fly!
+  2. My Friend Is Sad
+  3. I Am Invited to a Party!
+  4. There Is a Bird on Your Head!
+  5. I Love My New Toy!
+  6. I Will Surprise My Friend!
+  7. Are You Ready to Play Outside?
+  8. Watch Me Throw the Ball!
+  9. Elephants Cannot Dance!
+  10. Pigs Make Me Sneeze!
+  11. I Am Going!
+  12. Can I Play Too?
+  13. We Are in a Book!
+  14. I Broke My Trunk!
+  15. Should I Share My Ice Cream?
+  16. Happy Pig Day!
+  17. Listen to My Trumpet!
+  18. Let's Go for a Drive!
+  19. A Big Guy Took My Ball!
+  20. I'm a Frog!
+  21. My New Friend Is So Fun!
+  22. Waiting Is Not Easy!
+  23. I Will Take a Nap!
+  24. I Really Like Slop!
+  25. The Thank You Book
+
+</details>
 
 ### Epic! (에픽)
 
@@ -502,6 +612,179 @@ Biff·Chip·Kipper 남매와 강아지 Floppy가 나오는 영국 대표 리더�
 |---|---|---|---|---|---|---|---|
 | `natgeo-full` | National Geographic Kids - Full Collection | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 묶음 | National Geographic Kids Readers 전체 — 권이 지정되지 않음 |
 | `natgeo-prereader` | National Geographic Kids - Pre-reader | 6~7세 | L3 | 리더스·그림책·읽기 | 15분 | 묶음 | National Geographic Kids Readers 'Pre-reader' 표시 책 중 아이 관심 동물로 1권 |
+
+### Songbirds Phonics (Julia Donaldson)
+
+*OUP 파닉스 리더스 (Oxford Reading Tree 계열)* · [공식 사이트](https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/)
+
+『The Gruffalo』 작가 Julia Donaldson이 쓴 Oxford Reading Tree 계열 파닉스 리더스 60권. Stage 1+부터 Stage 6까지 단계마다 새로 배우는 소리가 정해져 있어, 배운 소리만으로 읽을 수 있다. ORT 이야기책(Biff·Chip·Kipper)과 함께 많이 쓴다.
+
+| 항목 ID | 카탈로그 제목 | 나이 | 레벨 | 유형 | 하루 | 구체성 | 어디서 무엇을 찾나 |
+|---|---|---|---|---|---|---|---|
+| `songbirds-1` | Songbirds Phonics (ORT) - Stage 1+ | 4~6세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 1+·More Stage 1+ (12권) — 아래 순서대로 |
+| `songbirds-full` | Songbirds Phonics (ORT) - Full Set | 4~7세 | L3 | 리더스·그림책·읽기 | 15분 | 학습 단위 | 집에 있는 Songbirds 전집을 Stage 1+부터 차례로 (60권) |
+| `songbirds-2` | Songbirds Phonics (ORT) - Stage 2-3 | 5~7세 | L4 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 2~More Stage 3 (24권) — 아래 순서대로 |
+| `songbirds-3` | Songbirds Phonics (ORT) - Stage 4-6 | 6~7세 | L5 | 리더스·그림책·읽기 | 15분 | 학습 단위 | Songbirds Stage 4~6 (24권) — 아래 순서대로 |
+
+<details><summary><code>songbirds-1</code> 학습 단위 12개 (진행 순서)</summary>
+
+- **Stage 1+**
+  1. Top Cat
+  2. Sam's Pot
+  3. Bob Bug
+  4. Dig, Dig, Dig!
+  5. Zak and the Vet
+  6. Mum Bug's Bag
+- **More Stage 1+**
+  7. Cat Naps
+  8. Pen Fun
+  9. The Big Cod
+  10. The Pins and the Pegs
+  11. Is It?
+  12. Mix, Mix, Mix
+
+</details>
+
+<details><summary><code>songbirds-2</code> 학습 단위 24개 (진행 순서)</summary>
+
+- **Stage 2**
+  1. The Odd Pet
+  2. Miss! Miss!
+  3. This and That
+  4. Fish and Chips
+  5. Singing Dad
+  6. Doctor Duck
+- **More Stage 2**
+  7. Mr Zed
+  8. The Ox and the Yak
+  9. The Doll in the Bin
+  10. Animal Quiz
+  11. The Seven Kids
+  12. Ron Rabbit's Egg
+- **Stage 3**
+  13. The Big Match
+  14. The Shopping List
+  15. Gran Is Cross
+  16. The Trunk and the Skunk
+  17. The Scrap Rocket
+  18. Splash and Squelch
+- **More Stage 3**
+  19. Ron Rabbit's Big Day
+  20. The Wishing Elf
+  21. Bob Bug and the Insect Club
+  22. Where Is Snail?
+  23. Stop Chatting, Bill
+  24. Back to Bed
+
+</details>
+
+<details><summary><code>songbirds-3</code> 학습 단위 24개 (진행 순서)</summary>
+
+- **Stage 4**
+  1. Queen Aneena's Feast
+  2. Spike Says
+  3. The Wrong Kind of Knight
+  4. Moan, Moan, Moan!
+  5. The Snake and the Drake
+  6. Tadpoles
+- **More Stage 4**
+  7. The Red Man and the Green Man
+  8. Pirates
+  9. Tails
+  10. Pen Pals
+  11. My Cat
+  12. Tim's Bad Mood
+- **Stage 5**
+  13. Sue Kangaroo
+  14. The Cinderella Play
+  15. Usman's Books
+  16. The Upside-Down Browns
+  17. Leroy
+  18. No Milk Today
+- **Stage 6**
+  19. Tara's Party
+  20. Paula the Vet
+  21. Where Were You, Bert?
+  22. Clare and the Fair
+  23. The Deer and the Earwig
+  24. Jack and the Giants
+
+</details>
+
+<details><summary><code>songbirds-full</code> 학습 단위 60개 (진행 순서)</summary>
+
+- **Stage 1+**
+  1. Top Cat
+  2. Sam's Pot
+  3. Bob Bug
+  4. Dig, Dig, Dig!
+  5. Zak and the Vet
+  6. Mum Bug's Bag
+- **More Stage 1+**
+  7. Cat Naps
+  8. Pen Fun
+  9. The Big Cod
+  10. The Pins and the Pegs
+  11. Is It?
+  12. Mix, Mix, Mix
+- **Stage 2**
+  13. The Odd Pet
+  14. Miss! Miss!
+  15. This and That
+  16. Fish and Chips
+  17. Singing Dad
+  18. Doctor Duck
+- **More Stage 2**
+  19. Mr Zed
+  20. The Ox and the Yak
+  21. The Doll in the Bin
+  22. Animal Quiz
+  23. The Seven Kids
+  24. Ron Rabbit's Egg
+- **Stage 3**
+  25. The Big Match
+  26. The Shopping List
+  27. Gran Is Cross
+  28. The Trunk and the Skunk
+  29. The Scrap Rocket
+  30. Splash and Squelch
+- **More Stage 3**
+  31. Ron Rabbit's Big Day
+  32. The Wishing Elf
+  33. Bob Bug and the Insect Club
+  34. Where Is Snail?
+  35. Stop Chatting, Bill
+  36. Back to Bed
+- **Stage 4**
+  37. Queen Aneena's Feast
+  38. Spike Says
+  39. The Wrong Kind of Knight
+  40. Moan, Moan, Moan!
+  41. The Snake and the Drake
+  42. Tadpoles
+- **More Stage 4**
+  43. The Red Man and the Green Man
+  44. Pirates
+  45. Tails
+  46. Pen Pals
+  47. My Cat
+  48. Tim's Bad Mood
+- **Stage 5**
+  49. Sue Kangaroo
+  50. The Cinderella Play
+  51. Usman's Books
+  52. The Upside-Down Browns
+  53. Leroy
+  54. No Milk Today
+- **Stage 6**
+  55. Tara's Party
+  56. Paula the Vet
+  57. Where Were You, Bert?
+  58. Clare and the Fair
+  59. The Deer and the Earwig
+  60. Jack and the Giants
+
+</details>
 
 ### The Magic School Bus
 
@@ -578,11 +861,14 @@ Jack과 Annie가 마법의 나무집으로 시간 여행을 하는 챕터북. 1�
 ## 출처와 원칙
 
 - 학습 단위 제목 출처 (`oup_ca`): Oxford University Press Canada, Language Arts 주문서 'Oxford Reading Tree — Biff, Chip and Kipper Stories' (https://www.oupcanada.com/school/order_form/a/ORT.Biff.Chip.And.Kipper.Stories.Order.Form.pdf) 의 팩 표지 목록
-- 공식 목록에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.
+- 학습 단위 제목 출처 (`jd_site`): Julia Donaldson 공식 사이트 Songbird Phonics 페이지 (https://www.juliadonaldson.co.uk/books/educational/songbird-phonics/) 의 단계별 목록
+- 학습 단위 제목 출처 (`jolly_site`): Jolly Learning 공식 사이트 Jolly Phonics 페이지 FAQ 'In what order are the letter sounds taught?' (https://jollylearning.com/en-gb/our-programmes/jolly-phonics) 의 7그룹 순서
+- 학습 단위 제목 출처 (`wiki_ep`): Wikipedia 'Elephant & Piggie' 문서의 Books 목록 (https://en.wikipedia.org/wiki/Elephant_and_Piggie) — 출판사(Disney-Hyperion) 페이지는 자동 접속이 막혀 2차 자료로 확인
+- 출처(공식 목록 우선, 막힌 경우 명시한 2차 자료)에서 확인한 제목만 학습 단위로 넣습니다. 확인하지 못한 시리즈는 '묶음'으로 남겨 둡니다.
 - 저작권(기획서 §7.3): 제목·팩 이름·활동 방법만 다루고 책 본문·영상은 싣거나 호스팅하지 않습니다.
 
 ## 남은 일 (묶음 → 학습 단위)
 
-아래 40개는 아직 '앱 전체·시리즈 전체' 단위라 카드가 막연합니다. 공식 목록으로 권·레슨을 확인해 단위로 쪼갤 대상입니다.
+아래 37개는 아직 '앱 전체·시리즈 전체' 단위라 카드가 막연합니다. 공식 목록으로 권·레슨을 확인해 단위로 쪼갤 대상입니다.
 
-`usborne-thatsnotmy`, `khan-kids`, `starfall-abcs`, `abcmouse`, `cocomelon`, `peppa`, `jolly-songs`, `jolly-letter`, `ort-stage1`, `bobbooks-1`, `starfall-read`, `razkids-aa`, `alphablocks`, `scholastic-phonics`, `readingeggs`, `bobbooks-2`, `flyguy`, `natgeo-prereader`, `razkids-bc`, `scholastic-sight`, `magicschoolbus`, `usborne-first`, `starfall-imreading`, `epic`, `sss-library`, `khan-full`, `jolly-full`, `razkids-full`, `natgeo-full`, `usborne-full`, `epic-full`, `starfall-full`, `abcmouse-full`, `readingeggs-full`, `scholastic-full`, `magic-tree-house`, `nate-the-great`, `junie-b-jones`, `frog-and-toad`, `amelia-bedelia`
+`usborne-thatsnotmy`, `khan-kids`, `starfall-abcs`, `abcmouse`, `cocomelon`, `peppa`, `ort-stage1`, `bobbooks-1`, `starfall-read`, `razkids-aa`, `alphablocks`, `scholastic-phonics`, `readingeggs`, `bobbooks-2`, `flyguy`, `natgeo-prereader`, `razkids-bc`, `scholastic-sight`, `magicschoolbus`, `usborne-first`, `starfall-imreading`, `epic`, `sss-library`, `khan-full`, `razkids-full`, `natgeo-full`, `usborne-full`, `epic-full`, `starfall-full`, `abcmouse-full`, `readingeggs-full`, `scholastic-full`, `magic-tree-house`, `nate-the-great`, `junie-b-jones`, `frog-and-toad`, `amelia-bedelia`
