@@ -89,9 +89,11 @@ python3 scripts/smoke_test.py
 또는:
 
 ```bash
-./run.sh          # 서버 시작
+./run.sh          # 서버 시작 (.env가 있으면 읽음)
 ./run.sh test     # 스모크 테스트
 ```
+
+배포본과 같은 Claude 모드로 로컬 실행하려면 저장소 루트에 `.env`(깃에 올라가지 않음)를 만들고 `ANTHROPIC_API_KEY=...`를 적은 뒤 `./run.sh`를 실행합니다. 키가 없으면 같은 규칙의 규칙 기반으로 동작합니다.
 
 ## 구조
 
