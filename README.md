@@ -34,7 +34,7 @@
 
 | 기술 요소 | 어디서 | 하는 일 |
 |---|---|---|
-| **RAG** | `Bloomy-AI/ai/rag/`, `backend/ai_bridge.py` | 아이 나이·단계·학습 시간·보유 교재로 카탈로그 67종을 검색(TF-IDF + 메타데이터 필터) → Claude가 **검색된 자료 ID 안에서만** 4주 20일 계획을 고름. 구체적 후보가 충분하면 '앱 전체' 같은 묶음 항목은 제외 |
+| **RAG** | `Bloomy-AI/ai/rag/`, `backend/ai_bridge.py` | 아이 나이·단계·학습 시간·보유 교재로 카탈로그 67종을 검색(TF-IDF(Term Frequency 단어 빈도 · Inverse Document Frequency 역문서 빈도) + 메타데이터 필터) → Claude가 **검색된 자료 ID 안에서만** 4주 20일 계획을 고름. 구체적 후보가 충분하면 '앱 전체' 같은 묶음 항목은 제외 |
 | **AI Agent** | `backend/coach.py`, `Bloomy-AI/ai/agent/` | 부모 기록 → 의도 분류 → 규칙 분기(C 수정 요청 → B 어려움 → A 잘함) → 도구(계획 반복·교체·진도)로 다음 카드 조정 → 코칭 메시지. 발달 진단·효과 보증 금지 가드레일 |
 | **Long-term Memory** | `backend/coach.py` (`memory_facts`), `backend/curriculum.py` | 아이별 최근 14일 기록에서 연속 지표(연속 학습일, 이해도·흥미 저하 연속, 잘한 날 연속)를 뽑고 피드백마다 `memory_facts`에 기록, 권 진도는 이전 계획에서 이어감 → 코칭 분기·계획 조정·카드의 '기록 근거'에 사용. 기록 3일 미만이면 추세 판단 보류 |
 | **자동화 워크플로우** | `backend/scheduler.py`, `vercel.json` | Vercel Cron이 매일 09:00 KST 아침 카드 알림 + 미기록 리마인드 |

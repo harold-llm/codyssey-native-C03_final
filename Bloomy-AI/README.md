@@ -19,7 +19,7 @@ python -m examples.ai_demo
 python -m examples.integration_demo
 ```
 
-오프라인 예제는 API 키와 네트워크 없이 TF-IDF 검색, 규칙, 템플릿으로 실행합니다. 신규 단위 테스트에는 `jsonschema`가 필요합니다. [시연 시나리오](docs/demo-scenario.md)와 [검증 결과](docs/test-results.md)를 참고하세요.
+오프라인 예제는 API 키와 네트워크 없이 TF-IDF(Term Frequency 단어 빈도 · Inverse Document Frequency 역문서 빈도) 검색, 규칙, 템플릿으로 실행합니다. 신규 단위 테스트에는 `jsonschema`가 필요합니다. [시연 시나리오](docs/demo-scenario.md)와 [검증 결과](docs/test-results.md)를 참고하세요.
 
 ## 실제 LLM API 모드
 
