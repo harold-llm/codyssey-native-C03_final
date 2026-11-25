@@ -190,19 +190,21 @@ def load(strict: bool = False) -> tuple[int, list[str]]:
     """
     store.init()
     errors: list[str] = []
+    current: set[str] = set()
     for fp, raw in _iter_items():
         try:
-            upsert_item(normalize(raw, fp))
+            row = normalize(raw, fp)
+            upsert_item(row)
+            current.add(row["id"])
         except (ValueError, TypeError) as exc:
             errors.append(str(exc))
     if errors and strict:
         raise ValueError("카탈로그 검증 실패:\n" + "\n".join(errors))
     if errors:
         print(f"[bloomy-catalog] {len(errors)}개 항목 스킵:\n{'\n'.join(errors)}")
-    _ITEMS[:] = cast(
-        "list[Item]",
-        store.query("SELECT * FROM contents ORDER BY level, age_min, id"),
-    )
+    # 예전 카탈로그에서 빠진 항목은 DB 행(옛 계획이 참조할 수 있음)은 두되 추천 대상에서는 뺀다
+    rows = cast("list[Item]", store.query("SELECT * FROM contents ORDER BY level, age_min, id"))
+    _ITEMS[:] = [r for r in rows if r["id"] in current]
     return len(_ITEMS), errors
 
 
