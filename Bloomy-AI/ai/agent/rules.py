@@ -1,5 +1,6 @@
 """Pure decision function: rest day, referral, C, B, then default A."""
 from datetime import timedelta
+
 from .contracts import iso_date
 from .intent import INTENTS
 

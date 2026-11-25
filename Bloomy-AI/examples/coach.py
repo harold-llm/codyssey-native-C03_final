@@ -2,6 +2,7 @@
 import json
 import sys
 from pathlib import Path
+
 from ai.agent import CoachAgent, CoachRequest, Feedback, LearningCard
 from ai.contracts import RecommendationRequest
 from ai.rag import RecommendationEngine

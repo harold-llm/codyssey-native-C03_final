@@ -1,5 +1,6 @@
 """Catalog and RAG tools; never write a backend plan or approve it."""
 from dataclasses import asdict
+
 from ai.contracts import RecommendationRequest
 
 

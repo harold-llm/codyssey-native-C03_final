@@ -17,6 +17,8 @@
 | 사용자 피드백과 반영 (요약) | [`06-사용자-피드백-반영.md`](06-사용자-피드백-반영.md) |
 | 사용자 테스트 기록 · 상세 판단 | [`docs/user-test.md`](docs/user-test.md) · [`docs/feedback-report.md`](docs/feedback-report.md) |
 | 협업 기록 | [`docs/collaboration.md`](docs/collaboration.md) |
+| 안정성·예외 처리 (반복 실행 27,000건) | [`docs/stability.md`](docs/stability.md) |
+| 코드 컨벤션 (ruff) | [`docs/code-style.md`](docs/code-style.md) |
 | 발표 자료 | [`00-슬라이드.pdf`](00-슬라이드.pdf) |
 | 시연 영상 | (준비 중) |
 
@@ -27,9 +29,21 @@
 | B | 이종명 | PM / 백엔드 | 기획·명세 문서, `backend/`, 통합·배포 |
 | A | 박상혁 | AI / 데이터 | `Bloomy-AI/` (RAG·코치 Agent·Memory) — PR #1 |
 | F | 박진성 | 프론트엔드 / 콘텐츠 | `learning/` 아이 학습 화면·콘텐츠·에셋 |
-| Q | 양정현 | QA / 사용자 테스트 / 문서 | 실사용자 테스트 운영, 발표 자료 |
+| Q | 양정현 | QA / 사용자 테스트 / 문서 | 실사용자 테스트 운영, 피드백 수집·정리 — PR #2 |
 
-브랜치·통합 경위와 역할별 기여 근거(커밋·PR)는 [`docs/collaboration.md`](docs/collaboration.md)에 정리했습니다.
+### 저장소와 기여 증빙
+
+- 저장소: https://github.com/harold-llm/codyssey-native-C03_final (공개) · 기본 브랜치 `main` = 배포 브랜치(push 시 Vercel 자동 배포)
+- 브랜치 운영: 팀원 작업은 각자 브랜치(`feature/ai-offline`, `feature/bloomy-learning-integration`, `docs/q-user-feedback`)에서 진행해 `main`에 병합(PR #1·#2). 기획·백엔드·통합은 B가 `main`에서 진행
+
+| 팀원 | GitHub | 담당 기능 | 기여 증빙 |
+|---|---|---|---|
+| B 이종명 | `harold-llm` | 기획·명세 문서, 백엔드 전체(인증·온보딩·분기 엔진·코치·리포트·자동화), 팀원 산출물 통합, 배포, 피드백 반영 | 백엔드 구현 [`4de41c2`](https://github.com/harold-llm/codyssey-native-C03_final/commit/4de41c2) · 통합 [`0e67598`](https://github.com/harold-llm/codyssey-native-C03_final/commit/0e67598) · [커밋 목록](https://github.com/harold-llm/codyssey-native-C03_final/commits/main?author=harold-llm) |
+| A 박상혁 | `psh30427-ops` | RAG 추천 엔진, 코치 Agent, Long-term Memory, LLM 클라이언트, 단위 테스트 84개 | [PR #1 Add Bloomy AI modules](https://github.com/harold-llm/codyssey-native-C03_final/pull/1) · [`995f72a`](https://github.com/harold-llm/codyssey-native-C03_final/commit/995f72a) (`feature/ai-offline`) |
+| F 박진성 | `parkjs497562-tech` | 아이 학습 화면, 학습 데이터·추천 로직, 이미지 에셋 20종 | [`1f83084`](https://github.com/harold-llm/codyssey-native-C03_final/commit/1f83084) (`feature/bloomy-learning-integration`) |
+| Q 양정현 | `yjh88` | 실사용자 테스트 운영(보호자 6명), 피드백 수집·정리 문서 | [PR #2 실사용자 피드백 수집·정리](https://github.com/harold-llm/codyssey-native-C03_final/pull/2) · [`9d71607`](https://github.com/harold-llm/codyssey-native-C03_final/commit/9d71607) 외 2건 |
+
+통합 경위(수동 통합과 원 커밋 연결), 커밋 수와 기여량의 관계는 [`docs/collaboration.md`](docs/collaboration.md)에 정리했습니다.
 
 ## 핵심 AI 활용
 
@@ -82,10 +96,12 @@ python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt uvicorn
 DATABASE_URL='postgresql://...' ./.venv/bin/python -m uvicorn api.index:app --port 8000
 ```
 
-스모크 테스트 (154개 체크):
+스모크 테스트 (154개 체크) · 반복 실행 테스트 · 린트:
 
 ```bash
 python3 scripts/smoke_test.py
+python3 scripts/soak_test.py        # 결과: docs/stability.md
+ruff check backend api scripts Bloomy-AI
 ```
 
 또는:

@@ -1,8 +1,8 @@
 """Demonstrate L1/L3 curricula and coaching with synthetic profiles."""
 import argparse
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from ai.agent import CoachAgent, CoachRequest, Feedback, LearningCard
 from ai.contracts import RecommendationRequest

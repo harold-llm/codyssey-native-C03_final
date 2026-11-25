@@ -1,10 +1,11 @@
 """Identity-scoped memory, idempotent feedback, and transactional coach retries."""
-from dataclasses import asdict, replace
-from datetime import timedelta
 import hashlib
 import json
+from dataclasses import asdict, replace
+from datetime import timedelta
 
-from ai.agent.contracts import Feedback, CoachResult, child_identity, iso_date
+from ai.agent.contracts import CoachResult, Feedback, child_identity, iso_date
+
 from .repository import MemoryConflictError
 from .sqlite_store import SQLiteMemoryRepository
 from .summary import summarize

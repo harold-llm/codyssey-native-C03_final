@@ -1,8 +1,9 @@
 """Deterministic local sparse-vector retrieval. No API or model downloads."""
-from collections import Counter
 import math
 import re
+from collections import Counter
 from typing import Protocol
+
 from .materials import is_owned as is_owned_material
 
 ALIASES = {"듣기": "listening", "말하기": "speaking", "읽기": "reading", "쓰기": "writing", "파닉스": "phonics"}

@@ -1,5 +1,6 @@
 """Validate the action boundary independently of the message composer."""
 from dataclasses import asdict
+
 from .rules import decide
 
 AI_LABEL = "AI가 작성한 코칭 메시지입니다."

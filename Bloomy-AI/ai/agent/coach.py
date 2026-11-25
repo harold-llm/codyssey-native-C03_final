@@ -1,8 +1,10 @@
 """Bounded local Agent: classify, decide, retrieve, propose, and validate."""
 from dataclasses import asdict
+
+from ai.llm import LLMError
+
 from .contracts import CoachRequest, CoachResult
 from .guardrails import AI_LABEL, validate_result
-from ai.llm import LLMError
 from .intent import KeywordIntentClassifier, LLMIntentClassifier, classify_safely
 from .message import generate_opening
 from .rules import decide

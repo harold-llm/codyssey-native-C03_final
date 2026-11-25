@@ -1,7 +1,7 @@
 """SQLite persistence. All child reads and mutations are explicitly scoped."""
+import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
-import sqlite3
 from threading import RLock
 
 

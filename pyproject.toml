@@ -11,6 +11,23 @@ dependencies = [
 [tool.vercel]
 entrypoint = "api.index:app"
 
+# 코드 컨벤션: docs/code-style.md · 실행: ruff check backend api scripts Bloomy-AI
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+# E/W 스타일, F 오류(미사용 import·정의되지 않은 이름 등), I import 정렬
+select = ["E", "F", "W", "I"]
+# 긴 한국어 안내 문구·SQL은 억지로 줄바꿈하면 읽기 어려워 줄 길이는 권장(120)으로만 둔다
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# 같은 폴더 모듈을 쓰려고 sys.path를 먼저 설정하는 진입점·스크립트
+"backend/main.py" = ["E402"]
+"api/index.py" = ["E402"]
+"scripts/*.py" = ["E402"]
+
 [tool.ruff.lint.isort]
 known-first-party = ["main", "store"]
 

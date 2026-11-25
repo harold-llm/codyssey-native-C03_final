@@ -1,17 +1,17 @@
 """Durable memory, scoped history, calendar trends, and integrated retry tests."""
+import sqlite3
+import unittest
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
-import sqlite3
 from tempfile import TemporaryDirectory
-import unittest
 from unittest.mock import patch
 
 from ai.agent import CoachAgent, CoachRequest, Feedback, LearningCard
 from ai.contracts import RecommendationRequest
-from ai.memory import MemoryService, MemoryConflictError
+from ai.memory import MemoryConflictError, MemoryService
 from ai.rag import RecommendationEngine
 from ai.rag.ingest import load_catalog
 

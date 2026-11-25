@@ -39,11 +39,11 @@ def available() -> bool:
 def _engine() -> RecommendationEngine:
     global _rag
     if _rag is None:
-        from ai.llm import client_from_env
-        from ai.rag import RecommendationEngine
         # LLM(Claude/OpenAI)을 넘겨 RAG가 계획·학습방법을 생성하게 한다.
         # 키가 없으면 None → 템플릿 기반 초안으로 폴백.
         import curriculum
+        from ai.llm import client_from_env
+        from ai.rag import RecommendationEngine
         _rag = RecommendationEngine.from_file(CATALOG_PATH, llm=client_from_env(),
                                               deprioritized=curriculum.collection_ids())
     return _rag

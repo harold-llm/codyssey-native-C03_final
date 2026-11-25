@@ -1,10 +1,10 @@
 """Offline end-to-end demo with synthetic data and a simulated backend."""
 import argparse
+import json
+import sys
 from copy import deepcopy
 from dataclasses import asdict, replace
-import json
 from pathlib import Path
-import sys
 from tempfile import mkdtemp
 
 from ai.agent import CoachAgent, CoachRequest, Feedback, LearningCard

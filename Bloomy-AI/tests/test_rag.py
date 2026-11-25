@@ -1,8 +1,8 @@
 """Behavior tests; network and external API keys are never required."""
+import unittest
 from copy import deepcopy
 from datetime import date
 from pathlib import Path
-import unittest
 
 from ai.contracts import RecommendationRequest
 from ai.rag import RecommendationEngine

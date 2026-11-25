@@ -1,11 +1,11 @@
 """Coach behavior and RAG integration tests; no API keys or network."""
-from copy import deepcopy
-from dataclasses import asdict, replace
-from pathlib import Path
 import json
 import subprocess
 import sys
 import unittest
+from copy import deepcopy
+from dataclasses import asdict, replace
+from pathlib import Path
 from unittest.mock import patch
 
 from ai.agent import CoachAgent, CoachRequest, Feedback, LearningCard

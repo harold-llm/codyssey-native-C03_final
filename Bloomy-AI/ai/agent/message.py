@@ -1,8 +1,9 @@
 """Compose coaching with a case-specific vocabulary and immutable card actions."""
 from datetime import timedelta
 
-from .contracts import iso_date
 from ai.llm import complete, object_schema
+
+from .contracts import iso_date
 
 OPENERS = {
     "A": (
