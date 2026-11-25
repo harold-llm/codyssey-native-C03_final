@@ -900,7 +900,7 @@ def section_delete_account(token1: str | None, child_ids: tuple[int, int]) -> No
 
 
 def section_curriculum() -> None:
-    """학습 단위 커리큘럼 + 카탈로그 안내 문서 (docs/catalog.md)."""
+    """학습 단위 커리큘럼 + RAG 추천 자료 문서 (05-RAG-추천-자료.md)."""
     print("\n[curriculum] 학습 단위·카탈로그 문서")
     guide_items = cast("dict[str, object]", curriculum.guide()["items"])
     missing = [it["id"] for it in catalog.search() if it["id"] not in guide_items]
@@ -966,7 +966,7 @@ def section_curriculum() -> None:
     import subprocess
     r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "gen_catalog_doc.py"), "--check"],
                        capture_output=True, text=True)
-    check("docs/catalog.md 최신 (gen_catalog_doc.py --check)", r.returncode == 0, r.stdout.strip())
+    check("05-RAG-추천-자료.md 최신 (gen_catalog_doc.py --check)", r.returncode == 0, r.stdout.strip())
 
 
 def section_songs() -> None:
@@ -1083,9 +1083,9 @@ def main() -> int:
     today = clock.today()  # 서버와 같은 한국 시간 기준
     suffix = dt.datetime.now().strftime("%H%M%S")
 
-    # 과거 계획 앵커: 최근 월요일(<= 오늘-3). d0..d4 = 월~금 모두 과거,
+    # 과거 계획 앵커: 최근 월요일(<= 오늘-5). d0..d4 = 월~금 모두 과거(금 <= 오늘-1),
     # d5 = 그 다음 주 월요일(계획 내, 피드백 없음) — 요일에 무관하게 결정적.
-    base = today - dt.timedelta(days=3)
+    base = today - dt.timedelta(days=5)
     m = base - dt.timedelta(days=base.weekday())
     d0, d1, d2, d3, d4 = (m + dt.timedelta(days=i) for i in range(5))
     d5 = d4 + dt.timedelta(days=3)  # 금 → 다음 월

@@ -13,7 +13,7 @@
 | 🌐 배포 URL | https://codyssey-native-c03-final.vercel.app |
 | 기획서 · 요구 명세서 | [`01-기획서.md`](01-기획서.md) · [`02-요구-명세서.md`](02-요구-명세서.md) |
 | 시스템 아키텍처 | [`02-요구-명세서.md` §4](02-요구-명세서.md#4-시스템-아키텍처) |
-| 추천 콘텐츠 카탈로그 | [`docs/catalog.md`](docs/catalog.md) |
+| RAG 추천 자료 목록 (67개) | [`05-RAG-추천-자료.md`](05-RAG-추천-자료.md) |
 | 사용자 테스트 · 피드백 반영 | [`docs/user-test.md`](docs/user-test.md) · [`docs/feedback-report.md`](docs/feedback-report.md) |
 | 협업 기록 | [`docs/collaboration.md`](docs/collaboration.md) |
 | 발표 자료 · 시연 영상 | (준비 중) |
@@ -58,7 +58,7 @@
 
 ## 추천 콘텐츠 카탈로그
 
-RAG가 추천하는 자료 67개가 각각 무엇인지(책·앱·영상), 어디서 무엇을 찾는지, 권 단위 학습 순서는 [`docs/catalog.md`](docs/catalog.md)에 정리돼 있습니다. 이 문서는 `backend/data/catalog.json`·`content_guide.json`에서 **자동 생성**됩니다.
+RAG가 추천하는 자료 67개가 각각 무엇인지(책·앱·영상), 어디서 무엇을 찾는지, 권 단위 학습 순서는 [`05-RAG-추천-자료.md`](05-RAG-추천-자료.md)에 정리돼 있습니다. 이 문서는 `backend/data/catalog.json`·`content_guide.json`에서 **자동 생성**됩니다.
 
 - 수동 생성: `python3 scripts/gen_catalog_doc.py`
 - 자동 갱신: 저장소마다 한 번 `git config core.hooksPath .githooks` → 두 JSON을 바꾼 커밋에 문서가 함께 갱신돼 들어갑니다.

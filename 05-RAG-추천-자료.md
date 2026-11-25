@@ -1,4 +1,4 @@
-# RAG 콘텐츠 카탈로그 안내
+# 05. RAG 추천 자료 목록 — 꽃피다 (Bloomy)
 
 > **자동 생성 문서입니다. 직접 고치지 마세요.** 원본은 `backend/data/catalog.json`(추천 대상 항목)과
 > `backend/data/content_guide.json`(설명·찾는 법·학습 단위)이며, `python3 scripts/gen_catalog_doc.py`로 다시 만듭니다.
@@ -19,6 +19,80 @@
 | 묶음 | 36 | 묶음 — 앱·시리즈 전체라서 무엇을 할지 아직 지정되지 않음 (학습 단위로 쪼갤 대상) |
 
 레벨: L1 노출·듣기 → L2 소리 인지 → L3 파닉스 → L4 사이트워드·초기 해독 → L5 리더스 독해
+
+## 전체 목록 (67개)
+
+RAG가 검색하는 대상 전체입니다. 레벨·나이 순. 자료별 설명·찾는 법·학습 단위는 아래 '시리즈·서비스별 안내'에 있습니다.
+
+| # | 자료 | 시리즈·서비스 | 유형 | 나이 | 레벨 | 하루 | 구체성 | 항목 ID |
+|---|---|---|---|---|---|---|---|---|
+| 1 | ABCmouse - Early Learning | ABCmouse | 앱·활동 | 4~5세 | L1 | 10분 | 묶음 | `abcmouse` |
+| 2 | Action Verb Cards | 직접 만드는 카드·워크시트 | 앱·활동 | 4~5세 | L1 | 10분 | 단일 작품 | `action-cards` |
+| 3 | Cocomelon - Nursery Rhymes | Cocomelon | 영상 | 4~5세 | L1 | 10분 | 묶음 | `cocomelon` |
+| 4 | Color & Shape Flashcards | 직접 만드는 카드·워크시트 | 앱·활동 | 4~5세 | L1 | 10분 | 단일 작품 | `color-flashcards` |
+| 5 | Eric Carle - Brown Bear, Brown Bear, What Do You See? | Eric Carle 그림책 | 리더스·그림책 | 4~5세 | L1 | 10분 | 단일 작품 | `eric-brownbear` |
+| 6 | Eric Carle - The Very Hungry Caterpillar | Eric Carle 그림책 | 리더스·그림책 | 4~5세 | L1 | 10분 | 단일 작품 | `eric-caterpillar` |
+| 7 | Jolly Phonics - Songs | Jolly Phonics | 오디오 | 4~5세 | L1 | 10분 | 학습 단위 | `jolly-songs` |
+| 8 | Khan Academy Kids | Khan Academy Kids | 앱·활동 | 4~5세 | L1 | 10분 | 묶음 | `khan-kids` |
+| 9 | Peppa Pig - Official Episodes | Peppa Pig (페파 피그) | 영상 | 4~5세 | L1 | 10분 | 학습 단위 | `peppa` |
+| 10 | Pinkfong - Baby Shark | Pinkfong (핑크퐁) | 영상 | 4~5세 | L1 | 10분 | 단일 작품 | `pinkfong-babyshark` |
+| 11 | Starfall - ABCs | Starfall | 앱·활동 | 4~5세 | L1 | 10분 | 묶음 | `starfall-abcs` |
+| 12 | Super Simple Songs - ABC Song | Super Simple Songs | 영상 | 4~5세 | L1 | 10분 | 단일 작품 | `sss-abc` |
+| 13 | Super Simple Songs - Head Shoulders Knees & Toes | Super Simple Songs | 영상 | 4~5세 | L1 | 10분 | 단일 작품 | `sss-head` |
+| 14 | Super Simple Songs - Twinkle Twinkle Little Star | Super Simple Songs | 영상 | 4~5세 | L1 | 10분 | 단일 작품 | `sss-twinkle` |
+| 15 | Usborne - That's Not My... series | Usborne (어스본) | 리더스·그림책 | 4~5세 | L1 | 10분 | 묶음 | `usborne-thatsnotmy` |
+| 16 | ABCmouse - Full Curriculum | ABCmouse | 앱·활동 | 4~7세 | L1 | 10분 | 묶음 | `abcmouse-full` |
+| 17 | Khan Academy Kids - Full Curriculum | Khan Academy Kids | 앱·활동 | 4~7세 | L1 | 10분 | 묶음 | `khan-full` |
+| 18 | Super Simple Songs - Full Library | Super Simple Songs | 영상 | 4~7세 | L1 | 10분 | 묶음 | `sss-library` |
+| 19 | Jolly Phonics - Full Program | Jolly Phonics | 파닉스 | 4~7세 | L2 | 15분 | 학습 단위 | `jolly-full` |
+| 20 | Reading Eggs - Full Program | Reading Eggs | 앱·활동 | 4~7세 | L2 | 10분 | 묶음 | `readingeggs-full` |
+| 21 | Starfall - Full Curriculum | Starfall | 앱·활동 | 4~7세 | L2 | 10분 | 묶음 | `starfall-full` |
+| 22 | Usborne - Full Phonics Collection | Usborne (어스본) | 리더스·그림책 | 4~7세 | L2 | 15분 | 묶음 | `usborne-full` |
+| 23 | Alphablocks - Phonics Episodes | Alphablocks | 영상 | 5~6세 | L2 | 10분 | 묶음 | `alphablocks` |
+| 24 | Bob Books - Set 1: Beginning Readers | Bob Books | 리더스·그림책 | 5~6세 | L2 | 15분 | 묶음 | `bobbooks-1` |
+| 25 | Dr. Seuss - Hop on Pop | Dr. Seuss | 리더스·그림책 | 5~6세 | L2 | 15분 | 단일 작품 | `drseuss-hop` |
+| 26 | Jolly Phonics - Letter Sounds | Jolly Phonics | 파닉스 | 5~6세 | L2 | 15분 | 학습 단위 | `jolly-letter` |
+| 27 | LeapFrog - Letter Factory | LeapFrog Letter Factory | 영상 | 5~6세 | L2 | 10분 | 단일 작품 | `leapfrog-letter` |
+| 28 | Oxford Reading Tree - Stage 1 | Oxford Reading Tree (ORT) | 리더스·그림책 | 5~6세 | L2 | 15분 | 묶음 | `ort-stage1` |
+| 29 | Pete the Cat - I Love My White Shoes | Pete the Cat | 리더스·그림책 | 5~6세 | L2 | 15분 | 단일 작품 | `pete-shoes` |
+| 30 | Raz-Kids - Level aa-A | Raz-Kids | 앱·활동 | 5~6세 | L2 | 10분 | 묶음 | `razkids-aa` |
+| 31 | Reading Eggs | Reading Eggs | 앱·활동 | 5~6세 | L2 | 10분 | 묶음 | `readingeggs` |
+| 32 | Scholastic - Phonics Workbook | Scholastic | 워크시트 | 5~6세 | L2 | 15분 | 묶음 | `scholastic-phonics` |
+| 33 | Sight Word Flashcards | 직접 만드는 카드·워크시트 | 앱·활동 | 5~6세 | L2 | 10분 | 단일 작품 | `sight-cards` |
+| 34 | Starfall - Learn to Read | Starfall | 앱·활동 | 5~6세 | L2 | 10분 | 묶음 | `starfall-read` |
+| 35 | Super Simple Songs - Phonics Song | Super Simple Songs | 영상 | 5~6세 | L2 | 10분 | 단일 작품 | `sss-phonics` |
+| 36 | Usborne Phonics Readers - Fox on a Box | Usborne (어스본) | 리더스·그림책 | 5~6세 | L2 | 15분 | 단일 작품 | `usborne-fox` |
+| 37 | Songbirds Phonics (ORT) - Stage 1+ | Songbirds Phonics (Julia Donaldson) | 리더스·그림책 | 4~6세 | L3 | 15분 | 학습 단위 | `songbirds-1` |
+| 38 | Epic! - Full Library | Epic! (에픽) | 앱·활동 | 4~7세 | L3 | 10분 | 묶음 | `epic-full` |
+| 39 | National Geographic Kids - Full Collection | National Geographic Kids Readers | 리더스·그림책 | 4~7세 | L3 | 15분 | 묶음 | `natgeo-full` |
+| 40 | Oxford Reading Tree - Full Series | Oxford Reading Tree (ORT) | 리더스·그림책 | 4~7세 | L3 | 15분 | 학습 단위 | `ort-full` |
+| 41 | Raz-Kids - Full Library | Raz-Kids | 앱·활동 | 4~7세 | L3 | 10분 | 묶음 | `razkids-full` |
+| 42 | Scholastic - Full Collection | Scholastic | 리더스·그림책 | 4~7세 | L3 | 15분 | 묶음 | `scholastic-full` |
+| 43 | Songbirds Phonics (ORT) - Full Set | Songbirds Phonics (Julia Donaldson) | 리더스·그림책 | 4~7세 | L3 | 15분 | 학습 단위 | `songbirds-full` |
+| 44 | Oxford Reading Tree - Stage 2 | Oxford Reading Tree (ORT) | 리더스·그림책 | 5~6세 | L3 | 15분 | 학습 단위 | `ort-stage2` |
+| 45 | Elephant & Piggie - Full Series (25 books) | Elephant & Piggie (Mo Willems) | 리더스·그림책 | 5~7세 | L3 | 15분 | 학습 단위 | `elephant-piggie` |
+| 46 | Bob Books - Set 2: Advancing Beginners | Bob Books | 리더스·그림책 | 6~7세 | L3 | 15분 | 묶음 | `bobbooks-2` |
+| 47 | CVC Word Writing Practice | 직접 만드는 카드·워크시트 | 워크시트 | 6~7세 | L3 | 15분 | 단일 작품 | `cvc-writing` |
+| 48 | Elephant & Piggie - Today I Will Fly! | Elephant & Piggie (Mo Willems) | 리더스·그림책 | 6~7세 | L3 | 15분 | 단일 작품 | `elephant-fly` |
+| 49 | Epic! - Digital Library | Epic! (에픽) | 앱·활동 | 6~7세 | L3 | 10분 | 묶음 | `epic` |
+| 50 | Fly Guy series | Fly Guy (Tedd Arnold) | 리더스·그림책 | 6~7세 | L3 | 15분 | 묶음 | `flyguy` |
+| 51 | National Geographic Kids - Pre-reader | National Geographic Kids Readers | 리더스·그림책 | 6~7세 | L3 | 15분 | 묶음 | `natgeo-prereader` |
+| 52 | Oxford Reading Tree - Stage 3 | Oxford Reading Tree (ORT) | 리더스·그림책 | 6~7세 | L3 | 15분 | 학습 단위 | `ort-stage3` |
+| 53 | Pete the Cat - Rocking in My School Shoes | Pete the Cat | 리더스·그림책 | 6~7세 | L3 | 15분 | 단일 작품 | `pete-school` |
+| 54 | Raz-Kids - Level B-C | Raz-Kids | 앱·활동 | 6~7세 | L3 | 10분 | 묶음 | `razkids-bc` |
+| 55 | Scholastic - Sight Word Readers | Scholastic | 리더스·그림책 | 6~7세 | L3 | 15분 | 묶음 | `scholastic-sight` |
+| 56 | Starfall - I'm Reading | Starfall | 앱·활동 | 6~7세 | L3 | 10분 | 묶음 | `starfall-imreading` |
+| 57 | The Magic School Bus - Episodes | The Magic School Bus | 영상 | 6~7세 | L3 | 10분 | 묶음 | `magicschoolbus` |
+| 58 | Usborne - First Reading Level 1 | Usborne (어스본) | 리더스·그림책 | 6~7세 | L3 | 15분 | 묶음 | `usborne-first` |
+| 59 | Songbirds Phonics (ORT) - Stage 2-3 | Songbirds Phonics (Julia Donaldson) | 리더스·그림책 | 5~7세 | L4 | 15분 | 학습 단위 | `songbirds-2` |
+| 60 | Frog and Toad series | Frog and Toad (Arnold Lobel) | 리더스·그림책 | 6~7세 | L4 | 15분 | 묶음 | `frog-and-toad` |
+| 61 | Oxford Reading Tree - Stage 4 | Oxford Reading Tree (ORT) | 리더스·그림책 | 6~7세 | L4 | 15분 | 학습 단위 | `ort-stage4` |
+| 62 | Amelia Bedelia series | Amelia Bedelia | 리더스·그림책 | 7~7세 | L4 | 15분 | 묶음 | `amelia-bedelia` |
+| 63 | Nate the Great series | Nate the Great | 리더스·그림책 | 7~7세 | L4 | 15분 | 묶음 | `nate-the-great` |
+| 64 | Oxford Reading Tree - Stage 5 | Oxford Reading Tree (ORT) | 리더스·그림책 | 6~7세 | L5 | 15분 | 학습 단위 | `ort-stage5` |
+| 65 | Songbirds Phonics (ORT) - Stage 4-6 | Songbirds Phonics (Julia Donaldson) | 리더스·그림책 | 6~7세 | L5 | 15분 | 학습 단위 | `songbirds-3` |
+| 66 | Junie B. Jones series | Junie B. Jones | 리더스·그림책 | 7~7세 | L5 | 15분 | 묶음 | `junie-b-jones` |
+| 67 | Magic Tree House series | Magic Tree House | 리더스·그림책 | 7~7세 | L5 | 15분 | 묶음 | `magic-tree-house` |
 
 ## 시리즈·서비스별 안내
 

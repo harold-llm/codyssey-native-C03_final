@@ -1,4 +1,4 @@
-"""RAG 카탈로그 안내 문서 생성기 → docs/catalog.md
+"""RAG 추천 자료 문서 생성기 → 05-RAG-추천-자료.md
 
 원본: backend/data/catalog.json (RAG·규칙 계획이 실제로 쓰는 항목)
      backend/data/content_guide.json (시리즈 설명·찾는 법·학습 단위)
@@ -20,7 +20,8 @@ from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "backend", "data")
-OUT = os.path.join(ROOT, "docs", "catalog.md")
+DOC_NAME = "05-RAG-추천-자료.md"
+OUT = os.path.join(ROOT, DOC_NAME)
 sys.path.insert(0, os.path.join(ROOT, "backend"))
 
 LEVELS = {
@@ -56,7 +57,7 @@ def render() -> str:
 
     L = []
     w = L.append
-    w("# RAG 콘텐츠 카탈로그 안내")
+    w("# 05. RAG 추천 자료 목록 — 꽃피다 (Bloomy)")
     w("")
     w("> **자동 생성 문서입니다. 직접 고치지 마세요.** 원본은 `backend/data/catalog.json`(추천 대상 항목)과")
     w("> `backend/data/content_guide.json`(설명·찾는 법·학습 단위)이며, `python3 scripts/gen_catalog_doc.py`로 다시 만듭니다.")
@@ -76,6 +77,19 @@ def render() -> str:
         w(f"| {GRAN_MARK[key]} | {gran.get(key, 0)} | {g['granularity_labels'][key]} |")
     w("")
     w("레벨: " + " → ".join(f"{c} {n}" for c, n in LEVELS.values()))
+    w("")
+
+    w(f"## 전체 목록 ({len(catalog)}개)")
+    w("")
+    w("RAG가 검색하는 대상 전체입니다. 레벨·나이 순. 자료별 설명·찾는 법·학습 단위는 아래 '시리즈·서비스별 안내'에 있습니다.")
+    w("")
+    w("| # | 자료 | 시리즈·서비스 | 유형 | 나이 | 레벨 | 하루 | 구체성 | 항목 ID |")
+    w("|---|---|---|---|---|---|---|---|---|")
+    for n, it in enumerate(sorted(catalog, key=lambda x: (x["level"], x["age_min"], x["age_max"], x["title"])), 1):
+        info = items[it["id"]]
+        code, _ = LEVELS[it["level"]]
+        w(f"| {n} | {it['title']} | {series[info['series']]['name']} | {TYPES.get(it['type'], it['type'])} | "
+          f"{it['age_min']}~{it['age_max']}세 | {code} | {it['session_minutes']}분 | {GRAN_MARK[info['granularity']]} | `{it['id']}` |")
     w("")
 
     w("## 시리즈·서비스별 안내")
@@ -182,13 +196,13 @@ def main() -> int:
         except FileNotFoundError:
             current = ""
         if current != text:
-            print("docs/catalog.md가 최신이 아닙니다: python3 scripts/gen_catalog_doc.py")
+            print(f"{DOC_NAME}이 최신이 아닙니다: python3 scripts/gen_catalog_doc.py")
             return 1
-        print("docs/catalog.md 최신")
+        print(f"{DOC_NAME} 최신")
         return 0
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(text)
-    print("작성: docs/catalog.md")
+    print(f"작성: {DOC_NAME}")
     return 0
 
 

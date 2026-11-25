@@ -1,7 +1,7 @@
 """학습 단위(권·에피소드) 커리큘럼 — 카드 문구를 '어떤 책의 무엇을 할지'로 바꾼다.
 
 데이터: `data/content_guide.json`
-  - series: 시리즈·서비스 설명 (문서 docs/catalog.md 생성용)
+  - series: 시리즈·서비스 설명 (문서 05-RAG-추천-자료.md 생성용)
   - unit_packs: 학습 단위 묶음 (예: ORT Stage 2 팩 6종 36권, 공식 목록에서 확인한 제목만)
   - items: 카탈로그 항목별 찾는 법·단위 구성
 
