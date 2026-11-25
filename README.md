@@ -17,7 +17,8 @@
 | 사용자 피드백과 반영 (요약) | [`06-사용자-피드백-반영.md`](06-사용자-피드백-반영.md) |
 | 사용자 테스트 기록 · 상세 판단 | [`docs/user-test.md`](docs/user-test.md) · [`docs/feedback-report.md`](docs/feedback-report.md) |
 | 협업 기록 | [`docs/collaboration.md`](docs/collaboration.md) |
-| 발표 자료 · 시연 영상 | (준비 중) |
+| 발표 자료 | [`00-슬라이드.pdf`](00-슬라이드.pdf) |
+| 시연 영상 | (준비 중) |
 
 ## 팀원 및 역할
 
