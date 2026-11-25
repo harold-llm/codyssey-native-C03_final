@@ -1024,6 +1024,23 @@ def section_praise(child_id: int, dates: list[dt.date]) -> None:
     check("today 응답: 기록에 맞춰 praise 포함/생략", all(seen), str(seen))
 
 
+def section_my_plan(token: str | None, child_id: int) -> None:
+    """학습 계획 메뉴: 4주 계획 + 날짜별 상태."""
+    print("\n[my plan] 학습 계획 메뉴")
+    st, d = req("GET", f"/api/children/{child_id}/plan", token=token)
+    d = cast("dict[str, object]", d)
+    cards = cast("list[dict[str, object]]", d.get("cards") or [])
+    check("GET /plan 200 + 카드 + today", st == 200 and bool(cards) and bool(d.get("today")))
+    ok = {"done", "today", "planned", "missed", "none", "rest"}
+    check("카드마다 day_status·content_title", all(c.get("day_status") in ok for c in cards)
+          and all(c.get("content_title") for c in cards if c.get("content_id")))
+    today = str(d.get("today"))
+    check("미래 날짜는 예정, 지난 기록은 완료/못 함/쉬는 날/기록 없음",
+          all(c["day_status"] == "planned" for c in cards if str(c["date"]) > today)
+          and all(c["day_status"] != "planned" for c in cards if str(c["date"]) < today))
+    check("기록한 날은 완료로 표시", any(c["day_status"] == "done" for c in cards), str([c["day_status"] for c in cards][:8]))
+
+
 def section_curriculum_page(token: str | None, child_id: int) -> None:
     """자료별 전체 커리큘럼 페이지 API."""
     print("\n[curriculum page] 전체 커리큘럼")
@@ -1081,6 +1098,7 @@ def main() -> int:
     section_scheduler_cron(token1, m, d5)
     section_praise(child2, [d0, d1, d2, d3, d4])
     section_curriculum_page(token1, child2)
+    section_my_plan(token1, child2)
     section_learning(token1)
     section_delete_account(token1, (child1, child2))
     section_curriculum()

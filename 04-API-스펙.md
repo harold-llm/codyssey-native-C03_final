@@ -220,7 +220,8 @@
 
 #### `GET /api/children/{id}/plan`
 
-- `200` `{"plan": plan(approved 또는 최신), "cards": [...]}` / 없음 `404`
+- `200` `{"plan": plan(approved 또는 최신), "cards": [...], "today": "YYYY-MM-DD"}` / 없음 `404`
+- 각 카드에 `day_status`(`done` 완료 · `today` 오늘 · `planned` 예정 · `missed` 기록 없음 · `none` 못 함 · `rest` 쉬는 날), `completion`(그날 기록, 없으면 `null`), `content_title`(자료 이름)을 붙인다. 상단 "학습 계획" 메뉴가 사용.
 
 ### 2.4 데일리 루프
 

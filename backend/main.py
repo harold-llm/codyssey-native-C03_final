@@ -468,7 +468,33 @@ def ep_plan(child: dict[str, object]) -> Resp:
     plan = store.approved_plan(cid) or store.latest_plan(cid)
     if not plan:
         return 404, {"error": "계획이 없습니다"}, JSON
-    return 200, {"plan": plan, "cards": store.cards_for_plan(cast("int", plan["id"]))}, JSON
+    cards = store.cards_for_plan(cast("int", plan["id"]))
+    today = clock.today().isoformat()
+    records: dict[str, dict[str, object]] = {}
+    if cards:
+        for f in store.feedback_between(cid, str(cards[0]["date"]), str(cards[-1]["date"]),
+                                        include_rest=True):
+            records[str(f["date"])] = f
+    out: list[dict[str, object]] = []
+    for c in cards:
+        d = str(c["date"])
+        f = records.get(d)
+        if f and f.get("rest_day"):
+            st = "rest"
+        elif f and f.get("completion") in ("full", "partial"):
+            st = "done"
+        elif f:
+            st = "none"  # 기록은 했지만 '못 함'
+        elif d == today:
+            st = "today"
+        elif d > today:
+            st = "planned"
+        else:
+            st = "missed"
+        item = catalog.find_item(c.get("content_id"))
+        out.append({**c, "day_status": st, "completion": (f or {}).get("completion") or None,
+                    "content_title": (item or {}).get("title")})
+    return 200, {"plan": plan, "cards": out, "today": today}, JSON
 
 
 def _with_guide(child: dict[str, object], card: dict[str, object] | None) -> dict[str, object] | None:

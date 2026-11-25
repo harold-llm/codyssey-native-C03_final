@@ -27,6 +27,7 @@ const state = {
   nextCard: null,
   lastFeedback: null,
   report: null,
+  myPlan: null,
   showKo: (() => { try { return !!localStorage.getItem('bloomy_show_ko'); } catch (e) { return false; } })(),
   achievement: null,
   aiRec: null,
@@ -495,6 +496,7 @@ function render() {
     case 'diagnosis': app.innerHTML = diagnosisHtml(); bindDiagnosis(); break;
     case 'plan': app.innerHTML = planHtml(); bindPlan(); break;
     case 'today': app.innerHTML = todayHtml(); bindToday(); break;
+    case 'myplan': app.innerHTML = myPlanHtml(); bindMyPlan(); break;
     case 'report': app.innerHTML = reportHtml(); bindReport(); break;
     case 'curriculum': app.innerHTML = curriculumHtml(); bindCurriculum(); window.scrollTo(0, 0); break;
     default: app.innerHTML = loadingHtml();
@@ -1293,6 +1295,102 @@ async function runAiRecommendation() {
 }
 
 /* ---------------- report ---------------- */
+/* ---------------- 학습 계획 (메뉴: 언제든 4주 계획 보기) ---------------- */
+const DAY_STATUS = {
+  done: ['완료', 'st-done'], today: ['오늘', 'st-today'], planned: ['예정', 'st-planned'],
+  missed: ['기록 없음', 'st-missed'], none: ['못 함', 'st-missed'], rest: ['쉬는 날', 'st-later'],
+};
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+async function loadMyPlan() {
+  if (!state.child) return;
+  try {
+    state.myPlan = await api('GET', '/api/children/' + state.child.id + '/plan');
+  } catch (e) {
+    state.myPlan = null;
+  }
+}
+
+function weekdayOf(d) {
+  const [y, m, dd] = String(d).split('-').map(Number);
+  return WEEKDAYS[new Date(y, m - 1, dd).getDay()];
+}
+
+function myPlanHtml() {
+  const data = state.myPlan;
+  if (!data || !data.plan) {
+    return `<section class="screen"><div class="empty">아직 학습 계획이 없어요.<br>프로필과 진단을 마치면 4주 계획이 만들어져요.</div></section>`;
+  }
+  const plan = data.plan, cards = data.cards || [], today = data.today || '';
+  if (plan.status !== 'approved') {
+    return `<section class="screen">
+      <div class="hero" style="padding:40px 0 24px"><span class="eyebrow">학습 계획</span>
+        <h1 class="hero-title">계획 초안이 준비돼 있어요</h1>
+        <p class="hero-sub">승인하면 첫 학습일부터 카드가 도착해요.</p></div>
+      <button class="btn btn-block" id="myPlanApprove">계획 확인하고 승인하기</button>
+    </section>`;
+  }
+  const weeks = [];
+  for (let i = 0; i < cards.length; i += 5) weeks.push(cards.slice(i, i + 5));
+  const passed = cards.filter((c) => c.date <= today);
+  const done = cards.filter((c) => c.day_status === 'done').length;
+  const chip = (k) => { const [t, cls] = DAY_STATUS[k] || [k, '']; return `<span class="st ${cls}">${esc(t)}</span>`; };
+  return `
+  <section class="screen">
+    <div class="hero" style="padding:40px 0 24px">
+      <span class="eyebrow">학습 계획</span>
+      <h1 class="hero-title">우리 아이 4주 계획</h1>
+      <p class="hero-sub">${esc(plan.explanation || '아이의 진단을 바탕으로 만든 4주 계획이에요.')}</p>
+      <p class="small muted mt8">${cards.length ? `${esc(fmtDate(cards[0].date))} ~ ${esc(fmtDate(cards[cards.length - 1].date))} · ` : ''}지난 학습일 ${passed.length}일 중 ${done}일 완료</p>
+    </div>
+    <div class="plan-hero">
+      ${weeks.map((week, wi) => `
+        <div class="plan-week">
+          <div class="plan-week-head">
+            <h3 class="plan-week-title">${wi + 1}주차</h3>
+            <span class="plan-week-range">${esc(fmtDate(week[0].date))} ~ ${esc(fmtDate(week[week.length - 1].date))}</span>
+          </div>
+          <div class="plan-list">
+            ${week.map((c) => {
+              const open = c.date <= today;
+              return `
+              <div class="plan-row${c.date === today ? ' is-today' : ''}${open ? ' is-open' : ''}"${open ? ` data-date="${esc(c.date)}" role="button" tabindex="0" title="이날 카드 보기"` : ''}>
+                <span class="plan-date">${esc(fmtDate(c.date))} (${weekdayOf(c.date)})</span>
+                <span class="plan-task">${esc(c.task)}${c.content_title ? `<span class="plan-src">${esc(c.content_title)}</span>` : ''}</span>
+                <span class="plan-min">${c.minutes}분</span>
+                ${chip(c.day_status)}
+                ${c.content_id ? `<a class="plan-cur" href="#curriculum/${esc(c.content_id)}" target="_blank" rel="noopener" title="전체 커리큘럼 보기">↗</a>` : ''}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`).join('')}
+      <p class="small muted mt16">오늘까지의 날짜를 누르면 그날 카드와 기록을 볼 수 있어요. ↗는 자료별 전체 커리큘럼(새 탭)이에요.</p>
+    </div>
+  </section>`;
+}
+
+function bindMyPlan() {
+  const approve = document.getElementById('myPlanApprove');
+  if (approve) {
+    approve.addEventListener('click', () => {
+      state.plan = state.myPlan.plan;
+      state.cards = state.myPlan.cards || [];
+      state.view = 'plan';
+      render();
+    });
+  }
+  const go = async (date) => { await loadToday(date); state.view = 'today'; render(); window.scrollTo(0, 0); };
+  document.querySelectorAll('.plan-row.is-open').forEach((row) => {
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      go(row.getAttribute('data-date'));
+    });
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(row.getAttribute('data-date')); }
+    });
+  });
+}
+
 function reportHtml() {
   const r = state.report;
   const a = state.achievement;
@@ -1397,6 +1495,10 @@ function bindGlobalNav() {
         if (!state.token) { state.view = 'auth'; }
         else if (!state.child) { state.view = 'onboarding'; }
         else { await loadToday(); state.view = 'today'; }
+      } else if (target === 'myplan') {
+        if (!state.token) { state.view = 'auth'; }
+        else if (!state.child) { state.view = 'onboarding'; }
+        else { await loadMyPlan(); state.view = 'myplan'; }
       } else if (target === 'report') {
         if (!state.token) { state.view = 'auth'; }
         else if (!state.child) { state.view = 'onboarding'; }

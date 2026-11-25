@@ -475,6 +475,15 @@ textarea.input { resize: vertical; min-height: 84px; }
 }
 .plan-task { flex: 1; font-size: 0.95rem; }
 .plan-min { font-size: 0.8rem; color: var(--text-tertiary); }
+.plan-row.is-open { cursor: pointer; }
+.plan-row.is-open:hover { border-color: var(--accent); }
+.plan-row.is-today { outline: 2px solid var(--accent); outline-offset: -1px; }
+.plan-src { display: block; font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; }
+.plan-cur { font-size: 0.9rem; text-decoration: none; color: var(--accent); padding: 2px 4px; }
+@media (max-width: 480px) {
+  .plan-row { flex-wrap: wrap; gap: 8px 12px; }
+  .plan-task { flex-basis: 100%; order: 5; }
+}
 
 /* ---------- Today ---------- */
 .today-grid {
